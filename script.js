@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(response => response.json())
     .then(data => {
         submissionsData = data.submissions;
+
+        console.log('submissionsData:', submissionsData);
         
         // Populate dropdown with submission IDs
         submissionsData.forEach(submission => {
