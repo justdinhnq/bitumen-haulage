@@ -1,150 +1,18 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
-  </head>
-  <body>
-    <div id="widgetContainer">
-      <h3 id="widgetLabel">Data Lookup</h3>
-      <label id="column1Label" for="column1">Column 1:</label>
-      <select id="column1"></select>
-      <p>
-        <span id="column2Label">Column 2:</span>
-        <input type="text" id="column2" readonly>
-      </p>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submission Widget</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="custom-widget">
+        <select id="submission-dropdown">
+            <option value="">Select a Submission</option>
+        </select>
+        <input type="text" id="name-field" placeholder="Name will appear here" readonly>
     </div>
-
-    <script>
-      // Initialization script to set up labels
-      (() => {
-        console.log("Initialization script starting...");
-
-        JFCustomWidget.subscribe("ready", function () {
-          console.log("Widget is ready. Fetching widget settings...");
-
-          // Fetch widget settings
-          const widgetLabel = JFCustomWidget.getWidgetSetting("title_");
-          const column1Label = JFCustomWidget.getWidgetSetting("column1Label");
-          const column2Label = JFCustomWidget.getWidgetSetting("column2Label");
-
-          console.log("Fetched settings:", { widgetLabel, column1Label, column2Label });
-
-          // Update labels dynamically based on widget settings
-          document.getElementById("widgetLabel").textContent = widgetLabel;
-          document.getElementById("column1Label").textContent = column1Label;
-          document.getElementById("column2Label").textContent = column2Label;
-
-          console.log("Labels updated successfully.");
-        });
-      })();
-
-      // Main script to fetch and handle data
-      JFCustomWidget.subscribe("ready", function () {
-        console.log("Main script starting...");
-
-        const apiKey_ = JFCustomWidget.getWidgetSetting("column4Field");         // not set name with "apiKey" or similar
-        const formID_ = JFCustomWidget.getWidgetSetting("column3Field");         // not set name with "formID" or similar
-        const column1Field = JFCustomWidget.getWidgetSetting("column1Field");
-        const column2Field = JFCustomWidget.getWidgetSetting("column2Field");
-
-        console.log("Settings:", { apiKey_, formID_, column1Field, column2Field });
-
-        if (!apiKey_ || !formID_) {
-          console.error("Error: apiKey or formID is missing in widget settings.");
-          return;
-        }
-
-        // Fetch data for Column 1
-        const fetchColumn1Data = async () => {
-          console.log("Fetching data for Column 1...");
-          try {
-            const response = await fetch(
-              `https://api.jotform.com/form/${formID_}/submissions?apiKey=${apiKey_}`
-            );
-            const data = await response.json();
-            const submissions = data.content;
-
-            console.log("Fetched submissions:", submissions);
-
-            const select = document.getElementById("column1");
-            submissions.forEach((submission) => {
-              const column1Value = Object.values(submission.answers).find(
-                (answer) => answer.text === column1Field
-              )?.answer;
-
-              console.log("Processing submission:", { submission, column1Value });
-
-              if (column1Value) {
-                const option = document.createElement("option");
-                option.value = column1Value;
-                option.text = column1Value;
-                select.appendChild(option);
-              }
-            });
-
-            console.log("Column 1 data populated successfully.");
-          } catch (error) {
-            console.error("Error fetching Column 1 data:", error);
-          }
-        };
-
-        // Fetch the corresponding value for Column 2
-        const getColumn2Data = async (column1Value) => {
-          console.log(`Fetching data for Column 2 (selected Column 1: ${column1Value})...`);
-          try {
-            const response = await fetch(
-              `https://api.jotform.com/form/${formID_}/submissions?apiKey=${apiKey_}`
-            );
-            const data = await response.json();
-            const submissions = data.content;
-
-            console.log("Fetched submissions for Column 2:", submissions);
-
-            const submission = submissions.find((s) => {
-              const column1Answer = Object.values(s.answers).find(
-                (answer) => answer.text === column1Field
-              )?.answer;
-              return column1Answer === column1Value;
-            });
-
-            const column2Value = submission
-              ? Object.values(submission.answers).find(
-                  (answer) => answer.text === column2Field
-                )?.answer
-              : null;
-
-            console.log(`Fetched Column 2 value: ${column2Value}`);
-            return column2Value;
-          } catch (error) {
-            console.error("Error fetching Column 2 data:", error);
-          }
-        };
-
-        // Update Column 2 when Column 1 is selected
-        document.getElementById("column1").addEventListener("change", async (event) => {
-          const selectedValue = event.target.value;
-          console.log(`Column 1 selected: ${selectedValue}`);
-          const column2Value = await getColumn2Data(selectedValue);
-          document.getElementById("column2").value = column2Value || "Not found";
-          console.log(`Updated Column 2 value: ${column2Value}`);
-        });
-
-        // Load Column 1 data into the dropdown
-        fetchColumn1Data();
-      });
-
-      // Submit the selected data to Jotform
-      JFCustomWidget.subscribe("submit", function () {
-        const selectedColumn1 = document.getElementById("column1").value;
-        const column2Value = document.getElementById("column2").value;
-
-        console.log("Submitting data:", { selectedColumn1, column2Value });
-
-        JFCustomWidget.sendSubmit({
-          valid: true,
-          value: JSON.stringify({ column1: selectedColumn1, column2: column2Value }),
-        });
-      });
-    </script>
-  </body>
+    <script src="script.js"></script>
+</body>
 </html>
