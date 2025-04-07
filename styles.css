@@ -1,28 +1,24 @@
-﻿.container {
-    font-family: Arial, sans-serif;
-    padding: 10px;
+﻿#custom-widget {
     max-width: 300px;
+    margin: 20px;
 }
 
-label {
-    display: block;
-    margin: 5px 0;
-}
-
-input {
+#submission-dropdown {
     width: 100%;
-    padding: 5px;
+    padding: 8px;
     margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-button {
-    background-color: #007bff;
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
+#name-field {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f5f5f5;
 }
 
-button:hover {
-    background-color: #0056b3;
+#name-field[readonly] {
+    cursor: not-allowed;
 }

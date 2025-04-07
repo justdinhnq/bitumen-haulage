@@ -1,23 +1,46 @@
-window.jotformCustomWidgetInitialized(function (data) {
-    console.log("Widget initialized:", data);
-});
+document.addEventListener('DOMContentLoaded', function() {
+    const apiKey = '38253712fa8d8d79431cd7ec2ca697ee';
+    const formId = '250956600933055';
+    const dropdown = document.getElementById('submission-dropdown');
+    const nameField = document.getElementById('name-field');
+    let submissionsData = [];
 
-function calculateCost() {
-    const distance = parseFloat(document.getElementById("distance").value);
-    const weight = parseFloat(document.getElementById("weight").value);
-    const ratePerKmPerTon = 2.5; // Example rate: $2.5 per km per ton
-    const cost = distance * weight * ratePerKmPerTon;
-
-    if (isNaN(cost)) {
-        document.getElementById("result").innerText = "Please enter valid numbers.";
-        return;
-    }
-
-    document.getElementById("result").innerText = `Cost: $${cost.toFixed(2)}`;
-
-    // Send result to JotForm
-    window.jotformCustomWidget.sendData({
-        value: cost.toFixed(2),
-        valid: true
+    // Fetch submissions from Formstack API
+    fetch(`https://www.formstack.com/api/v2/form/${formId}/submission.json`, {
+        headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        submissionsData = data.submissions;
+        
+        // Populate dropdown with submission IDs
+        submissionsData.forEach(submission => {
+            const option = document.createElement('option');
+            option.value = submission.id;
+            option.text = `Submission ${submission.id}`;
+            dropdown.appendChild(option);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching submissions:', error);
+        dropdown.innerHTML = '<option value="">Error loading submissions</option>';
     });
-}
+
+    // Handle dropdown selection
+    dropdown.addEventListener('change', function() {
+        const selectedId = this.value;
+        if (selectedId) {
+            const selectedSubmission = submissionsData.find(sub => sub.id === selectedId);
+            if (selectedSubmission && selectedSubmission.data.name) {
+                nameField.value = selectedSubmission.data.name.value;
+            } else {
+                nameField.value = 'No name found';
+            }
+        } else {
+            nameField.value = '';
+        }
+    });
+});
