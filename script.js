@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // If running outside Jotform widget context, include the SDK
     if (typeof JFCustomWidget === 'undefined') {
         const script = document.createElement('script');
-        script.src = '//js.jotform.com/JotFormCustomWidget.min.js';
+        script.src = 'https://js.jotform.com/JotFormCustomWidget.min.js';
         document.head.appendChild(script);
     }
 });
