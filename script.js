@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let submissionsData = [];
 
     // Fetch submissions from JotForm API
-    fetch(`https://api.jotform.com/form/${formId}/submissions?apiKey=${apiKey}`, {
+    fetch(`https://downer.jotform.com/API/form/${formId}/submissions?apiKey=${apiKey}`, {
         headers: {
             'Accept': 'application/json'
         }
