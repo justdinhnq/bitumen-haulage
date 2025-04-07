@@ -5,10 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const nameField = document.getElementById('name-field');
     let submissionsData = [];
 
-    // Fetch submissions from Formstack API
-    fetch(`https://www.formstack.com/api/v2/form/${formId}/submission.json`, {
+    // Fetch submissions from JotForm API
+    fetch(`https://api.jotform.com/form/${formId}/submissions?apiKey=${apiKey}`, {
         headers: {
-            'Authorization': `Bearer ${apiKey}`,
             'Accept': 'application/json'
         }
     })
