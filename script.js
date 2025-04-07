@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // If running outside Jotform widget context, include the SDK
     if (typeof JFCustomWidget === 'undefined') {
         const script = document.createElement('script');
-        script.src = 'https://js.jotform.com/JotFormCustomWidget.min.js';
+        script.src = '//js.jotform.com/JotFormCustomWidget.min.js';
         document.head.appendChild(script);
     }
 });
@@ -17,10 +17,11 @@ JFCustomWidget.subscribe("ready", function() {
     let submissionsData = [];
 
     // Fetch submissions
+    // https://downer.jotform.com/API/form/250956600933055/submissions?apiKey=38253712fa8d8d79431cd7ec2ca697ee
     const fetchSubmissions = async () => {
         try {
             const response = await fetch(
-                `https://api.jotform.com/form/${formId}/submissions?apiKey=${apiKey}`,
+                `https://downer.jotform.com/API/form/${formId}/submissions?apiKey=${apiKey}`,
                 {
                     method: 'GET',
                     headers: {
@@ -29,6 +30,7 @@ JFCustomWidget.subscribe("ready", function() {
                 }
             );
             const data = await response.json();
+            console.log('data:', data);
             submissionsData = data.content || [];
 
             // Populate dropdown
