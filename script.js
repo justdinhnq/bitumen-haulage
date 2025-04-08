@@ -1,12 +1,12 @@
 // Main widget logic
 JFCustomWidget.subscribe("ready", function() {
-    // api.jotform.com
-    //const apiKey = '38253712fa8d8d79431cd7ec2ca697ee'; 
-    //const formId = '250956600933055';
+    // downer.jotform.com/API
+    const apiKey = '38253712fa8d8d79431cd7ec2ca697ee'; 
+    const formId = '250956600933055';
 
-    // downer.jotform.com
-    const apiKey = 'e8f69971946f06201befd8165890d1f6'; 
-    const formId = '250968169939074'; 
+    // api.jotform.com
+    // const apiKey = 'e8f69971946f06201befd8165890d1f6'; 
+    // const formId = '250968169939074'; 
 
     const dropdown = document.getElementById('submission-dropdown');
     const nameField = document.getElementById('name-field');
@@ -20,8 +20,8 @@ JFCustomWidget.subscribe("ready", function() {
         console.log('start fetching submissions');
         try {
             const response = await fetch(
-                `https://api.jotform.com/form/${formId}/submissions?apiKey=${apiKey}`
-                //`https://downer.jotform.com/API/form/${formId}/submissions?apiKey=${apiKey}`
+                // `https://api.jotform.com/form/${formId}/submissions?apiKey=${apiKey}`
+                `https://downer.jotform.com/API/form/${formId}/submissions?apiKey=${apiKey}`
             );
             const data = await response.json();
             console.log('data:', data);
