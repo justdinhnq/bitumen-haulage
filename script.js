@@ -1,13 +1,3 @@
-// Load Jotform widget SDK
-document.addEventListener('DOMContentLoaded', function() {
-    // If running outside Jotform widget context, include the SDK
-    if (typeof JFCustomWidget === 'undefined') {
-        const script = document.createElement('script');
-        script.src = 'https://js.jotform.com/JotFormCustomWidget.min.js';
-        document.head.appendChild(script);
-    }
-});
-
 // Main widget logic
 JFCustomWidget.subscribe("ready", function() {
     const apiKey = '38253712fa8d8d79431cd7ec2ca697ee'; // Hardcoded as per your original
@@ -16,9 +6,12 @@ JFCustomWidget.subscribe("ready", function() {
     const nameField = document.getElementById('name-field');
     let submissionsData = [];
 
+    console.log('subscribing')
+
     // Fetch submissions
     // https://downer.jotform.com/API/form/250956600933055/submissions?apiKey=38253712fa8d8d79431cd7ec2ca697ee
     const fetchSubmissions = async () => {
+        console.log('start fetching submissions');
         try {
             const response = await fetch(
                 `https://downer.jotform.com/API/form/${formId}/submissions?apiKey=${apiKey}`
