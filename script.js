@@ -20,7 +20,7 @@ JFCustomWidget.subscribe("ready", function() {
         console.log('start fetching submissions');
         try {
             const response = await fetch(
-                // `https://api.jotform.com/form/${formId}/submissions?apiKey=${apiKey}`
+                // `https://api.jotform.com/form/${formId}/submissions?apiKey=${apiKey}` // "message": "You're not authorized to use (/form-id-submissions) " <= if using API key from downer.jotform.com
                 //`https://downer.jotform.com/API/form/${formId}/submissions?apiKey=${apiKey}`
                 'https://jotform-proxy.onrender.com/proxy/submissions'
             );
