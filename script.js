@@ -21,8 +21,8 @@ JFCustomWidget.subscribe("ready", function() {
         try {
             const response = await fetch(
                 // `https://api.jotform.com/form/${formId}/submissions?apiKey=${apiKey}`
-                //`https://downer.jotform.com/API/form/${formId}/submissions?apiKey=${apiKey}`
-                'https://jotform-proxy.onrender.com/proxy/submissions'
+                `https://downer.jotform.com/API/form/${formId}/submissions?apiKey=${apiKey}`
+                //'https://jotform-proxy.onrender.com/proxy/submissions'
             );
             console.log('response: ', response);
             const data = await response.json();
