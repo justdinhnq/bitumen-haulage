@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Custom User List Widget</title>
+  <style>
+    .user-list-container {
+      font-family: Arial, sans-serif;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .row input[type="text"] {
+      flex: 1;
+      padding: 8px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .signature-pad {
+      flex: 1;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      height: 100px;
+      background-color: #f9f9f9;
+    }
+    .clear-btn {
+      margin-left: 5px;
+      padding: 5px 10px;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .remove-btn {
+      margin-left: 5px;
+      padding: 5px 10px;
+      background-color: #ff9800;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .add-btn {
+      padding: 10px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .error {
+      color: red;
+      font-size: 12px;
+      display: none;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="user-list-container" id="userList">
+    <div class="row" data-row-id="0">
+      <input type="text" class="name-input" placeholder="Enter name" />
+      <canvas class="signature-pad"></canvas>
+      <button class="clear-btn">Clear</button>
+      <button class="remove-btn">Remove</button>
+    </div>
+    <button class="add-btn">Add New Row</button>
+    <div class="error" id="errorMessage">Please fill out all fields before submitting.</div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    (function () {
+      let rowCount = 1;
+
+      function initializeRow(row) {
+        const canvas = row.querySelector(".signature-pad");
+        const clearBtn = row.querySelector(".clear-btn");
+        const ctx = canvas.getContext("2d");
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        // Set canvas size
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+
+        // Drawing logic
+        function startDrawing(e) {
+          isDrawing = true;
+          [lastX, lastY] = getCoordinates(e);
+        }
+
+        function draw(e) {
+          if (!isDrawing) return;
+          e.preventDefault();
+          const [x, y] = getCoordinates(e);
+          ctx.beginPath();
+          ctx.moveTo(lastX, lastY);
+          ctx.lineTo(x, y);
+          ctx.strokeStyle = "#000";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          [lastX, lastY] = [x, y];
+          updateData();
+        }
+
+        function stopDrawing() {
+          isDrawing = false;
+        }
+
+        function getCoordinates(e) {
+          const rect = canvas.getBoundingClientRect();
+          let x, y;
+          if (e.type.includes("touch")) {
+            x = e.touches[0].clientX - rect.left;
+            y = e.touches[0].clientY - rect.top;
+          } else {
+            x = e.clientX - rect.left;
+            y = e.clientY - rect.top;
+          }
+          return [x, y];
+        }
+
+        canvas.addEventListener("mousedown", startDrawing);
+        canvas.addEventListener("mousemove", draw);
+        canvas.addEventListener("mouseup", stopDrawing);
+        canvas.addEventListener("mouseout", stopDrawing);
+        canvas.addEventListener("touchstart", startDrawing);
+        canvas.addEventListener("touchmove", draw);
+        canvas.addEventListener("touchend", stopDrawing);
+
+        // Clear signature
+        clearBtn.addEventListener("click", () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          updateData();
+        });
+
+        // Update data on input change
+        row.querySelector(".name-input").addEventListener("input", updateData);
+      }
+
+      function updateData() {
+        const rows = document.querySelectorAll(".row");
+        const data = [];
+        rows.forEach((row) => {
+          const name = row.querySelector(".name-input").value;
+          const canvas = row.querySelector(".signature-pad");
+          const signature = canvas.toDataURL();
+          data.push({ name, signature });
+        });
+        // Send data to Jotform
+        if (window.JF && window.JF.setWidgetValue) {
+          window.JF.setWidgetValue(JSON.stringify(data));
+        }
+      }
+
+      function validateForm() {
+        const rows = document.querySelectorAll(".row");
+        let isValid = true;
+        rows.forEach((row) => {
+          const name = row.querySelector(".name-input").value;
+          const canvas = row.querySelector(".signature-pad");
+          const isCanvasEmpty = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data.every((val) => val === 0);
+          if (!name || isCanvasEmpty) {
+            isValid = false;
+          }
+        });
+        const errorMessage = document.getElementById("errorMessage");
+        errorMessage.style.display = isValid ? "none" : "block";
+        return isValid;
+      }
+
+      // Initialize existing rows
+      document.querySelectorAll(".row").forEach(initializeRow);
+
+      // Add new row
+      document.querySelector(".add-btn").addEventListener("click", () => {
+        const newRow = document.createElement("div");
+        newRow.className = "row";
+        newRow.dataset.rowId = rowCount++;
+        newRow.innerHTML = `
+          <input type="text" class="name-input" placeholder="Enter name" />
+          <canvas class="signature-pad"></canvas>
+          <button class="clear-btn">Clear</button>
+          <button class="remove-btn">Remove</button>
+        `;
+        document.getElementById("userList").insertBefore(newRow, document.querySelector(".add-btn"));
+        initializeRow(newRow);
+        updateData();
+      });
+
+      // Remove row
+      document.getElementById("userList").addEventListener("click", (e) => {
+        if (e.target.classList.contains("remove-btn")) {
+          const rows = document.querySelectorAll(".row");
+          if (rows.length > 1) {
+            e.target.closest(".row").remove();
+            updateData();
+          }
+        }
+      });
+
+      // Jotform widget integration
+      if (window.JF) {
+        // Initialize widget
+        JF.getWidgetValue((response) => {
+          if (response && typeof response === "string" && response !== "[]") {
+            const data = JSON.parse(response);
+            const container = document.getElementById("userList");
+            container.innerHTML = "";
+            data.forEach((item, index) => {
+              const row = document.createElement("div");
+              row.className = "row";
+              row.dataset.rowId = index;
+              row.innerHTML = `
+                <input type="text" class="name-input" value="${item.name}" placeholder="Enter name" />
+                <canvas class="signature-pad"></canvas>
+                <button class="clear-btn">Clear</button>
+                <button class="remove-btn">Remove</button>
+              `;
+              container.appendChild(row);
+              initializeRow(row);
+              const canvas = row.querySelector(".signature-pad");
+              const ctx = canvas.getContext("2d");
+              const img = new Image();
+              img.src = item.signature;
+              img.onload = () => ctx.drawImage(img, 0, 0);
+            });
+            container.appendChild(document.querySelector(".add-btn"));
+            container.appendChild(document.getElementById("errorMessage"));
+          }
+        });
+
+        // Validate before submission
+        JF.validateWidget(() => validateForm());
+      }
+    })();
+  </script>
+</body>
+</html>
