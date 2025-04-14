@@ -85,7 +85,8 @@
                 ctx: null,
                 isDrawing: false,
                 lastX: 0,
-                lastY: 0
+                lastY: 0,
+                isEmpty: true
             }));
 
             canvases.forEach((canvas, index) => {
@@ -116,6 +117,7 @@
                 // Clear button
                 clearButtons[index].addEventListener('click', () => {
                     signatures[index].ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    signatures[index].isEmpty = true;
                     sendData();
                 });
             });
@@ -125,6 +127,7 @@
                 signatures[index].isDrawing = true;
                 signatures[index].lastX = e.clientX - rect.left;
                 signatures[index].lastY = e.clientY - rect.top;
+                signatures[index].isEmpty = false;
             }
 
             function draw(e, index) {
@@ -152,13 +155,17 @@
             function sendData() {
                 const data = Array.from(nameInputs).map((input, index) => ({
                     name: input.value.trim(),
-                    signature: canvases[index].toDataURL('image/png')
+                    signature: signatures[index].isEmpty ? '' : canvases[index].toDataURL('image/png')
                 }));
 
-                const isValid = data.some(row => row.name || row.signature !== canvases[index].toDataURL('image/png'));
+                // Allow empty rows, so always mark as valid
+                JFCustomWidget.sendData({
+                    value: JSON.stringify(data),
+                    widgetHeight: document.body.scrollHeight
+                });
 
                 JFCustomWidget.sendSubmit({
-                    valid: isValid,
+                    valid: true, // Always valid to allow empty rows and avoid required error
                     value: JSON.stringify(data)
                 });
             }
@@ -176,7 +183,8 @@
             // Handle widget resizing
             function resizeCanvases() {
                 canvases.forEach((canvas, index) => {
-                    const dataURL = canvas.toDataURL('image/png');
+                    if (signatures[index].isEmpty) return;
+                    const dataURL = canvases[index].toDataURL('image/png');
                     canvas.width = canvas.offsetWidth;
                     const img = new Image();
                     img.src = dataURL;
@@ -187,11 +195,6 @@
             }
 
             window.addEventListener('resize', resizeCanvases);
-
-            // Set widget height
-            JFCustomWidget.sendData({
-                widgetHeight: document.body.scrollHeight
-            });
         })();
     </script>
 </body>
