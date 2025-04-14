@@ -49,8 +49,7 @@
             <tr>
                 <td><input type="text" class="name-input" maxlength="100"></td>
                 <td>
-                    <!--<canvas class="signature-canvas"></canvas>-->
-                    <input type="text" class="name-input" maxlength="100">
+                    <canvas class="signature-canvas"></canvas>
                 </td>
             </tr>
         </tbody>
@@ -133,10 +132,10 @@
                 }));
 
                 // Allow empty rows, so always mark as valid
-                JFCustomWidget.sendData({
-                    value: JSON.stringify(data),
-                    widgetHeight: document.body.scrollHeight
-                });
+                //JFCustomWidget.sendData({
+                //    value: JSON.stringify(data),
+                //    widgetHeight: document.body.scrollHeight
+                //});
 
                 JFCustomWidget.sendSubmit({
                     valid: true, // Always valid to allow empty rows and avoid required error
@@ -149,10 +148,20 @@
                 sendData();
 
                 // Update on name input
-                nameInputs.forEach(input => {
-                    input.addEventListener('input', sendData);
-                });
+                //nameInputs.forEach(input => {
+                //    input.addEventListener('input', sendData);
+                //});
             });
+
+            // Send data to Jotform when submitted
+            //JFCustomWidget.subscribe("submit", function() {
+            //    const selectedId = dropdown.value;
+            //    const nameValue = nameField.value;
+            //    JFCustomWidget.sendSubmit({
+            //        valid: true,
+            //        value: JSON.stringify({ submissionId: selectedId, name: nameValue })
+            //    });
+            // });
 
             // Handle widget resizing
             function resizeCanvases() {
