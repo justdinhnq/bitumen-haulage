@@ -1,427 +1,198 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Custom Dynamic User List Widget</title>
-  <style>
-    .user-list-container {
-      font-family: Arial, sans-serif;
-      width: 100%;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .row {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .cell {
-      flex: 1;
-      margin-right: 8px;
-      display: flex;
-      flex-direction: column;
-    }
-    .cell:last-child {
-      margin-right: 0;
-    }
-    .cell input[type="text"] {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      width: 100%;
-    }
-    .signature-pad {
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      height: 100px;
-      background-color: #f9f9f9;
-      width: 100%;
-    }
-    .clear-btn {
-      margin-top: 5px;
-      padding: 5px 10px;
-      background-color: #f44336;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      align-self: flex-start;
-    }
-    .remove-btn {
-      padding: 5px 10px;
-      background-color: #ff9800;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .add-row-btn, .add-column-btn {
-      padding: 10px;
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin: 10px 5px 0 0;
-    }
-    .error {
-      color: red;
-      font-size: 12px;
-      display: none;
-      margin-top: 5px;
-    }
-    .column-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 5px;
-      margin-right: 8px;
-    }
-    .column-header:last-child {
-      margin-right: 0;
-    }
-    .column-header input {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      margin-right: 5px;
-      width: 100px;
-    }
-    .remove-column-btn {
-      padding: 5px 10px;
-      background-color: #f44336;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .signature-header .remove-column-btn {
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jotform Custom Widget - Name and Signature Table</title>
+    <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            width: 100%;
+            height: 60px;
+            cursor: crosshair;
+        }
+        .clear-btn {
+            font-size: 12px;
+            padding: 2px 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-  <div class="user-list-container" id="userList">
-    <div class="header-row" id="headerRow">
-      <div class="column-header" data-column-id="0">
-        <input type="text" class="column-name" value="Name" />
-        <button class="remove-column-btn">Remove</button>
-      </div>
-      <div class="column-header signature-header" data-column-id="1">
-        <input type="text" class="column-name" value="Signature" readonly />
-      </div>
-    </div>
-    <div class="row" data-row-id="0">
-      <div class="cell" data-column-id="0">
-        <input type="text" class="name-input" placeholder="Enter name" />
-      </div>
-      <div class="cell" data-column-id="1">
-        <canvas class="signature-pad"></canvas>
-        <button class="clear-btn">Clear</button>
-      </div>
-      <button class="remove-btn">Remove</button>
-    </div>
-    <button class="add-row-btn">Add New Row</button>
-    <button class="add-column-btn">Add New Column</button>
-    <div class="error" id="errorMessage">Please fill out all fields before submitting.</div>
-  </div>
+    <table id="signatureTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Signature</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" class="name-input" maxlength="100"></td>
+                <td>
+                    <canvas class="signature-canvas"></canvas>
+                    <button class="clear-btn">Clear</button>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="text" class="name-input" maxlength="100"></td>
+                <td>
+                    <canvas class="signature-canvas"></canvas>
+                    <button class="clear-btn">Clear</button>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="text" class="name-input" maxlength="100"></td>
+                <td>
+                    <canvas class="signature-canvas"></canvas>
+                    <button class="clear-btn">Clear</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    (function () {
-      let rowCount = 1;
-      let columnCount = 2;
-      const columnTypes = {
-        0: "text",
-        1: "signature"
-      };
-      const signatureColumnId = "1";
+    <script>
+        (function () {
+            // Initialize signature canvases
+            const canvases = document.querySelectorAll('.signature-canvas');
+            const clearButtons = document.querySelectorAll('.clear-btn');
+            const nameInputs = document.querySelectorAll('.name-input');
+            const signatures = Array.from(canvases).map(() => ({
+                ctx: null,
+                isDrawing: false,
+                lastX: 0,
+                lastY: 0
+            }));
 
-      function initializeRow(row) {
-        row.querySelectorAll(".signature-pad").forEach(canvas => {
-          const cell = canvas.closest(".cell");
-          const clearBtn = cell.querySelector(".clear-btn");
-          const ctx = canvas.getContext("2d");
-          let isDrawing = false;
-          let lastX = 0;
-          let lastY = 0;
+            canvases.forEach((canvas, index) => {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = 60;
+                signatures[index].ctx = canvas.getContext('2d');
+                signatures[index].ctx.lineWidth = 2;
+                signatures[index].ctx.lineCap = 'round';
+                signatures[index].ctx.lineJoin = 'round';
 
-          canvas.width = canvas.offsetWidth;
-          canvas.height = canvas.offsetHeight;
+                // Drawing event listeners
+                canvas.addEventListener('mousedown', (e) => startDrawing(e, index));
+                canvas.addEventListener('mousemove', (e) => draw(e, index));
+                canvas.addEventListener('mouseup', () => stopDrawing(index));
+                canvas.addEventListener('mouseout', () => stopDrawing(index));
 
-          function startDrawing(e) {
-            isDrawing = true;
-            [lastX, lastY] = getCoordinates(e);
-          }
+                // Touch support
+                canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    startDrawing(e.touches[0], index);
+                });
+                canvas.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    draw(e.touches[0], index);
+                });
+                canvas.addEventListener('touchend', () => stopDrawing(index));
 
-          function draw(e) {
-            if (!isDrawing) return;
-            e.preventDefault();
-            const [x, y] = getCoordinates(e);
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(x, y);
-            ctx.strokeStyle = "#000";
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            [lastX, lastY] = [x, y];
-            updateData();
-          }
-
-          function stopDrawing() {
-            isDrawing = false;
-          }
-
-          function getCoordinates(e) {
-            const rect = canvas.getBoundingClientRect();
-            let x, y;
-            if (e.type.includes("touch")) {
-              x = e.touches[0].clientX - rect.left;
-              y = e.touches[0].clientY - rect.top;
-            } else {
-              x = e.clientX - rect.left;
-              y = e.clientY - rect.top;
-            }
-            return [x, y];
-          }
-
-          canvas.addEventListener("mousedown", startDrawing);
-          canvas.addEventListener("mousemove", draw);
-          canvas.addEventListener("mouseup", stopDrawing);
-          canvas.addEventListener("mouseout", stopDrawing);
-          canvas.addEventListener("touchstart", startDrawing);
-          canvas.addEventListener("touchmove", draw);
-          canvas.addEventListener("touchend", stopDrawing);
-
-          clearBtn.addEventListener("click", () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            updateData();
-          });
-        });
-
-        row.querySelectorAll(".name-input").forEach(input => {
-          input.addEventListener("input", updateData);
-        });
-      }
-
-      function updateData() {
-        const rows = document.querySelectorAll(".row");
-        const headers = document.querySelectorAll(".column-header");
-        const data = {
-          columns: Array.from(headers).map(h => ({
-            id: h.dataset.columnId,
-            name: h.querySelector(".column-name").value,
-            type: columnTypes[h.dataset.columnId]
-          })),
-          rows: []
-        };
-
-        rows.forEach(row => {
-          const rowData = {};
-          row.querySelectorAll(".cell").forEach(cell => {
-            const columnId = cell.dataset.columnId;
-            if (columnTypes[columnId] === "text") {
-              rowData[columnId] = cell.querySelector(".name-input").value;
-            } else if (columnTypes[columnId] === "signature") {
-              const canvas = cell.querySelector(".signature-pad");
-              rowData[columnId] = canvas.toDataURL();
-            }
-          });
-          data.rows.push(rowData);
-        });
-
-        if (window.JF && window.JF.setWidgetValue) {
-          const dataString = data.rows.length > 0 ? JSON.stringify(data) : "";
-          window.JF.setWidgetValue(dataString);
-        }
-      }
-
-      function validateForm() {
-        const rows = document.querySelectorAll(".row");
-        let isValid = true;
-        rows.forEach(row => {
-          row.querySelectorAll(".cell").forEach(cell => {
-            const columnId = cell.dataset.columnId;
-            if (columnTypes[columnId] === "text") {
-              const input = cell.querySelector(".name-input");
-              if (!input.value.trim()) {
-                isValid = false;
-              }
-            } else if (columnTypes[columnId] === "signature") {
-              const canvas = cell.querySelector(".signature-pad");
-              const ctx = canvas.getContext("2d");
-              const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-              const isCanvasEmpty = Array.from(imageData).every(val => val === 0);
-              if (isCanvasEmpty) {
-                isValid = false;
-              }
-            }
-          });
-        });
-        const errorMessage = document.getElementById("errorMessage");
-        errorMessage.style.display = isValid ? "none" : "block";
-        return isValid;
-      }
-
-      document.querySelectorAll(".row").forEach(initializeRow);
-
-      document.querySelector(".add-row-btn").addEventListener("click", () => {
-        const newRow = document.createElement("div");
-        newRow.className = "row";
-        newRow.dataset.rowId = rowCount++;
-        let rowHTML = "";
-        const headers = document.querySelectorAll(".column-header");
-        headers.forEach(header => {
-          const columnId = header.dataset.columnId;
-          if (columnTypes[columnId] === "text") {
-            rowHTML += `
-              <div class="cell" data-column-id="${columnId}">
-                <input type="text" class="name-input" placeholder="Enter value" />
-              </div>
-            `;
-          }
-        });
-        rowHTML += `
-          <div class="cell" data-column-id="${signatureColumnId}">
-            <canvas class="signature-pad"></canvas>
-            <button class="clear-btn">Clear</button>
-          </div>
-          <button class="remove-btn">Remove</button>
-        `;
-        newRow.innerHTML = rowHTML;
-        document.getElementById("userList").insertBefore(newRow, document.querySelector(".add-row-btn"));
-        initializeRow(newRow);
-        updateData();
-      });
-
-      document.querySelector(".add-column-btn").addEventListener("click", () => {
-        const newColumnId = columnCount++;
-        columnTypes[newColumnId] = "text";
-        const headerRow = document.getElementById("headerRow");
-        const signatureHeader = headerRow.querySelector(`.column-header[data-column-id="${signatureColumnId}"]`);
-        const newHeader = document.createElement("div");
-        newHeader.className = "column-header";
-        newHeader.dataset.columnId = newColumnId;
-        newHeader.innerHTML = `
-          <input type="text" class="column-name" value="Column ${newColumnId}" />
-          <button class="remove-column-btn">Remove</button>
-        `;
-        headerRow.insertBefore(newHeader, signatureHeader);
-
-        document.querySelectorAll(".row").forEach(row => {
-          const signatureCell = row.querySelector(`.cell[data-column-id="${signatureColumnId}"]`);
-          const newCell = document.createElement("div");
-          newCell.className = "cell";
-          newCell.dataset.columnId = newColumnId;
-          newCell.innerHTML = `<input type="text" class="name-input" placeholder="Enter value" />`;
-          row.insertBefore(newCell, signatureCell);
-          newCell.querySelector(".name-input").addEventListener("input", updateData);
-        });
-
-        newHeader.querySelector(".column-name").addEventListener("input", updateData);
-        updateData();
-      });
-
-      document.getElementById("userList").addEventListener("click", (e) => {
-        if (e.target.classList.contains("remove-btn")) {
-          const rows = document.querySelectorAll(".row");
-          if (rows.length > 1) {
-            e.target.closest(".row").remove();
-            updateData();
-          }
-        } else if (e.target.classList.contains("remove-column-btn")) {
-          const headers = document.querySelectorAll(".column-header");
-          if (headers.length > 2) {
-            const columnId = e.target.closest(".column-header").dataset.columnId;
-            e.target.closest(".column-header").remove();
-            document.querySelectorAll(`.cell[data-column-id="${columnId}"]`).forEach(cell => cell.remove());
-            delete columnTypes[columnId];
-            updateData();
-          }
-        }
-      });
-
-      if (window.JF) {
-        JF.getWidgetValue((response) => {
-          if (response && typeof response === "string" && response !== "[]") {
-            const data = JSON.parse(response);
-            const container = document.getElementById("userList");
-            const headerRow = document.getElementById("headerRow");
-            headerRow.innerHTML = "";
-            container.innerHTML = "";
-            columnCount = 0;
-            rowCount = 0;
-
-            const nonSignatureColumns = data.columns.filter(col => col.id !== signatureColumnId);
-            const signatureColumn = data.columns.find(col => col.id === signatureColumnId);
-
-            nonSignatureColumns.forEach(col => {
-              columnTypes[col.id] = col.type;
-              const header = document.createElement("div");
-              header.className = "column-header";
-              header.dataset.columnId = col.id;
-              header.innerHTML = `
-                <input type="text" class="column-name" value="${col.name}" />
-                <button class="remove-column-btn">Remove</button>
-              `;
-              headerRow.appendChild(header);
-              header.querySelector(".column-name").addEventListener("input", updateData);
-              columnCount = Math.max(columnCount, parseInt(col.id) + 1);
+                // Clear button
+                clearButtons[index].addEventListener('click', () => {
+                    signatures[index].ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    sendData();
+                });
             });
 
-            const signatureHeader = document.createElement("div");
-            signatureHeader.className = "column-header signature-header";
-            signatureHeader.dataset.columnId = signatureColumnId;
-            signatureHeader.innerHTML = `
-              <input type="text" class="column-name" value="Signature" readonly />
-            `;
-            headerRow.appendChild(signatureHeader);
+            function startDrawing(e, index) {
+                const rect = canvases[index].getBoundingClientRect();
+                signatures[index].isDrawing = true;
+                signatures[index].lastX = e.clientX - rect.left;
+                signatures[index].lastY = e.clientY - rect.top;
+            }
 
-            data.rows.forEach((rowData, rowIndex) => {
-              const row = document.createElement("div");
-              row.className = "row";
-              row.dataset.rowId = rowIndex;
-              let rowHTML = "";
-              nonSignatureColumns.forEach(col => {
-                if (col.type === "text") {
-                  rowHTML += `
-                    <div class="cell" data-column-id="${col.id}">
-                      <input type="text" class="name-input" value="${rowData[col.id] || ''}" placeholder="Enter value" />
-                    </div>
-                  `;
-                }
-              });
-              rowHTML += `
-                <div class="cell" data-column-id="${signatureColumnId}">
-                  <canvas class="signature-pad"></canvas>
-                  <button class="clear-btn">Clear</button>
-                </div>
-                <button class="remove-btn">Remove</button>
-              `;
-              row.innerHTML = rowHTML;
-              container.appendChild(row);
-              initializeRow(row);
-              if (rowData[signatureColumnId]) {
-                const canvas = row.querySelector(`.cell[data-column-id="${signatureColumnId}"] .signature-pad`);
-                const ctx = canvas.getContext("2d");
-                const img = new Image();
-                img.src = rowData[signatureColumnId];
-                img.onload = () => ctx.drawImage(img, 0, 0);
-              }
-              rowCount = Math.max(rowCount, rowIndex + 1);
+            function draw(e, index) {
+                if (!signatures[index].isDrawing) return;
+
+                const rect = canvases[index].getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                signatures[index].ctx.beginPath();
+                signatures[index].ctx.moveTo(signatures[index].lastX, signatures[index].lastY);
+                signatures[index].ctx.lineTo(x, y);
+                signatures[index].ctx.stroke();
+
+                signatures[index].lastX = x;
+                signatures[index].lastY = y;
+
+                sendData();
+            }
+
+            function stopDrawing(index) {
+                signatures[index].isDrawing = false;
+            }
+
+            function sendData() {
+                const data = Array.from(nameInputs).map((input, index) => ({
+                    name: input.value.trim(),
+                    signature: canvases[index].toDataURL('image/png')
+                }));
+
+                const isValid = data.some(row => row.name || row.signature !== canvases[index].toDataURL('image/png'));
+
+                JFCustomWidget.sendSubmit({
+                    valid: isValid,
+                    value: JSON.stringify(data)
+                });
+            }
+
+            // Send initial data
+            JFCustomWidget.subscribe('ready', () => {
+                sendData();
+
+                // Update on name input
+                nameInputs.forEach(input => {
+                    input.addEventListener('input', sendData);
+                });
             });
 
-            container.appendChild(document.querySelector(".add-row-btn"));
-            container.appendChild(document.querySelector(".add-column-btn"));
-            container.appendChild(document.getElementById("errorMessage"));
-          }
-        });
+            // Handle widget resizing
+            function resizeCanvases() {
+                canvases.forEach((canvas, index) => {
+                    const dataURL = canvas.toDataURL('image/png');
+                    canvas.width = canvas.offsetWidth;
+                    const img = new Image();
+                    img.src = dataURL;
+                    img.onload = () => {
+                        signatures[index].ctx.drawImage(img, 0, 0);
+                    };
+                });
+            }
 
-        JF.validateWidget(() => validateForm());
-      }
-    })();
-  </script>
+            window.addEventListener('resize', resizeCanvases);
+
+            // Set widget height
+            JFCustomWidget.sendData({
+                widgetHeight: document.body.scrollHeight
+            });
+        })();
+    </script>
 </body>
 </html>
