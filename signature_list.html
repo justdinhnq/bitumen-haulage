@@ -20,12 +20,12 @@
     }
     .cell {
       flex: 1;
-      margin-right: 8px; /* Small padding between columns */
+      margin-right: 8px;
       display: flex;
       flex-direction: column;
     }
     .cell:last-child {
-      margin-right: 0; /* Remove margin for the last cell (signature) */
+      margin-right: 0;
     }
     .cell input[type="text"] {
       padding: 8px;
@@ -77,7 +77,7 @@
       display: flex;
       align-items: center;
       margin-bottom: 5px;
-      margin-right: 8px; /* Match cell padding for headers */
+      margin-right: 8px;
     }
     .column-header:last-child {
       margin-right: 0;
@@ -233,7 +233,8 @@
         });
 
         if (window.JF && window.JF.setWidgetValue) {
-          window.JF.setWidgetValue(JSON.stringify(data));
+          const dataString = data.rows.length > 0 ? JSON.stringify(data) : "";
+          window.JF.setWidgetValue(dataString);
         }
       }
 
@@ -250,7 +251,9 @@
               }
             } else if (columnTypes[columnId] === "signature") {
               const canvas = cell.querySelector(".signature-pad");
-              const isCanvasEmpty = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data.every(val => val === 0);
+              const ctx = canvas.getContext("2d");
+              const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+              const isCanvasEmpty = Array.from(imageData).every(val => val === 0);
               if (isCanvasEmpty) {
                 isValid = false;
               }
