@@ -35,11 +35,6 @@
             height: 60px;
             cursor: crosshair;
         }
-        .clear-btn {
-            font-size: 12px;
-            padding: 2px 5px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -54,22 +49,8 @@
             <tr>
                 <td><input type="text" class="name-input" maxlength="100"></td>
                 <td>
-                    <canvas class="signature-canvas"></canvas>
-                    <button class="clear-btn">Clear</button>
-                </td>
-            </tr>
-            <tr>
-                <td><input type="text" class="name-input" maxlength="100"></td>
-                <td>
-                    <canvas class="signature-canvas"></canvas>
-                    <button class="clear-btn">Clear</button>
-                </td>
-            </tr>
-            <tr>
-                <td><input type="text" class="name-input" maxlength="100"></td>
-                <td>
-                    <canvas class="signature-canvas"></canvas>
-                    <button class="clear-btn">Clear</button>
+                    <!--<canvas class="signature-canvas"></canvas>-->
+                    <input type="text" class="name-input" maxlength="100">
                 </td>
             </tr>
         </tbody>
@@ -113,13 +94,6 @@
                     draw(e.touches[0], index);
                 });
                 canvas.addEventListener('touchend', () => stopDrawing(index));
-
-                // Clear button
-                clearButtons[index].addEventListener('click', () => {
-                    signatures[index].ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    signatures[index].isEmpty = true;
-                    sendData();
-                });
             });
 
             function startDrawing(e, index) {
