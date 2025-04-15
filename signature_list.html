@@ -35,6 +35,17 @@
             height: 60px;
             cursor: crosshair;
         }
+        .clear-btn {
+            font-size: 12px;
+            padding: 2px 5px;
+            cursor: pointer;
+        }
+        .error-message {
+            color: red;
+            font-size: 12px;
+            display: none;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -50,10 +61,26 @@
                 <td><input type="text" class="name-input" maxlength="100"></td>
                 <td>
                     <canvas class="signature-canvas"></canvas>
+                    <button class="clear-btn">Clear</button>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="text" class="name-input" maxlength="100"></td>
+                <td>
+                    <canvas class="signature-canvas"></canvas>
+                    <button class="clear-btn">Clear</button>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="text" class="name-input" maxlength="100"></td>
+                <td>
+                    <canvas class="signature-canvas"></canvas>
+                    <button class="clear-btn">Clear</button>
                 </td>
             </tr>
         </tbody>
     </table>
+    <div class="error-message" id="errorMessage">Please provide at least one name or signature.</div>
 
     <script>
         (function () {
@@ -61,12 +88,12 @@
             const canvases = document.querySelectorAll('.signature-canvas');
             const clearButtons = document.querySelectorAll('.clear-btn');
             const nameInputs = document.querySelectorAll('.name-input');
+            const errorMessage = document.getElementById('errorMessage');
             const signatures = Array.from(canvases).map(() => ({
                 ctx: null,
                 isDrawing: false,
                 lastX: 0,
-                lastY: 0,
-                isEmpty: true
+                lastY: 0
             }));
 
             canvases.forEach((canvas, index) => {
@@ -93,6 +120,12 @@
                     draw(e.touches[0], index);
                 });
                 canvas.addEventListener('touchend', () => stopDrawing(index));
+
+                // Clear button
+                clearButtons[index].addEventListener('click', () => {
+                    signatures[index].ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    sendData();
+                });
             });
 
             function startDrawing(e, index) {
@@ -100,7 +133,6 @@
                 signatures[index].isDrawing = true;
                 signatures[index].lastX = e.clientX - rect.left;
                 signatures[index].lastY = e.clientY - rect.top;
-                signatures[index].isEmpty = false;
             }
 
             function draw(e, index) {
@@ -128,18 +160,30 @@
             function sendData() {
                 const data = Array.from(nameInputs).map((input, index) => ({
                     name: input.value.trim(),
-                    signature: signatures[index].isEmpty ? '' : canvases[index].toDataURL('image/png')
+                    signature: canvases[index].toDataURL('image/png')
                 }));
 
-                // Allow empty rows, so always mark as valid
-                //JFCustomWidget.sendData({
-                //    value: JSON.stringify(data),
-                //    widgetHeight: document.body.scrollHeight
-                //});
+                // Check if at least one row has a name or a non-empty signature
+                const hasData = data.some(row => {
+                    const canvas = canvases[data.indexOf(row)];
+                    const emptyCanvas = document.createElement('canvas');
+                    emptyCanvas.width = canvas.width;
+                    emptyCanvas.height = canvas.height;
+                    return row.name || row.signature !== emptyCanvas.toDataURL('image/png');
+                });
 
+                // If the widget is required, show error message if no data
+                errorMessage.style.display = hasData ? 'none' : 'block';
+
+                // Send data to Jotform
                 JFCustomWidget.sendSubmit({
-                    valid: true, // Always valid to allow empty rows and avoid required error
+                    valid: true, // Always true to avoid Jotform's required field error
                     value: JSON.stringify(data)
+                });
+
+                // Update widget height to account for error message
+                JFCustomWidget.sendData({
+                    widgetHeight: document.body.scrollHeight
                 });
             }
 
@@ -148,26 +192,39 @@
                 sendData();
 
                 // Update on name input
-                //nameInputs.forEach(input => {
-                //    input.addEventListener('input', sendData);
-                //});
+                nameInputs.forEach(input => {
+                    input.addEventListener('input', sendData);
+                });
             });
 
-            // Send data to Jotform when submitted
-            //JFCustomWidget.subscribe("submit", function() {
-            //    const selectedId = dropdown.value;
-            //    const nameValue = nameField.value;
-            //    JFCustomWidget.sendSubmit({
-            //        valid: true,
-            //        value: JSON.stringify({ submissionId: selectedId, name: nameValue })
-            //    });
-            // });
+            // Handle form submission validation
+            JFCustomWidget.subscribe('submit', () => {
+                const data = Array.from(nameInputs).map((input, index) => ({
+                    name: input.value.trim(),
+                    signature: canvases[index].toDataURL('image/png')
+                }));
+
+                const hasData = data.some(row => {
+                    const canvas = canvases[data.indexOf(row)];
+                    const emptyCanvas = document.createElement('canvas');
+                    emptyCanvas.width = canvas.width;
+                    emptyCanvas.height = canvas.height;
+                    return row.name || row.signature !== emptyCanvas.toDataURL('image/png');
+                });
+
+                JFCustomWidget.sendSubmit({
+                    valid: hasData, // Only valid if there is data
+                    value: JSON.stringify(data)
+                });
+
+                // Show error if no data
+                errorMessage.style.display = hasData ? 'none' : 'block';
+            });
 
             // Handle widget resizing
             function resizeCanvases() {
                 canvases.forEach((canvas, index) => {
-                    if (signatures[index].isEmpty) return;
-                    const dataURL = canvases[index].toDataURL('image/png');
+                    const dataURL = canvas.toDataURL('image/png');
                     canvas.width = canvas.offsetWidth;
                     const img = new Image();
                     img.src = dataURL;
@@ -178,6 +235,11 @@
             }
 
             window.addEventListener('resize', resizeCanvases);
+
+            // Set initial widget height
+            JFCustomWidget.sendData({
+                widgetHeight: document.body.scrollHeight
+            });
         })();
     </script>
 </body>
