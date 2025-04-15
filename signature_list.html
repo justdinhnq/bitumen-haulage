@@ -157,31 +157,41 @@
                 signatures[index].isDrawing = false;
             }
 
-            function sendData() {
-                const data = Array.from(nameInputs).map((input, index) => ({
-                    name: input.value.trim(),
-                    signature: canvases[index].toDataURL('image/png')
-                }));
-
-                // Check if at least one row has a name or a non-empty signature
-                const hasData = data.some(row => {
-                    const canvas = canvases[data.indexOf(row)];
-                    const emptyCanvas = document.createElement('canvas');
-                    emptyCanvas.width = canvas.width;
-                    emptyCanvas.height = canvas.height;
-                    return row.name || row.signature !== emptyCanvas.toDataURL('image/png');
+            function getData() {
+                return Array.from(nameInputs).map((input, index) => {
+                    const canvas = canvases[index];
+                    const signature = canvas.toDataURL('image/png');
+                    return {
+                        name: input.value.trim(),
+                        signature: signature
+                    };
                 });
+            }
 
-                // If the widget is required, show error message if no data
+            function isCanvasEmpty(canvas) {
+                const emptyCanvas = document.createElement('canvas');
+                emptyCanvas.width = canvas.width;
+                emptyCanvas.height = canvas.height;
+                return canvas.toDataURL('image/png') === emptyCanvas.toDataURL('image/png');
+            }
+
+            function sendData() {
+                const data = getData();
+                const hasData = data.some(row => row.name || !isCanvasEmpty(canvases[data.indexOf(row)]));
+
+                // Update error message visibility
                 errorMessage.style.display = hasData ? 'none' : 'block';
 
                 // Send data to Jotform
-                JFCustomWidget.sendSubmit({
-                    valid: true, // Always true to avoid Jotform's required field error
-                    value: JSON.stringify(data)
+                const value = JSON.stringify(data);
+                JFCustomWidget.sendData({
+                    value: value
                 });
 
-                // Update widget height to account for error message
+                // Log for debugging
+                console.log('Sending data:', value);
+
+                // Update widget height
                 JFCustomWidget.sendData({
                     widgetHeight: document.body.scrollHeight
                 });
@@ -197,25 +207,19 @@
                 });
             });
 
-            // Handle form submission validation
+            // Handle form submission
             JFCustomWidget.subscribe('submit', () => {
-                const data = Array.from(nameInputs).map((input, index) => ({
-                    name: input.value.trim(),
-                    signature: canvases[index].toDataURL('image/png')
-                }));
+                const data = getData();
+                const hasData = data.some(row => row.name || !isCanvasEmpty(canvases[data.indexOf(row)]));
 
-                const hasData = data.some(row => {
-                    const canvas = canvases[data.indexOf(row)];
-                    const emptyCanvas = document.createElement('canvas');
-                    emptyCanvas.width = canvas.width;
-                    emptyCanvas.height = canvas.height;
-                    return row.name || row.signature !== emptyCanvas.toDataURL('image/png');
-                });
-
+                const value = JSON.stringify(data);
                 JFCustomWidget.sendSubmit({
-                    valid: hasData, // Only valid if there is data
-                    value: JSON.stringify(data)
+                    valid: hasData,
+                    value: value
                 });
+
+                // Log for debugging
+                console.log('Submitting data:', value);
 
                 // Show error if no data
                 errorMessage.style.display = hasData ? 'none' : 'block';
