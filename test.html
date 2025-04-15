@@ -11,15 +11,21 @@
     </div>
     <script type="text/javascript">
         JFCustomWidget.subscribe("ready", function () {
+            console.log("1");
             var charLimit = parseInt(JFCustomWidget.getWidgetSetting('charLimit'));
+            console.log("2");
             var myTextInput = document.getElementById("myTextInput");
+            console.log("3");
             myTextInput ? myTextInput.maxLength = charLimit : "";
+            console.log("4");
             //Then subscribe to form submit event to save the input when the form is submitted
             JFCustomWidget.subscribe("submit", function () {
+                console.log("5");
                 var data = {
                     valid: true,
                     value: myTextInput.value
                 }
+                console.log("6");
                 // Finally, send data to your JotForm form
                 JFCustomWidget.sendSubmit(data);
             });
