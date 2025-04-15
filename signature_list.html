@@ -209,6 +209,7 @@
 
             // Handle form submission
             JFCustomWidget.subscribe('submit', () => {
+                console.log('Submitting data...');
                 const data = getData();
                 const hasData = data.some(row => row.name || !isCanvasEmpty(canvases[data.indexOf(row)]));
 
