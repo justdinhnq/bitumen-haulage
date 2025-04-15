@@ -59,9 +59,12 @@ JFCustomWidget.subscribe("ready", function() {
     JFCustomWidget.subscribe("submit", function() {
         const selectedId = dropdown.value;
         const nameValue = nameField.value;
+
+        console.log('Submission value: ', JSON.stringify({ myvalue: selectedId, name: nameValue }))
+
         JFCustomWidget.sendSubmit({
             valid: true,
-            value: JSON.stringify({ submissionId: selectedId, name: nameValue })
+            value: JSON.stringify({ myvalue: selectedId, name: nameValue })
         });
     });
 
