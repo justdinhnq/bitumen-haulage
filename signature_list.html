@@ -213,6 +213,7 @@
                 const hasData = data.some(row => row.name || !isCanvasEmpty(canvases[data.indexOf(row)]));
 
                 const value = JSON.stringify(data);
+                console.log('Data before submitting:', value);
                 JFCustomWidget.sendSubmit({
                     valid: hasData,
                     value: value
