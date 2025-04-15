@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-
+<html>
 <head>
     <meta charset="utf-8">
     <script src="//js.jotform.com/JotFormCustomWidget.min.js"></script>
 </head>
-
 <body>
     <div id="mywidget">
         <input type="text" id="myTextInput" value="hello world" placeholder="Type here..." />
@@ -12,26 +11,31 @@
     <script type="text/javascript">
         JFCustomWidget.subscribe("ready", function () {
             console.log("1");
-            var charLimit = parseInt(JFCustomWidget.getWidgetSetting('charLimit'));
+            var charLimit = parseInt(JFCustomWidget.getWidgetSetting('charLimit')) || 100; // Fallback to 100 if charLimit is not set
             console.log("2");
             var myTextInput = document.getElementById("myTextInput");
             console.log("3");
-            myTextInput ? myTextInput.maxLength = charLimit : "";
+            if (myTextInput) {
+                myTextInput.maxLength = charLimit;
+            } else {
+                console.error("myTextInput element not found");
+            }
             console.log("4");
-            //Then subscribe to form submit event to save the input when the form is submitted
+
+            // Subscribe to form submit event
             JFCustomWidget.subscribe("submit", function () {
                 console.log("5");
+                var myTextInput = document.getElementById("myTextInput"); // Re-query to ensure element exists
                 var data = {
                     valid: true,
-                    value: myTextInput.value
-                }
-                console.log("data: " + data);
-                // Finally, send data to your JotForm form
+                    value: myTextInput && myTextInput.value ? myTextInput.value : "missing value here"
+                };
+                console.log("data: ", data);
+                // Send data to JotForm
                 JFCustomWidget.sendSubmit(data);
                 console.log("6");
             });
         });
     </script>
 </body>
-
 </html>
