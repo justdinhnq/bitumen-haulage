@@ -7,25 +7,15 @@
 
 <body>
     <div id="mywidget">
-        <input type="text" id="myTextInput">
+        <input type="text" id="myTextInput" value="hello world" placeholder="Type here..." />
     </div>
     <script type="text/javascript">
-        /*Begin by subscribing to the "ready" event.
-        The ready event has a callback function
-        where you will include all your JavaScript. */
         JFCustomWidget.subscribe("ready", function () {
-            /*Next, get Widget's user settings to apply them on your widget.
-            In this case, we are setting the maxLength attribute for our
-            input field*/
-            var charLimit =
-                parseInt(JFCustomWidget.getWidgetSetting('charLimit'));
+            var charLimit = parseInt(JFCustomWidget.getWidgetSetting('charLimit'));
             var myTextInput = document.getElementById("myTextInput");
             myTextInput ? myTextInput.maxLength = charLimit : "";
             //Then subscribe to form submit event to save the input when the form is submitted
             JFCustomWidget.subscribe("submit", function () {
-                /*prepare the data you'll be sending
-                setting "valid" as "true" enables the form to check for a
-                value if it is required*/
                 var data = {
                     valid: true,
                     value: myTextInput.value
