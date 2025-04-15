@@ -197,37 +197,40 @@
                 });
             }
 
-            // Send initial data
+            //always subscribe to ready event and implement widget related code
+            //inside callback function , it is the best practice while developing widgets
             JFCustomWidget.subscribe('ready', () => {
-                sendData();
+                //sendData();
 
                 // Update on name input
-                nameInputs.forEach(input => {
-                    input.addEventListener('input', sendData);
+                //nameInputs.forEach(input => {
+                //    input.addEventListener('input', sendData);
+                //});
+
+                // Handle form submission
+                JFCustomWidget.subscribe('submit', () => {
+                    console.log('Submitting data...');
+                    const data = getData();
+                    const hasData = data.some(row => row.name || !isCanvasEmpty(canvases[data.indexOf(row)]));
+
+                    const value = JSON.stringify(data);
+                    console.log('Data before submitting:', value);
+
+                    var result = {}
+                    result.valid = hasData;
+                    result.value = value;
+
+                    JFCustomWidget.sendSubmit(result);
+
+                    // Log for debugging
+                    console.log('Submitting data:', value);
+
+                    // Show error if no data
+                    errorMessage.style.display = hasData ? 'none' : 'block';
                 });
             });
 
-            // Handle form submission
-            JFCustomWidget.subscribe('submit', () => {
-                console.log('Submitting data...');
-                const data = getData();
-                const hasData = data.some(row => row.name || !isCanvasEmpty(canvases[data.indexOf(row)]));
-
-                const value = JSON.stringify(data);
-                console.log('Data before submitting:', value);
-
-                var result = {}
-                result.valid = hasData;
-                result.value = value;
-
-                JFCustomWidget.sendSubmit(result);
-
-                // Log for debugging
-                console.log('Submitting data:', value);
-
-                // Show error if no data
-                errorMessage.style.display = hasData ? 'none' : 'block';
-            });
+            
 
             // Handle widget resizing
             function resizeCanvases() {
