@@ -1,32 +1,40 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <script src="//js.jotform.com/JotFormCustomWidget.min.js"></script>
-    </head>
-    <body>
-        <div id="main">
-            <h3>This is my first widget.</h3>
-            <span id="labelText"></span>
-            <input type="text" id="userInput">
-        </div>
-        <script type="text/javascript">
-            //always subscribe to ready event and implement widget related code
-            //inside callback function , it is the best practice while developing widgets
-            JFCustomWidget.subscribe("ready", function(){
-                var label = JFCustomWidget.getWidgetSetting('QuestionLabel');
-                document.getElementById('labelText').innerHTML = label;
-                //subscribe to form submit event
-                JFCustomWidget.subscribe("submit", function(){
-                    var msg = {
-                        //you should valid attribute to data for JotForm
-                        //to be able to use youw widget as required
-                        valid: true,
-                        value: document.getElementById('userInput').value
-                    }
-                    // send value to JotForm
-                    JFCustomWidget.sendSubmit(msg);
-                });
+
+<head>
+    <meta charset="utf-8">
+    <script src="//js.jotform.com/JotFormCustomWidget.min.js"></script>
+</head>
+
+<body>
+    <div id="mywidget">
+        <input type="text" id="myTextInput">
+    </div>
+    <script type="text/javascript">
+        /*Begin by subscribing to the "ready" event.
+        The ready event has a callback function
+        where you will include all your JavaScript. */
+        JFCustomWidget.subscribe("ready", function () {
+            /*Next, get Widget's user settings to apply them on your widget.
+            In this case, we are setting the maxLength attribute for our
+            input field*/
+            var charLimit =
+                parseInt(JFCustomWidget.getWidgetSetting('charLimit'));
+            var myTextInput = document.getElementById("myTextInput");
+            myTextInput ? myTextInput.maxLength = charLimit : "";
+            //Then subscribe to form submit event to save the input when the form is submitted
+            JFCustomWidget.subscribe("submit", function () {
+                /*prepare the data you'll be sending
+                setting "valid" as "true" enables the form to check for a
+                value if it is required*/
+                var data = {
+                    valid: true,
+                    value: myTextInput.value
+                }
+                // Finally, send data to your JotForm form
+                JFCustomWidget.sendSubmit(data);
             });
-        </script>
-    </body>
+        });
+    </script>
+</body>
+
 </html>
