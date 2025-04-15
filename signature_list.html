@@ -214,10 +214,12 @@
 
                 const value = JSON.stringify(data);
                 console.log('Data before submitting:', value);
-                JFCustomWidget.sendSubmit({
-                    valid: hasData,
-                    value: value
-                });
+
+                var result = {}
+                result.valid = hasData;
+                result.value = value;
+
+                JFCustomWidget.sendSubmit(result);
 
                 // Log for debugging
                 console.log('Submitting data:', value);
