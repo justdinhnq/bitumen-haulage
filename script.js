@@ -59,6 +59,7 @@ JFCustomWidget.subscribe("ready", function() {
         const selectedId = this.value;
         if (selectedId) {
             const selectedSubmission = submissionsData.find(sub => sub.id === selectedId);
+            console.log('selectedSubmission.answers: ', selectedSubmission.answers);
             if (selectedSubmission && selectedSubmission.answers) {
                 // Update all fields
                 Object.keys(fields).forEach(fieldId => {
