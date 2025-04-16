@@ -1,18 +1,32 @@
-// Main widget logic
 JFCustomWidget.subscribe("ready", function() {
     // downer.jotform.com/API
     const apiKey = '38253712fa8d8d79431cd7ec2ca697ee'; 
-    const formId = '250956600933055';
-
-    // api.jotform.com
-    //const apiKey = 'e8f69971946f06201befd8165890d1f6'; 
-    //const formId = '250968169939074'; 
+    const formId = '250777678878079';
 
     const dropdown = document.getElementById('submission-dropdown');
-    const nameField = document.getElementById('name-field');
+    const fields = {
+        'driver-name': { type: 'text', name: 'driverName' },
+        'driver-signature': { type: 'image', name: 'driverSignature' },
+        'loading-point': { type: 'text', name: 'loadingPoint' },
+        'customer-name': { type: 'text', name: 'customerName' },
+        'requested-time': { type: 'text', name: 'requestedTime' },
+        'downer-po': { type: 'text', name: 'downerPO' },
+        'product': { type: 'text', name: 'product' },
+        'loading-time-in': { type: 'text', name: 'loadingTimeIn' },
+        'loading-time-out': { type: 'text', name: 'loadingTimeOut' },
+        'bitumen-tanker-number': { type: 'text', name: 'bitumenTankerNumber' },
+        'company-name': { type: 'text', name: 'companyName' },
+        'refinery-name': { type: 'text', name: 'refineryName' },
+        'batch-number': { type: 'text', name: 'batchNumber' },
+        'load-temperature': { type: 'image', name: 'loadTemperature' },
+        'tank-temperature': { type: 'image', name: 'tankTemperature' },
+        'gross-weight': { type: 'image', name: 'grossWeight' },
+        'tare-weight': { type: 'image', name: 'tareWeight' },
+        'net-weight': { type: 'image', name: 'netWeight' }
+    };
     let submissionsData = [];
 
-    console.log('subscribing')
+    console.log('subscribing');
 
     // Fetch submissions
     const fetchSubmissions = async () => {
@@ -46,29 +60,60 @@ JFCustomWidget.subscribe("ready", function() {
         if (selectedId) {
             const selectedSubmission = submissionsData.find(sub => sub.id === selectedId);
             if (selectedSubmission && selectedSubmission.answers) {
-                // Find the 'name' field in answers
-                const nameAnswer = Object.values(selectedSubmission.answers).find(
-                    answer => answer.name === 'name'
-                );
-                nameField.value = nameAnswer && nameAnswer.answer ? nameAnswer.answer : 'No name found';
+                // Update all fields
+                Object.keys(fields).forEach(fieldId => {
+                    const field = fields[fieldId];
+                    const element = document.getElementById(fieldId);
+                    const answer = Object.values(selectedSubmission.answers).find(
+                        ans => ans.name === field.name
+                    );
+                    if (field.type === 'text') {
+                        element.value = answer && answer.answer ? answer.answer : `No ${field.name} found`;
+                    } else if (field.type === 'image') {
+                        element.src = answer && answer.answer ? answer.answer : '';
+                        element.alt = answer && answer.answer ? field.name : `No ${field.name} found`;
+                    }
+                });
             } else {
-                nameField.value = 'No name found';
+                // Reset all fields if no submission data
+                Object.keys(fields).forEach(fieldId => {
+                    const field = fields[fieldId];
+                    const element = document.getElementById(fieldId);
+                    if (field.type === 'text') {
+                        element.value = `No ${field.name} found`;
+                    } else if (field.type === 'image') {
+                        element.src = '';
+                        element.alt = `No ${field.name} found`;
+                    }
+                });
             }
         } else {
-            nameField.value = '';
+            // Clear all fields
+            Object.keys(fields).forEach(fieldId => {
+                const field = fields[fieldId];
+                const element = document.getElementById(fieldId);
+                if (field.type === 'text') {
+                    element.value = '';
+                } else if (field.type === 'image') {
+                    element.src = '';
+                    element.alt = field.name;
+                }
+            });
         }
     });
 
     // Send data to Jotform when submitted
     JFCustomWidget.subscribe("submit", function() {
         const selectedId = dropdown.value;
-        const nameValue = nameField.value;
+        const values = [selectedId];
+        Object.keys(fields).forEach(fieldId => {
+            const field = fields[fieldId];
+            const element = document.getElementById(fieldId);
+            values.push(field.type === 'text' ? element.value : element.src);
+        });
         JFCustomWidget.sendSubmit({
             valid: true,
-            value: {
-                "submissionId": selectedId, 
-                "nameValue": nameValue     
-            }
+            value: values
         });
     });
 
