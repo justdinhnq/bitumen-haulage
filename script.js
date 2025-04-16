@@ -75,22 +75,15 @@ JFCustomWidget.subscribe("ready", function() {
                         } else if (fieldId === 'loading-point' && answer && answer.answer) {
                             // Extract lat/lng from URL
                             const url = answer.answer;
-                            const match = url.match(/q=(-?\d+\.\d+),(-?\d+\.\d+)/);
-                            if (match) {
-                                const lat = match[1];
-                                const lng = match[2];
-                                // Fetch address using Google Maps Geocoding API
-                                fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyDNiOkBAfWzzI5cWSTU7rXLYANzMvLCOKk`)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        element.value = data.results[0]?.formatted_address || `No ${field.name} found`;
-                                    })
-                                    .catch(() => {
-                                        element.value = `No ${field.name} found`;
-                                    });
-                            } else {
+                            // Fetch address using Google Maps Geocoding API
+                            fetch(url)
+                            .then(response => response.json())
+                            .then(data => {
+                                element.value = data.results[0]?.formatted_address || `No ${field.name} found`;
+                            })
+                            .catch(() => {
                                 element.value = `No ${field.name} found`;
-                            }
+                            });
                         } else if (field.type === 'text') {
                             // Handle other text fields as before
                             element.value = answer && answer.answer ? answer.answer : `No ${field.name} found`;
