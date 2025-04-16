@@ -64,11 +64,15 @@ JFCustomWidget.subscribe("ready", function() {
                 Object.keys(fields).forEach(fieldId => {
                     const field = fields[fieldId];
                     const element = document.getElementById(fieldId);
+
                     const answer = Object.values(selectedSubmission.answers).find(
                         ans => ans.name === field.name
                     );
+
                     if (field.type === 'text') {
                         element.value = answer && answer.answer ? answer.answer : `No ${field.name} found`;
+                        
+                        console.log(`Field ID:`, fieldId, `Answer:`, element.value);
                     } else if (field.type === 'image') {
                         element.src = answer && answer.answer ? answer.answer : '';
                         element.alt = answer && answer.answer ? field.name : `No ${field.name} found`;
