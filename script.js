@@ -68,8 +68,8 @@ JFCustomWidget.subscribe("ready", function() {
                         ans => ans.name === field.name
                     );
                     if (field.type === 'text') {
-                        console.log('fieldId: ', fieldId);
-                        
+                        console.log('fieldId: ', fieldId, '; answer: ', answer);
+
                         if (fieldId === 'driver-name' && typeof answer.answer === 'object') {
                             // Handle Full Name object
                             const { first = '', last = '' } = answer.answer;
