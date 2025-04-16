@@ -68,13 +68,15 @@ JFCustomWidget.subscribe("ready", function() {
                         ans => ans.name === field.name
                     );
                     if (field.type === 'text') {
-                        if (fieldId === 'driver-name' && answer && answer.answer && typeof answer.answer === 'object') {
+                        console.log('fieldId: ', fieldId);
+                        
+                        if (fieldId === 'driver-name' && typeof answer.answer === 'object') {
                             // Handle Full Name object
                             const { first = '', last = '' } = answer.answer;
                             element.value = `${first} ${last}`.trim() || `No ${field.name} found`;
-                        } else if (fieldId === 'loading-point' && answer && answer.answer) {
-                            // Extract lat/lng from URL
+                        } else if (fieldId === 'loading-point') {
                             const url = answer.answer;
+                            console.log('url: ', url);
                             // Fetch address using Google Maps Geocoding API
                             fetch(url)
                             .then(response => response.json())
