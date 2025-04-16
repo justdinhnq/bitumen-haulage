@@ -15,14 +15,11 @@ JFCustomWidget.subscribe("ready", function() {
     console.log('subscribing')
 
     // Fetch submissions
-    // https://downer.jotform.com/API/form/250956600933055/submissions?apiKey=38253712fa8d8d79431cd7ec2ca697ee
     const fetchSubmissions = async () => {
         console.log('start fetching submissions');
         try {
             const response = await fetch(
-                //`https://api.jotform.com/form/${formId}/submissions?apiKey=${apiKey}`
                 `https://downer.jotform.com/API/form/${formId}/submissions?apiKey=${apiKey}`
-                //'https://jotform-proxy.onrender.com/proxy/submissions'
             );
             console.log('response: ', response);
             const data = await response.json();
@@ -68,7 +65,10 @@ JFCustomWidget.subscribe("ready", function() {
         const nameValue = nameField.value;
         JFCustomWidget.sendSubmit({
             valid: true,
-            value: JSON.stringify({ submissionId: selectedId, name: nameValue })
+            value: {
+                "submissionId": selectedId, // Replace "submissionId" with actual field ID/name
+                "nameValue": nameValue     // Replace "nameValue" with actual field ID/name
+            }
         });
     });
 
