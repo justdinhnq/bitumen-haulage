@@ -1,7 +1,7 @@
 JFCustomWidget.subscribe("ready", function() {
     // downer.jotform.com/API
     const apiKey = '38253712fa8d8d79431cd7ec2ca697ee'; 
-    const formId = '250777678878079';
+    const formId = '250956600933055';
 
     const dropdown = document.getElementById('submission-dropdown');
     const fields = {
@@ -64,15 +64,17 @@ JFCustomWidget.subscribe("ready", function() {
                 Object.keys(fields).forEach(fieldId => {
                     const field = fields[fieldId];
                     const element = document.getElementById(fieldId);
-
                     const answer = Object.values(selectedSubmission.answers).find(
                         ans => ans.name === field.name
                     );
-
                     if (field.type === 'text') {
-                        element.value = answer && answer.answer ? answer.answer : `No ${field.name} found`;
-                        
-                        console.log(`Field ID:`, fieldId, `Answer:`, element.value);
+                        if (fieldId === 'driver-name' && answer && answer.answer && typeof answer.answer === 'object') {
+                            // Handle Full Name object
+                            const { first = '', last = '' } = answer.answer;
+                            element.value = `${first} ${last}`.trim() || `No ${field.name} found`;
+                        } else {
+                            element.value = answer && answer.answer ? answer.answer : `No ${field.name} found`;
+                        }
                     } else if (field.type === 'image') {
                         element.src = answer && answer.answer ? answer.answer : '';
                         element.alt = answer && answer.answer ? field.name : `No ${field.name} found`;
