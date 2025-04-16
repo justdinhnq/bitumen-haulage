@@ -1,30 +1,34 @@
 ﻿#custom-widget {
-    max-width: 300px;
+    max-width: 400px;
     margin: 20px;
+    font-family: Arial, sans-serif;
+}
+
+#custom-widget label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #333;
 }
 
 #submission-dropdown {
     width: 100%;
     padding: 8px;
+    margin-top: 5px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-}
-
-#custom-widget label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #333;
+    font-size: 14px;
 }
 
 #custom-widget input[type="text"] {
     width: 100%;
     padding: 8px;
-    margin-bottom: 10px;
+    margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #f5f5f5;
+    font-size: 14px;
 }
 
 #custom-widget input[readonly] {
@@ -32,11 +36,10 @@
 }
 
 .signature-image {
-    width: 100%;
-    max-width: 200px; /* Limits image width */
+    max-width: 100%;
     height: auto;
-    margin-bottom: 10px;
+    margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    display: block; /* Ensures images stack vertically */
+    display: block;
 }
