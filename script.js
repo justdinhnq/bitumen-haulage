@@ -66,8 +66,8 @@ JFCustomWidget.subscribe("ready", function() {
         JFCustomWidget.sendSubmit({
             valid: true,
             value: {
-                "submissionId": selectedId, // Replace "submissionId" with actual field ID/name
-                "nameValue": nameValue     // Replace "nameValue" with actual field ID/name
+                "submissionId": selectedId, 
+                "nameValue": nameValue     
             }
         });
     });
