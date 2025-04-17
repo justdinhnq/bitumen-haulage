@@ -1,14 +1,15 @@
 JFCustomWidget.subscribe("ready", function() {
     const dropdown = document.getElementById('submission-dropdown');
+    const targetFieldId = 'input_5'; // Replace with the actual Jotform text field ID (e.g., input_5, q5_textBox)
 
-    // Populate dropdown with static options (can be replaced with API fetch)
+    // Populate dropdown with static options
     const options = [
-        { value: "Option1", text: "Option 1" },
-        { value: "Option2", text: "Option 2" },
-        { value: "Option3", text: "Option 3" }
+        { value: "1", text: "1" },
+        { value: "2", text: "2" },
+        { value: "3", text: "3" }
     ];
 
-    dropdown.innerHTML = '<option value="">Select an Option</option>';
+    dropdown.innerHTML = '<option value="">Select a Number</option>';
     options.forEach(option => {
         const opt = document.createElement('option');
         opt.value = option.value;
@@ -19,18 +20,10 @@ JFCustomWidget.subscribe("ready", function() {
     // Handle dropdown change
     dropdown.addEventListener('change', function() {
         const selectedValue = this.value;
-        if (selectedValue) {
-            console.log('Selected value for the field ID of input_4: ', selectedValue);
-            // Send selected value to the Jotform form field
-            JFCustomWidget.sendData({
-                field: 'input_4',
-                value: selectedValue
-            });
-        } else {
-            // Clear the form field if no selection
-            JFCustomWidget.sendData({
-                value: ''
-            });
-        }
+        // Send selected value to the specified form field
+        JFCustomWidget.sendData({
+            field: targetFieldId,
+            value: selectedValue || ''
+        });
     });
 });
