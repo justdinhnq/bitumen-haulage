@@ -1,6 +1,5 @@
 JFCustomWidget.subscribe("ready", function() {
     const dropdown = document.getElementById('submission-dropdown');
-    const targetFieldId = 'input_4'; // Replace with the actual Jotform text field ID (e.g., input_5, q5_textBox)
 
     // Populate dropdown with static options
     const options = [
@@ -20,11 +19,16 @@ JFCustomWidget.subscribe("ready", function() {
     // Handle dropdown change
     dropdown.addEventListener('change', function() {
         const selectedValue = this.value;
-        // Send selected value to the specified form field
+        console.log("Sending value:", selectedValue);
 
-        console.log("Selected value:", selectedValue, " from Field ID: ", targetFieldId); // Debugging line
+        // Approach 1: Send data as widget output
         JFCustomWidget.sendData({
-            field: targetFieldId,
+            value: selectedValue || ''
+        });
+
+        // Approach 2: Send as widget submission (fallback)
+        JFCustomWidget.sendSubmit({
+            valid: true,
             value: selectedValue || ''
         });
     });
