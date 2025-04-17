@@ -20,9 +20,10 @@ JFCustomWidget.subscribe("ready", function() {
     dropdown.addEventListener('change', function() {
         const selectedValue = this.value;
         if (selectedValue) {
+            console.log('Selected value for the field ID of input_4: ', selectedValue);
             // Send selected value to the Jotform form field
             JFCustomWidget.sendData({
-                field: 'textBox123',
+                field: 'input_4',
                 value: selectedValue
             });
         } else {
