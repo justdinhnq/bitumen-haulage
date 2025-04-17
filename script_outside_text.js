@@ -21,6 +21,8 @@ JFCustomWidget.subscribe("ready", function() {
     dropdown.addEventListener('change', function() {
         const selectedValue = this.value;
         // Send selected value to the specified form field
+
+        console.log("Selected value:", selectedValue, " from Field ID: ", targetFieldId); // Debugging line
         JFCustomWidget.sendData({
             field: targetFieldId,
             value: selectedValue || ''
