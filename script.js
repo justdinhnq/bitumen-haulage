@@ -10,7 +10,7 @@ JFCustomWidget.subscribe("ready", function() {
         'loading-point': { type: 'text', name: 'loadingPoint' },
         'customer-name': { type: 'text', name: 'customerName' },
         'requested-time': { type: 'text', name: 'requestedTime' },
-        'downer-po': { type: 'text', name: 'downerPO' },
+        'downer-po': { type: 'text', name: 'downerPurchaseOrder' },
         'product': { type: 'text', name: 'product' },
         'loading-time-in': { type: 'text', name: 'loadingTimeIn' },
         'loading-time-out': { type: 'text', name: 'loadingTimeOut' },
@@ -70,30 +70,45 @@ JFCustomWidget.subscribe("ready", function() {
                     );
                     if (field.type === 'text') {
                         console.log('fieldId: ', fieldId, '; answer: ', answer);
-
-                        if (fieldId === 'driver-name' && typeof answer.answer === 'object') {
+                        if (fieldId === 'driver-name' && answer && answer.answer && typeof answer.answer === 'object') {
                             // Handle Full Name object
                             const { first = '', last = '' } = answer.answer;
                             element.value = `${first} ${last}`.trim() || `No ${field.name} found`;
-                        } else if (fieldId === 'loading-point') {
+                        } else if (fieldId === 'loading-point' && answer && answer.answer) {
+                            // Extract lat/lng from Google Maps URL
                             const url = answer.answer;
-                            console.log('url: ', url);
-                            // Fetch address using Google Maps Geocoding API
-                            fetch(url)
-                            .then(response => response.json())
-                            .then(data => {
-                                element.value = data.results[0]?.formatted_address || `No ${field.name} found`;
-                            })
-                            .catch(() => {
+                            const match = url.match(/q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+                            if (match) {
+                                const lat = match[1];
+                                const lng = match[2];
+                                element.value = 'Loading...';
+                                // Fetch address using Google Maps Geocoding API
+                                fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyDNiOkBAfWzzI5cWSTU7rXLYANzMvLCOKk`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        element.value = data.results[0]?.formatted_address || `No ${field.name} found`;
+                                    })
+                                    .catch(() => {
+                                        element.value = `No ${field.name} found`;
+                                    });
+                            } else {
                                 element.value = `No ${field.name} found`;
-                            });
-                        } else if (field.type === 'text') {
-                            // Handle other text fields as before
+                            }
+                        } else if (fieldId === 'requested-time' && answer && answer.answer && typeof answer.answer === 'object') {
+                            // Handle datetime object
+                            const { day = '', month = '', year = '' } = answer.answer;
+                            element.value = `${day}-${month}-${year}`.trim() || `No ${field.name} found`;
+                        } else {
+                            // Handle other text fields
                             element.value = answer && answer.answer ? answer.answer : `No ${field.name} found`;
                         }
                     } else if (field.type === 'image') {
-                        element.src = answer && answer.answer ? answer.answer : '';
-                        element.alt = answer && answer.answer ? field.name : `No ${field.name} found`;
+                        // Handle image fields, including arrays from file uploads
+                        const imageUrl = answer && answer.answer 
+                            ? (Array.isArray(answer.answer) ? answer.answer[0] : answer.answer)
+                            : '';
+                        element.src = imageUrl;
+                        element.alt = imageUrl ? field.name : `No ${field.name} found`;
                     }
                 });
             } else {
