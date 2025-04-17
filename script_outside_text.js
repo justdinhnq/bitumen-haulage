@@ -1,6 +1,6 @@
 JFCustomWidget.subscribe("ready", function() {
     const dropdown = document.getElementById('submission-dropdown');
-    const targetFieldId = 'input_5'; // Replace with the actual Jotform text field ID (e.g., input_5, q5_textBox)
+    const targetFieldId = 'input_4'; // Replace with the actual Jotform text field ID (e.g., input_5, q5_textBox)
 
     // Populate dropdown with static options
     const options = [
