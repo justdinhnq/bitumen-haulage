@@ -23,14 +23,15 @@ JFCustomWidget.subscribe("ready", function() {
 
         // Approach 1: Send data as widget output
         JFCustomWidget.sendData({
-            value: selectedValue || ''
+            field: 'input_9',
+            value: 'hello'
         });
 
         console.log("Sending value 2nd time");
 
         JFCustomWidget.sendData({
             field: 'input_4',
-            value: 'another value here for testing'
+            value: 'world'
         });
 
         // Approach 2: Send as widget submission (fallback)
