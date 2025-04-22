@@ -9,6 +9,8 @@ JFCustomWidget.subscribe("ready", function() {
     function pollData() {
         console.log("Poll data with the key name: ", jsonKey);
         console.log("Data in textfield: ", textField.value);
+        console.log("Data from another field: ", JFCustomWidget.getFormFieldValue("input_9"));
+        console.log("Data from another field...: ", JFCustomWidget.getFormFieldValue("submission-dropdown"));
 
         if (textField.value && JFCustomWidgetUtils.isJsonString(textField.value)) {
             const value = JSON.parse(textField.value);
