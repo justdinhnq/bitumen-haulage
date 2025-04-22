@@ -4,11 +4,11 @@ JFCustomWidget.subscribe("ready", function() {
 
     console.log("script for input text is ready!!!!");
     
-    const jsonKey = JFCustomWidget.getWidgetSettings("key");
+    const jsonKey = JFCustomWidget.getWidgetSettings("key").Key;
 
     function pollData() {
         console.log("Poll data with the key name: ", jsonKey);
-        
+
         if (textField.value && JFCustomWidgetUtils.isJsonString(textField.value)) {
             const value = JSON.parse(jsonData);
             console.log("Extracted value for", jsonKey, ":", value);
