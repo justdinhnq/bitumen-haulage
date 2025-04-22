@@ -11,7 +11,7 @@ JFCustomWidget.subscribe("ready", function() {
         console.log("Data in textfield: ", textField.value);
 
         if (textField.value && JFCustomWidgetUtils.isJsonString(textField.value)) {
-            const value = JSON.parse(jsonData);
+            const value = JSON.parse(textField.value);
             console.log("Extracted value for", jsonKey, ":", value);
 
             // Update text field
