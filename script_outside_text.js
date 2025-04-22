@@ -40,4 +40,21 @@ JFCustomWidget.subscribe("ready", function() {
             value: selectedValue || ''
         });
     });
+
+    const dropdown02 = document.getElementById('submission-dropdown-02');
+    dropdown02.innerHTML = '<option value="">khong co gi</option>';
+    options.forEach(option => {
+        const opt = document.createElement('option');
+        opt.value = option.value;
+        opt.text = option.text;
+        dropdown02.appendChild(opt);
+    });
+    dropdown02.addEventListener('change', function() {
+        
+        JFCustomWidget.sendData({
+            field: 'input_9',
+            value: 'hello'
+        });
+    });
+
 });
