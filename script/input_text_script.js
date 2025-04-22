@@ -8,7 +8,7 @@ JFCustomWidget.subscribe("ready", function() {
 
     // Get JSON key from General tab
     JFCustomWidget.getWidgetSettings(function(settings) {
-        const jsonKey = settings.jsonKey || 'test1'; // Default to 'test1' if not set
+        const jsonKey = settings.key || 'test1'; // Default to 'test1' if not set
         console.log("JSON Key from settings:", jsonKey);
 
         // Poll for JSON data from input_6
