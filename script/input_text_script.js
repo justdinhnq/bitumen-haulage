@@ -7,6 +7,8 @@ JFCustomWidget.subscribe("ready", function() {
     const jsonKey = JFCustomWidget.getWidgetSettings("key");
 
     function pollData() {
+        console.log("Poll data with the key name: ", jsonKey);
+        
         if (textField.value && JFCustomWidgetUtils.isJsonString(textField.value)) {
             const value = JSON.parse(jsonData);
             console.log("Extracted value for", jsonKey, ":", value);
