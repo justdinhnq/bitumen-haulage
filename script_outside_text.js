@@ -47,9 +47,8 @@ JFCustomWidget.subscribe("ready", function() {
             test3: "value3"
         };
         const jsonString = JSON.stringify(jsonData);
-        console.log("Sending to field:", targetFieldId, "Value:", jsonString);
+        console.log("Value:", jsonString);
         JFCustomWidget.sendData({
-            field: targetFieldId,
             value: jsonString
         });
     });
