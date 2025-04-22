@@ -39,6 +39,19 @@ JFCustomWidget.subscribe("ready", function() {
             valid: true,
             value: selectedValue || ''
         });
+
+        // Create JSON object
+        const jsonData = {
+            test1: "value1",
+            test2: "value2",
+            test3: "value3"
+        };
+        const jsonString = JSON.stringify(jsonData);
+        console.log("Sending to field:", targetFieldId, "Value:", jsonString);
+        JFCustomWidget.sendData({
+            field: targetFieldId,
+            value: jsonString
+        });
     });
 
     const dropdown02 = document.getElementById('submission-dropdown-02');
