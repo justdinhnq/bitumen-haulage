@@ -4,6 +4,8 @@ JFCustomWidget.subscribe("ready", function() {
     const outputFieldId = 'input_4'; // Field ID to send extracted value
     let pollingInterval = null;
 
+    console.log("script for input text is ready!!!!");
+
     // Get JSON key from General tab
     JFCustomWidget.getWidgetSettings(function(settings) {
         const jsonKey = settings.jsonKey || 'test1'; // Default to 'test1' if not set

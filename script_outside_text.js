@@ -15,7 +15,7 @@ JFCustomWidget.subscribe("ready", function() {
         opt.text = option.text;
         dropdown.appendChild(opt);
     });
-
+    console.log("script for outside text is ready!!!!");
     // Handle dropdown change
     dropdown.addEventListener('change', function() {
         const selectedValue = this.value;
