@@ -8,7 +8,7 @@ JFCustomWidget.subscribe("ready", function() {
 
     console.log("Poll data with the key name: ", jsonKey);
     console.log("Data in textfield: ", textField.value);
-    console.log("Data: ", JFCustomWidget.texts());
+    console.log("Data: ", JFCustomWidget.texts);
 
     function processJsonData(jsonData) {
         if (jsonData && JFCustomWidgetUtils.isJsonString(jsonData)) {
