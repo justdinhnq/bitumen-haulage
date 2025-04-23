@@ -8,7 +8,7 @@ JFCustomWidget.subscribe("ready", function() {
 
     console.log("Poll data with the key name: ", jsonKey);
     console.log("Data in textfield: ", textField.value);
-    console.log("Data: ", JFCustomWidget.texts);
+    
 
     function processJsonData(jsonData) {
         if (jsonData && JFCustomWidgetUtils.isJsonString(jsonData)) {
@@ -32,17 +32,11 @@ JFCustomWidget.subscribe("ready", function() {
     });
 
     function pollSourceField() {
-        JFCustomWidget.getWidgetData(sourceFieldId, function(jsonData) {
-            console.log("JSON Data below...");
-            console.log("Data here: ", jsonData);
-            if (jsonData) {
-                processJsonData(jsonData);
-            } else {
-                JFCustomWidget.getFrameData(function(frameData) {
-                    processJsonData(frameData[sourceFieldId]);
-                });
-            }
-        });
+        console.log("Data: ", JFCustomWidget.texts);
+        
+        //if (jsonData) {
+        //    processJsonData(jsonData);
+        //} 
     }
 
     pollSourceField();
