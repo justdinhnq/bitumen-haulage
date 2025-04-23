@@ -32,7 +32,7 @@ JFCustomWidget.subscribe("ready", function() {
     });
 
     function pollSourceField() {
-        console.log("Data: ", JFCustomWidget.texts);
+        console.log("Data: ", JFCustomWidget.getFrameData());
         
         //if (jsonData) {
         //    processJsonData(jsonData);
