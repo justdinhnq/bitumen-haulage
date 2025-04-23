@@ -72,8 +72,12 @@ JFCustomWidget.subscribe("ready", function() {
     });
 
     /* Widget: Sender (sends data to multiple listener widgets) */
-    function sendWidgetDataToAll(data, listenerClass = 'custom-field-frame') {
-        const listenerIframes = document.querySelectorAll(`${listenerClass}`);
+    function sendWidgetDataToAll(data, listenerClass = 'custom-field-frame custom-field-frame-rendered frame-xd-ready frame-ready') {
+        const listenerIframes = document.querySelectorAll(`.${listenerClass}`);
+
+        document.querySelectorAll('iframe').forEach((iframe, i) => {
+            console.log(`Iframe ${i + 1} (id: ${iframe.id || 'none'}): ${iframe.classList.length > 0 ? Array.from(iframe.classList).join(', ') : 'No classes'}`);
+        });
         
         if (listenerIframes.length === 0) {
         console.error('No listener iframes found with class:', listenerClass);
