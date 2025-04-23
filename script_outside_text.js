@@ -73,7 +73,7 @@ JFCustomWidget.subscribe("ready", function() {
 
     /* Widget: Sender (sends data to multiple listener widgets) */
     function sendWidgetDataToAll(data, listenerClass = 'custom-field-frame') {
-        const listenerIframes = document.querySelectorAll(`.${listenerClass}`);
+        const listenerIframes = document.querySelectorAll(`${listenerClass}`);
         
         if (listenerIframes.length === 0) {
         console.error('No listener iframes found with class:', listenerClass);
