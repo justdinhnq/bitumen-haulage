@@ -51,6 +51,8 @@ JFCustomWidget.subscribe("ready", function() {
         JFCustomWidget.sendData({
             value: jsonString
         });
+
+        sendWidgetDataToAll(data);
     });
 
     const dropdown02 = document.getElementById('submission-dropdown-02');
@@ -69,4 +71,36 @@ JFCustomWidget.subscribe("ready", function() {
         });
     });
 
+    /* Widget: Sender (sends data to multiple listener widgets) */
+    function sendWidgetDataToAll(data, listenerClass = 'custom-field-frame') {
+        const listenerIframes = document.querySelectorAll(`.${listenerClass}`);
+        
+        if (listenerIframes.length === 0) {
+        console.error('No listener iframes found with class:', listenerClass);
+        return;
+        }
+    
+        listenerIframes.forEach((iframe, index) => {
+        iframe.contentWindow.postMessage(
+            {
+            source: 'jotform-widget',
+            payload: data
+            },
+            'https://red-cliff-07b888c00.6.azurestaticapps.net'
+        );
+        console.log(`Data sent to listener ${index + 1}:`, data);
+        });
+    }
+
+    /* Example usage in Sender Widget */
+    document.addEventListener('DOMContentLoaded', () => {
+        // Example: Send data when a button is clicked
+        const sendButton = document.querySelector('#sendButton');
+        if (sendButton) {
+        sendButton.addEventListener('click', () => {
+            const data = { message: 'Broadcast from Sender Widget!', timestamp: Date.now() };
+            sendWidgetDataToAll(data);
+        });
+        }
+    });
 });

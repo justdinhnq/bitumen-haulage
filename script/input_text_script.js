@@ -32,7 +32,7 @@ JFCustomWidget.subscribe("ready", function() {
     });
 
     function pollSourceField() {
-        console.log("Data: ", JFCustomWidget.getFieldsValueById('input_4'));
+        //console.log("Data: ", JFCustomWidget.getFieldsValueById('input_4'));
         
         //if (jsonData) {
         //    processJsonData(jsonData);
@@ -44,4 +44,32 @@ JFCustomWidget.subscribe("ready", function() {
     setTimeout(() => {
         if (pollingInterval) clearInterval(pollingInterval);
     }, 30000);
+
+    /* Widget: Receiver (listens for data) */
+    function setupWidgetListener(callback) {
+        window.addEventListener('message', (event) => {
+        // Verify the origin to ensure security
+        if (event.origin !== 'https://red-cliff-07b888c00.6.azurestaticapps.net') {
+            console.warn('Unauthorized message origin:', event.origin);
+            return;
+        }
+    
+        // Verify the message source
+        if (event.data.source === 'jotform-widget') {
+            console.log('Data received:', event.data.payload);
+            callback(event.data.payload);
+        }
+        });
+    }
+
+    /* Example usage in Receiver Widget */
+    document.addEventListener('DOMContentLoaded', () => {
+        setupWidgetListener((data) => {
+        // Handle received data (e.g., display it in the widget)
+        const output = document.querySelector('#output');
+        if (output) {
+            output.textContent = JSON.stringify(data, null, 2);
+        }
+        });
+    });
 });
