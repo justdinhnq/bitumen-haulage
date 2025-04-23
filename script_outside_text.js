@@ -52,7 +52,7 @@ JFCustomWidget.subscribe("ready", function() {
             value: jsonString
         });
 
-        sendWidgetDataToAll(data);
+        sendWidgetDataToAll(jsonString);
     });
 
     const dropdown02 = document.getElementById('submission-dropdown-02');
