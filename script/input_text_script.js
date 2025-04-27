@@ -7,7 +7,7 @@ JFCustomWidget.subscribe("ready", function() {
     const outputFieldId = 'input_9';
 
     console.log("Poll data with the key name: ", jsonKey);
-    console.log("Get Form Tracker ID: ", JFCustomWidget.getFormTrackerID())
+    console.log("getFrameData: ", JFCustomWidget.getFrameData())
     console.log("Data in textfield: ", textField.value);
     
 
