@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submission ID Dropdown Widget</title>
+    <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 10px; }
+        select { width: 100%; padding: 5px; }
+    </style>
+</head>
+<body>
+    <select id="submissionIds" onchange="handleSelection()">
+        <option value="">Select Submission ID</option>
+        <!-- Options populated dynamically or statically -->
+    </select>
+
+    <script>
+        let formId = '';
+
+        // Initialize Jotform Custom Widget
+        window.JFCustomWidget.subscribe('ready', function(data) {
+            // Get FormID from widget settings
+            const settings = data.widgetSettings || {};
+            formId = settings.formId || '';
+            if (!formId) {
+                console.error('FormID not provided in widget settings');
+                return;
+            }
+
+            // Example submission IDs (replace with Jotform API call if needed)
+            const submissionIds = ['001', '002', '003'];
+            const select = document.getElementById('submissionIds');
+            submissionIds.forEach(id => {
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = id;
+                select.appendChild(option);
+            });
+
+            // Set widget height
+            window.JFCustomWidget.requestFrameResize({ height: 100 });
+        });
+
+        function handleSelection() {
+            const submissionId = document.getElementById('submissionIds').value;
+            if (!submissionId || !formId) return;
+
+            // Mock submission data (replace with actual data from Jotform API)
+            const submissionData = {
+                test1: 'value1_' + submissionId,
+                test2: 'value2_' + submissionId,
+                test3: 'value3_' + submissionId
+            };
+
+            // Send data to Azure
+            fetch('https://your-azure-function-app.azurewebsites.net/api/store', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ formId, submissionId, data: submissionData })
+            })
+            .then(response => response.json())
+            .then(result => {
+                // Send data to Jotform form (optional)
+                window.JFCustomWidget.sendData({ value: JSON.stringify(submissionData) });
+            })
+            .catch(error => console.error('Error sending to Azure:', error));
+        }
+    </script>
+</body>
+</html>

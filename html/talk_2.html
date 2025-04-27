@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Textfield Widget</title>
+    <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 10px; }
+        input, button { width: 100%; padding: 5px; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <input type="text" id="valueField" readonly placeholder="Value will appear here">
+    <input type="text" id="submissionIdInput" placeholder="Enter Submission ID">
+    <input type="text" id="keyInput" placeholder="Enter Key (e.g., test2)">
+    <button onclick="fetchValue()">Fetch Value</button>
+
+    <script>
+        let formId = '';
+
+        // Initialize Jotform Custom Widget
+        window.JFCustomWidget.subscribe('ready', function(data) {
+            // Get FormID from widget settings
+            const settings = data.widgetSettings || {};
+            formId = settings.formId || '';
+            if (!formId) {
+                console.error('FormID not provided in widget settings');
+                return;
+            }
+
+            // Set widget height
+            window.JFCustomWidget.requestFrameResize({ height: 200 });
+        });
+
+        function fetchValue() {
+            const submissionId = document.getElementById('submissionIdInput').value;
+            const key = document.getElementById('keyInput').value;
+            if (!formId || !submissionId || !key) {
+                alert('Please provide FormID, Submission ID, and Key');
+                return;
+            }
+
+            // Fetch value from Azure
+            fetch(`https://your-azure-function-app.azurewebsites.net/api/retrieve/${formId}/${submissionId}/${key}`)
+                .then(response => response.json())
+                .then(result => {
+                    document.getElementById('valueField').value = result.value || 'Not found';
+                    // Send data to Jotform form (optional)
+                    window.JFCustomWidget.sendData({ value: result.value });
+                })
+                .catch(error => {
+                    console.error('Error fetching from Azure:', error);
+                    document.getElementById('valueField').value = 'Error';
+                });
+        }
+    </script>
+</body>
+</html>
