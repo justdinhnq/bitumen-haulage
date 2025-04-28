@@ -57,6 +57,11 @@ JFCustomWidget.subscribe("ready", function() {
     // Handle dropdown change
     dropdown.addEventListener('change', function() {
         const selectedId = this.value;
+
+        JFCustomWidget.sendData({
+            value: selectedId
+        });
+
         if (selectedId) {
             const selectedSubmission = submissionsData.find(sub => sub.id === selectedId);
             console.log('selectedSubmission.answers: ', selectedSubmission.answers);
