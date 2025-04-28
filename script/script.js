@@ -148,7 +148,7 @@ JFCustomWidget.subscribe("ready", function() {
             const element = document.getElementById(fieldId);
             values.push(field.type === 'text' ? element.value : element.src);
         });
-        console.log('Sending values:', values);
+        console.log('Sending values for submission:', values);
         JFCustomWidget.sendSubmit({
             valid: true,
             value: values
