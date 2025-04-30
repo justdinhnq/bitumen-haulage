@@ -40,9 +40,12 @@
                 return;
             }
 
-            // Fetch value from Azure
-            fetch(`https://your-azure-function-app.azurewebsites.net/api/retrieve/${formId}/${submissionId}/${key}`)
-                .then(response => response.json())
+            // Fetch value from Azure Functions
+            fetch(`https://jotformcomms2025.azurewebsites.net/api/retrieve/${formId}/${submissionId}/${key}`)
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json();
+                })
                 .then(result => {
                     document.getElementById('valueField').value = result.value || 'Not found';
                     // Send data to Jotform form (optional)

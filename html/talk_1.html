@@ -53,13 +53,16 @@
                 test3: 'value3_' + submissionId
             };
 
-            // Send data to Azure
-            fetch('https://your-azure-function-app.azurewebsites.net/api/store', {
+            // Send data to Azure Functions
+            fetch('https://jotformcomms2025.azurewebsites.net/api/store', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ formId, submissionId, data: submissionData })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
             .then(result => {
                 // Send data to Jotform form (optional)
                 window.JFCustomWidget.sendData({ value: JSON.stringify(submissionData) });
