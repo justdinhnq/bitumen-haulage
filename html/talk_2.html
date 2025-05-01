@@ -27,6 +27,8 @@
                 return;
             }
 
+            document.getElementById('valueField').value = JFCustomWidget.getSubmissionId();
+
             // Set widget height
             window.JFCustomWidget.requestFrameResize({ height: 200 });
         });
