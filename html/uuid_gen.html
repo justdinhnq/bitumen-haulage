@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UUID Generator Widget</title>
+    <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            margin: 0;
+        }
+        .uuid-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        input#uuid {
+            padding: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="uuid-container">
+        <input id="uuid" type="text" readonly value="" placeholder="Generating UUID...">
+        <button onclick="generateNewUUID()">Regenerate UUID</button>
+    </div>
+
+    <script>
+        let currentUUID = '';
+
+        // UUIDv4 generator
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Set and display new UUID
+        function setUUID() {
+            currentUUID = generateUUID();
+            document.getElementById('uuid').value = currentUUID;
+            // Send UUID to Jotform form
+            window.JFCustomWidget.sendData({ value: currentUUID });
+        }
+
+        // Regenerate UUID
+        function generateNewUUID() {
+            setUUID();
+        }
+
+        // Initialize Jotform Custom Widget
+        window.JFCustomWidget.subscribe('ready', function(data) {
+
+            // Generate initial UUID
+            setUUID();
+        });
+
+        
+    </script>
+</body>
+</html>

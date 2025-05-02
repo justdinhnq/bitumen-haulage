@@ -27,6 +27,12 @@
                 return;
             }
 
+            JFCustomWidget.getFormTrackerID(function(data) {
+                trackerId = data.value;
+                console.log('Tracker ID:', trackerId);
+            });
+
+            console.log('Form information:', JFCustomWidget.getFormTrackerID());
             
             // Example submission IDs (replace with Jotform API call if needed)
             const submissionIds = ['001', '002', '003'];
