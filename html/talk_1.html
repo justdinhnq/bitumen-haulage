@@ -27,12 +27,14 @@
                 return;
             }
 
-            JFCustomWidget.getFormTrackerID(function(data) {
-                trackerId = data.value;
-                console.log('Tracker ID:', trackerId);
-            });
-
-            console.log('Form information:', JFCustomWidget.getFormTrackerID());
+            // Log widget open time
+            const timestamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+            fetch('https://jotformcomms2025.azurewebsites.net/api/log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ formId, widgetName: 'widget1', timestamp })
+            })
+            .catch(error => console.error('Error logging widget open:', error));
             
             // Example submission IDs (replace with Jotform API call if needed)
             const submissionIds = ['001', '002', '003'];
