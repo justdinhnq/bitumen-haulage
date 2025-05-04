@@ -11,11 +11,15 @@
 </head>
 <body>
     <input type="text" id="valueField" readonly placeholder="Value will appear here">
-    <input type="text" id="submissionIdInput" placeholder="Enter Submission ID">
     <input type="text" id="keyInput" placeholder="Enter Key (e.g., test2)">
     <button onclick="fetchValue()">Fetch Value</button>
 
     <script>
+        const timestamp = new Date().toISOString()
+            .replace(/[-:]/g, '')
+            .split('.')[0]
+            .replace(/(\d{2})(\d{2})(\d{2})$/, '_$1_$2_$3');
+
         let formId = '';
 
         // Initialize Jotform Custom Widget
@@ -27,24 +31,19 @@
                 return;
             }
 
-            console.log('Day la thong tin form:', JFCustomWidgetUtils.P());
-
-            document.getElementById('valueField').value = JFCustomWidget.getSubmissionId();
-
-            // Set widget height
-            window.JFCustomWidget.requestFrameResize({ height: 200 });
+            // Example log with timestamp
+            console.log(`Widget initialized at timestamp: ${timestamp}`);
         });
 
         function fetchValue() {
-            const submissionId = document.getElementById('submissionIdInput').value;
             const key = document.getElementById('keyInput').value;
-            if (!formId || !submissionId || !key) {
-                alert('Please provide FormID, Submission ID, and Key');
+            if (!formId || !key) {
+                alert('Please provide FormID and Key');
                 return;
             }
 
-            // Fetch value from Azure Functions
-            fetch(`https://jotformcomms2025.azurewebsites.net/api/retrieve/${formId}/${submissionId}/${key}`)
+            // Fetch value from Azure Functions using timestamp instead of submissionId
+            fetch(`https://jotformcomms2025.azurewebsites.net/api/retrieve/${formId}/${timestamp}/${key}`)
                 .then(response => {
                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     return response.json();
