@@ -29,6 +29,7 @@
 
             // Log widget open time
             const timestamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+            console.log("xem thu the nao ne: ", timestamp);
             fetch('https://jotformcomms2025.azurewebsites.net/api/store', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
