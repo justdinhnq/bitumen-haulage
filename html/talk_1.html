@@ -16,6 +16,11 @@
     </select>
 
     <script>
+        const timestamp = new Date().toISOString()
+            .replace(/[-:]/g, '')
+            .split('.')[0]
+            .replace(/(\d{2})(\d{2})(\d{2})$/, '_$1_$2_$3');
+
         let formId = '';
 
         // Initialize Jotform Custom Widget
@@ -27,11 +32,23 @@
                 return;
             }
 
-            // Log widget open time
-            const timestamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-            console.log("xem thu the nao ne: ", timestamp);
-            
-            
+            console.log("Widget initialized at: ", timestamp);
+
+            // Fetch to Azure endpoint with timestamp
+            fetch('https://jotformcomms2025.azurewebsites.net/api/store', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ timestamp }) // Include global timestamp in the payload
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then(result => {
+                console.log('Empty JSON with timestamp fetch successful:', result);
+            })
+            .catch(error => console.error('Error during fetch with timestamp:', error));
+
             // Example submission IDs (replace with Jotform API call if needed)
             const submissionIds = ['001', '002', '003'];
             const select = document.getElementById('submissionIds');
@@ -61,15 +78,14 @@
             fetch('https://jotformcomms2025.azurewebsites.net/api/store', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ formId, submissionId, data: submissionData })
+                body: JSON.stringify({ formId, timestamp, data: submissionData }) // Use global timestamp
             })
             .then(response => {
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 return response.json();
             })
             .then(result => {
-                // Send data to Jotform form (optional)
-                //window.JFCustomWidget.sendData({ value: JSON.stringify(submissionData) });
+                console.log('FormId and timestamp sent successfully:', result);
             })
             .catch(error => console.error('Error sending to Azure:', error));
         }
