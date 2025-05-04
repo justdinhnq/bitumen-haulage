@@ -38,7 +38,7 @@
             fetch('https://jotformcomms2025.azurewebsites.net/api/store', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ timestamp }) // Include global timestamp in the payload
+                body: JSON.stringify({ formId, timestamp, data: {} })
             })
             .then(response => {
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -78,7 +78,7 @@
             fetch('https://jotformcomms2025.azurewebsites.net/api/store', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ formId, timestamp, data: submissionData }) // Use global timestamp
+                body: JSON.stringify({ formId, timestamp, data: submissionData }) 
             })
             .then(response => {
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
