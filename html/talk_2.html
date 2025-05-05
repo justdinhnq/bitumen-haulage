@@ -6,13 +6,11 @@
     <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
     <style>
         body { font-family: Arial, sans-serif; padding: 10px; }
-        input, button { width: 100%; padding: 5px; margin: 5px 0; }
+        input { width: 100%; padding: 5px; margin: 5px 0; }
     </style>
 </head>
 <body>
     <input type="text" id="valueField" readonly placeholder="Value will appear here">
-    <input type="text" id="keyInput" placeholder="Enter Key (e.g., test2)">
-    <button onclick="fetchValue()">Fetch Value</button>
 
     <script>
         const timestamp = new Date().toISOString()
@@ -21,11 +19,13 @@
             .replace(/(\d{2})(\d{2})(\d{2})$/, '_$1_$2_$3');
 
         let formId = '';
+        let key = '';
 
         // Initialize Jotform Custom Widget
         window.JFCustomWidget.subscribe('ready', function(data) {
             // Get FormID from widget settings
             formId = JFCustomWidget.getWidgetSetting("formId"); 
+            key = JFCustomWidget.getWidgetSetting("key");
             if (!formId) {
                 console.error('FormID not provided in widget settings');
                 return;
@@ -33,16 +33,18 @@
 
             // Example log with timestamp
             console.log(`Widget initialized at timestamp: ${timestamp}`);
+
+            // Start automatic data fetching every 5 seconds
+            setInterval(fetchValue, 5000);
         });
 
         function fetchValue() {
-            const key = document.getElementById('keyInput').value;
             if (!formId || !key) {
-                alert('Please provide FormID and Key');
+                console.warn('FormID or Key not provided. Skipping fetch.');
                 return;
             }
 
-            // Fetch value from Azure Functions using timestamp instead of submissionId
+            // Fetch value from Azure Functions using timestamp
             fetch(`https://jotformcomms2025.azurewebsites.net/api/retrieve/${formId}/${timestamp}/${key}`)
                 .then(response => {
                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
