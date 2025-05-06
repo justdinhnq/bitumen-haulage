@@ -25,7 +25,7 @@
         window.JFCustomWidget.subscribe('ready', function(data) {
             // Get FormID from widget settings
             formId = JFCustomWidget.getWidgetSetting("formId"); 
-            key = JFCustomWidget.getWidgetSetting("key");
+            key = JFCustomWidget.getWidgetSetting("FormKey");
             if (!formId) {
                 console.error('FormID not provided in widget settings');
                 return;
