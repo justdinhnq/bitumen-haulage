@@ -21,7 +21,7 @@
             .split('.')[0]
             .replace(/(\d{2})(\d{2})(\d{2})$/, '_$1_$2_$3');
 
-        let formId = JFCustomWidget.getWidgetSetting("formId");
+        let formId = '';
         let apiKey = '38253712fa8d8d79431cd7ec2ca697ee';
 
         // Fetch submissions
@@ -35,7 +35,6 @@
                 const data = await response.json();
                 
                 submissionsData = data.content || [];
-                console.log(`https://downer.jotform.com/API/form/${formId}/submissions?apiKey=${apiKey}`);
                 console.log('submissionsData: ', submissionsData);
                 
                 // Populate dropdown
@@ -52,19 +51,21 @@
             }
         };
 
-        // Initial fetch
-        fetchSubmissions(); 
+         
 
         // Initialize Jotform Custom Widget
         window.JFCustomWidget.subscribe('ready', function(data) {
             // Get FormID from widget settings
-              
+            formId = JFCustomWidget.getWidgetSetting("formId");  
             if (!formId) {
                 console.error('FormID not provided in widget settings');
                 return;
             }
 
             console.log("Widget initialized at: ", timestamp);
+
+            // Initial fetch
+            fetchSubmissions();
 
             // Fetch to Azure endpoint with timestamp
             fetch('https://jotformcomms2025.azurewebsites.net/api/store', {
