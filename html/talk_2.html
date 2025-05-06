@@ -36,12 +36,12 @@
 
             // Start automatic data fetching every 5 seconds
             setInterval(fetchValue, 5000);
-            
+
         });
 
         function fetchValue() {
             if (!formId || !key) {
-                console.warn('FormID or Key not provided. Skipping fetch.');
+                console.warn('FormID or Key not provided. Skipping fetch. FormID: ', formId, ', Key: ', key);
                 return;
             }
 
