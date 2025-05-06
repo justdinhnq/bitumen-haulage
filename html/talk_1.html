@@ -41,7 +41,7 @@
                 const select = document.getElementById('submissionIds');
                 submissionsData.forEach(submission => {
                     const option = document.createElement('option');
-                    option.value = submission.id;
+                    option.value = submission.value;
                     option.text = `Submission ${submission.id}`;
                     select.appendChild(option);
                 });
@@ -85,14 +85,16 @@
         });
 
         function handleSelection() {
-            const submissionId = document.getElementById('submissionIds').value;
+            const selectElement = document.getElementById('submissionIds');
+            const submissionId = selectElement.value; // Get the selected value
+            const submissionText = selectElement.options[selectElement.selectedIndex].text; // Get the selected option's text
+
             if (!submissionId || !formId) return;
 
-            // Mock submission data (replace with actual data from Jotform API)
+            // Construct submissionData based on the selected option
             const submissionData = {
-                test1: 'value1_' + submissionId,
-                test2: 'value2_' + submissionId,
-                test3: 'value3_' + submissionId
+                id: submissionId,
+                text: submissionText,
             };
 
             // Send data to Azure Functions
