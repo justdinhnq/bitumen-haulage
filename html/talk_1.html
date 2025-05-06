@@ -21,7 +21,7 @@
             .split('.')[0]
             .replace(/(\d{2})(\d{2})(\d{2})$/, '_$1_$2_$3');
 
-        let formId = '';
+        let formId = JFCustomWidget.getWidgetSetting("formId");
         let apiKey = '38253712fa8d8d79431cd7ec2ca697ee';
 
         // Fetch submissions
@@ -57,7 +57,7 @@
         // Initialize Jotform Custom Widget
         window.JFCustomWidget.subscribe('ready', function(data) {
             // Get FormID from widget settings
-            formId = JFCustomWidget.getWidgetSetting("formId");  
+              
             if (!formId) {
                 console.error('FormID not provided in widget settings');
                 return;
