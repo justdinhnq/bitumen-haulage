@@ -78,16 +78,6 @@
                 console.log('Empty JSON with timestamp fetch successful:', result);
             })
             .catch(error => console.error('Error during fetch with timestamp:', error));
-
-            // Example submission IDs (replace with Jotform API call if needed)
-            const submissionIds = ['001', '002', '003'];
-            const select = document.getElementById('submissionIds');
-            submissionIds.forEach(id => {
-                const option = document.createElement('option');
-                option.value = id;
-                option.textContent = id;
-                select.appendChild(option);
-            });
         });
 
         function handleSelection() {
