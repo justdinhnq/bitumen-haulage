@@ -71,22 +71,13 @@
 
         function handleSelection() {
             const selectElement = document.getElementById('submissionIds');
-            const submissionId = selectElement.value; // Get the selected value
-            const submissionText = selectElement.options[selectElement.selectedIndex].text; // Get the selected option's text
-
-            if (!submissionId || !formId) return;
-
-            // Construct submissionData based on the selected option
-            const submissionData = {
-                id: submissionId,
-                text: submissionText,
-            };
+            const content = selectElement.options[selectElement.selectedIndex].value; 
 
             // Send data to Azure Functions
             fetch('https://jotformcomms2025.azurewebsites.net/api/storeNRetrieve', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ formId, timestamp, data: submissionData }) 
+                body: JSON.stringify({ formId, timestamp, data: content }) 
             })
             .then(response => {
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
