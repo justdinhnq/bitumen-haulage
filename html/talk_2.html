@@ -11,7 +11,7 @@
 </head>
 <body>
     <input type="text" id="valueField" readonly placeholder="Value will appear here">
-
+    <button id="fetchButton" onclick="fetchValue()">Fetch Value</button>
     <script>
         const timestamp = new Date().toISOString()
             .replace(/[-:]/g, '')
@@ -35,7 +35,7 @@
             console.log(`Widget initialized at timestamp: ${timestamp}`);
 
             // Start automatic data fetching every 5 seconds
-            setInterval(fetchValue, 5);
+            //setInterval(fetchValue, 5);
 
         });
 
