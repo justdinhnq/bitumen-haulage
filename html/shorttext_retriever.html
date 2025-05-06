@@ -52,6 +52,9 @@
                     const data = JSON.parse(event.data);
                     console.log('Received message from Azure:', data);
 
+                    const object = JSON.parse(data);
+                    console.log('object:', object);
+
                     // Update the value field if the message contains relevant data
                     if (data && data.message && data.formId === formId && data.timestamp === timestamp) {
                         document.getElementById('valueField').value = data.message || 'No message';
