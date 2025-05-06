@@ -66,22 +66,6 @@
 
             // Initial fetch
             fetchSubmissions();
-
-            // Fetch to Azure endpoint with timestamp
-            azureEndpoint = 'https://jotformcomms2025.azurewebsites.net/api/storeNRetrieve'
-            fetch(azureEndpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ formId, timestamp, data: {} })
-            })
-            .then(response => {
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                return response.json();
-            })
-            .then(result => {
-                console.log('Empty JSON with timestamp fetch successful:', result);
-            })
-            .catch(error => console.error('Error during fetch with timestamp:', error));
         });
 
         function handleSelection() {
@@ -96,7 +80,7 @@
             };
 
             // Send data to Azure Functions
-            fetch('https://jotformcomms2025.azurewebsites.net/api/store', {
+            fetch('https://jotformcomms2025.azurewebsites.net/api/storeNRetrieve', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ formId, timestamp, data: submissionData }) 
