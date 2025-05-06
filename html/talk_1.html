@@ -22,6 +22,36 @@
             .replace(/(\d{2})(\d{2})(\d{2})$/, '_$1_$2_$3');
 
         let formId = '';
+        let apiKey = '38253712fa8d8d79431cd7ec2ca697ee';
+
+        // Fetch submissions
+        const fetchSubmissions = async () => {
+            console.log('start fetching submissions');
+            try {
+                const response = await fetch(
+                    `https://downer.jotform.com/API/form/${formId}/submissions?apiKey=${apiKey}`
+                );
+                console.log('response: ', response);
+                const data = await response.json();
+                
+                submissionsData = data.content || [];
+
+                // Populate dropdown
+                const select = document.getElementById('submissionIds');
+                submissionsData.forEach(submission => {
+                    const option = document.createElement('option');
+                    option.value = submission.id;
+                    option.text = `Submission ${submission.id}`;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error fetching submissions:', error);
+                dropdown.innerHTML = '<option value="">Error loading submissions</option>';
+            }
+        };
+
+        // Initial fetch
+        fetchSubmissions(); 
 
         // Initialize Jotform Custom Widget
         window.JFCustomWidget.subscribe('ready', function(data) {
@@ -58,9 +88,6 @@
                 option.textContent = id;
                 select.appendChild(option);
             });
-
-            // Set widget height
-            window.JFCustomWidget.requestFrameResize({ height: 100 });
         });
 
         function handleSelection() {
