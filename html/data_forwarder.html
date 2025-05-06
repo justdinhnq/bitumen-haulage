@@ -71,13 +71,31 @@
 
         function handleSelection() {
             const selectElement = document.getElementById('submissionIds');
-            const content = selectElement.options[selectElement.selectedIndex].value; 
+            const selectedValue = selectElement.options[selectElement.selectedIndex].value;
 
-            // Send data to Azure Functions
+            // Parse the selected value (if it's a JSON string)
+            let content;
+            try {
+                content = JSON.parse(selectedValue);
+            } catch (error) {
+                console.error('Error parsing selected value:', error);
+                return;
+            }
+
+            // Reduce the content to a 'name': 'answer' format
+            const simplifiedContent = Object.keys(content).reduce((acc, key) => {
+                const field = content[key];
+                acc[field.name] = field.answer || ''; // Default to an empty string if 'answer' is missing
+                return acc;
+            }, {});
+
+            console.log('Simplified content to be sent:', simplifiedContent);
+
+            // Send simplified data to Azure Functions
             fetch('https://jotformcomms2025.azurewebsites.net/api/storeNRetrieve', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ formId, timestamp, data: content }) 
+                body: JSON.stringify({ formId, timestamp, data: simplifiedContent })
             })
             .then(response => {
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
