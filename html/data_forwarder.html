@@ -40,6 +40,7 @@
                 // Populate dropdown
                 const select = document.getElementById('submissionIds');
                 submissionsData.forEach(submission => {
+                    console.log("content: ", submission.value)
                     const option = document.createElement('option');
                     option.value = submission.value;
                     option.text = `Submission ${submission.id}`;
