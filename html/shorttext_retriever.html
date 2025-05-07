@@ -52,7 +52,7 @@
                     const data = JSON.parse(event.data);
                     console.log('Received message from Azure:', data);
 
-                    const object = JSON.parse(data);
+                    const object = JSON.parse(data.data);
                     console.log('object:', object);
 
                     // Update the value field if the message contains relevant data
