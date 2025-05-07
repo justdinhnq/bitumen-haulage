@@ -52,14 +52,16 @@
                     const data = JSON.parse(event.data);
                     console.log('Received message from Azure:', data);
 
-                    const object = JSON.parse(data.data);
-                    console.log('object:', object);
-
-                    console.log('formId: ', formId, '; timestamp: ', timestamp, '; value by key: ', object[key])
-                    // Update the value field if the message contains relevant data
-                    if (data.formId === formId && data.timestamp === timestamp) {
-                        document.getElementById('valueField').value = object[key] || 'No message';
-                    }
+                    if (data == 'heartbeat') {
+                        console.log('Dont do anything because it is heartbeat only');
+                    } else {
+                        // Update the value field if the message contains relevant data
+                        if (data.formId === formId && data.timestamp === timestamp) {
+                            const object = JSON.parse(data.data);
+                            
+                            document.getElementById('valueField').value = object[key] || 'No message';
+                        }
+                    }                    
                 } catch (error) {
                     console.error('Error parsing real-time update:', error);
                 }
