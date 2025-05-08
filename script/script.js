@@ -156,7 +156,7 @@ JFCustomWidget.subscribe("ready", function() {
         console.log('Sending values for submission:', values);
         JFCustomWidget.sendSubmit({
             valid: true,
-            value: values
+            value: selectedId //values
         });
     });
 
