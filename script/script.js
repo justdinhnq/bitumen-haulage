@@ -10,7 +10,7 @@ JFCustomWidget.subscribe("ready", function() {
         'loading-point': { type: 'text', name: 'loadingPoint' },
         'delivery-point': { type: 'text', name: 'deliveryDestination' },
         'customer-name': { type: 'text', name: 'customerName' },
-        'requested-time': { type: 'text', name: 'requestedDate' },
+        'requested-time': { type: 'text', name: 'waitTime' },
         'downer-po': { type: 'text', name: 'downerPurchaseOrder' },
         'product': { type: 'text', name: 'product' },
 
@@ -134,9 +134,7 @@ JFCustomWidget.subscribe("ready", function() {
                             element.value = `${answer.answer}:${answer_m.answer} ${answer_a.answer}`;
 
                         } else if (fieldId === 'requested-time' && answer && answer.answer && typeof answer.answer === 'object') {
-                            // Handle datetime object
-                            const { day = '', month = '', year = '' } = answer.answer;
-                            element.value = `${day}-${month}-${year}`.trim() || `No ${field.name} found`;
+                            element.value = `${answer.answer}`;
                         } else {
                             // Handle other text fields
                             element.value = answer && answer.answer ? answer.answer : `No ${field.name} found`;
