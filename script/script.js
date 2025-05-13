@@ -105,11 +105,7 @@ JFCustomWidget.subscribe("ready", function() {
                             //} else {
                             //    element.value = `No ${field.name} found`;
                             //}
-                        } else if (fieldId === 'delivery-point' && answer && answer.answer) {
-                            element.value = answer.answer;
-
-                        } else if ((
-                            fieldId === 'loading-time-in-hour' || 
+                        } else if ((fieldId === 'delivery-point' || 
                             fieldId === 'customer-name' || 
                             fieldId === 'product' || 
                             fieldId === 'downer-po' || 
@@ -117,6 +113,12 @@ JFCustomWidget.subscribe("ready", function() {
                             fieldId === 'company-name' || 
                             fieldId === 'refinery-name' || 
                             fieldId === 'batch-number'
+
+                        ) && answer && answer.answer) {
+                            element.value = answer.answer;
+
+                        } else if ((
+                            fieldId === 'loading-time-in-hour'
                             ) 
                             && answer && answer.answer) {
 
