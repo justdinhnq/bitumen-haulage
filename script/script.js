@@ -107,6 +107,7 @@ JFCustomWidget.subscribe("ready", function() {
                             //}
                         } else if (fieldId === 'delivery-point' && answer && answer.answer) {
                             element.value = answer.answer;
+                            
                         } else if (fieldId === 'loading-time-in-hour' && answer && answer.answer) {
                             const field_m = fields['loading-time-in-minute'];
                             const answer_m = Object.values(selectedSubmission.answers).find(
@@ -141,7 +142,7 @@ JFCustomWidget.subscribe("ready", function() {
                             element.value = `${answer.answer}`;
                         } else {
                             // Handle other text fields
-                            element.value = answer && answer.answer ? answer.answer : `No ${field.name} found`;
+                            //element.value = answer && answer.answer ? answer.answer : `No ${field.name} found`;
                         }
                     } else if (field.type === 'image') {
                         // Handle image fields, including arrays from file uploads
