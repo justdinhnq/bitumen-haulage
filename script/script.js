@@ -131,6 +131,10 @@ JFCustomWidget.subscribe("ready", function() {
                                 ans => ans.name === field_a.name
                             );
 
+                            console.log(`${answer.answer}:`)
+                            console.log(`${answer_m.answer}`)
+                            console.log(`...${answer_a.answer}`)
+
                             element.value = `${answer.answer}:${answer_m.answer} ${answer_a.answer}`;
 
                         } else if (fieldId === 'requested-time' && answer && answer.answer && typeof answer.answer === 'object') {
