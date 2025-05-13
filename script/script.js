@@ -107,8 +107,20 @@ JFCustomWidget.subscribe("ready", function() {
                             //}
                         } else if (fieldId === 'delivery-point' && answer && answer.answer) {
                             element.value = answer.answer;
-                            
-                        } else if (fieldId === 'loading-time-in-hour' && answer && answer.answer) {
+
+                        } else if ((
+                            fieldId === 'loading-time-in-hour' || 
+                            fieldId === 'customer-name' || 
+                            fieldId === 'product' || 
+                            fieldId === 'downer-po' || 
+                            fieldId === 'bitumen-tanker-number' || 
+                            fieldId === 'company-name' || 
+                            fieldId === 'refinery-name' || 
+                            fieldId === 'batch-number'
+                            ) 
+                            && answer && answer.answer) {
+
+
                             const field_m = fields['loading-time-in-minute'];
                             const answer_m = Object.values(selectedSubmission.answers).find(
                                 ans => ans.name === field_m.name
@@ -132,13 +144,9 @@ JFCustomWidget.subscribe("ready", function() {
                                 ans => ans.name === field_a.name
                             );
 
-                            console.log(`${answer.answer}:`)
-                            console.log(`${answer_m.answer}`)
-                            console.log(`...${answer_a.answer}`)
-
                             element.value = `${answer.answer}:${answer_m.answer} ${answer_a.answer}`;
 
-                        } else if (fieldId === 'requested-time' && answer && answer.answer && typeof answer.answer === 'object') {
+                        } else if (fieldId === 'requested-time' && answer && answer.answer) {
                             element.value = `${answer.answer}`;
                         } else {
                             // Handle other text fields
