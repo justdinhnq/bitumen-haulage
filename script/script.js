@@ -17,6 +17,7 @@ JFCustomWidget.subscribe("ready", function() {
         'loading-time-in-hour': { type: 'text', name: 'inhour' },
         'loading-time-in-minute': { type: 'text', name: 'inminute' },
         'loading-time-in-ampm': { type: 'text', name: 'ampmin' },
+
         'loading-time-out-hour': { type: 'text', name: 'outhour' },
         'loading-time-out-minute': { type: 'text', name: 'outminute' },
         'loading-time-out-ampm': { type: 'text', name: 'ampmout' },
@@ -116,6 +117,10 @@ JFCustomWidget.subscribe("ready", function() {
                             const answer_a = Object.values(selectedSubmission.answers).find(
                                 ans => ans.name === field_a.name
                             );
+
+                            print(`${answer.answer}`)
+                            print(`:${answer_m.answer}`)
+                            print(`... ${answer_a.answer}`)
 
                             element.value = `${answer.answer}:${answer_m.answer} ${answer_a.answer}`;
 
