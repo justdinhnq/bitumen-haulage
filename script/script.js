@@ -118,10 +118,6 @@ JFCustomWidget.subscribe("ready", function() {
                                 ans => ans.name === field_a.name
                             );
 
-                            console.log(`${answer.answer}`)
-                            console.log(`:${answer_m.answer}`)
-                            console.log(`... ${answer_a.answer}`)
-
                             element.value = `${answer.answer}:${answer_m.answer} ${answer_a.answer}`;
 
                         } else if (fieldId === 'loading-time-out-hour' && answer && answer.answer) {
@@ -134,10 +130,6 @@ JFCustomWidget.subscribe("ready", function() {
                             const answer_a = Object.values(selectedSubmission.answers).find(
                                 ans => ans.name === field_a.name
                             );
-
-                            console.log(`${answer.answer}`)
-                            console.log(`:${answer_m.answer}`)
-                            console.log(`... ${answer_a.answer}`)
 
                             element.value = `${answer.answer}:${answer_m.answer} ${answer_a.answer}`;
 
