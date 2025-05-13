@@ -8,13 +8,19 @@ JFCustomWidget.subscribe("ready", function() {
         'driver-name': { type: 'text', name: 'driverName' },
         'driver-signature': { type: 'image', name: 'driverSignature' },
         'loading-point': { type: 'text', name: 'loadingPoint' },
-        'delivery-point': { type: 'text', name: 'deliveryPoint' },
+        'delivery-point': { type: 'text', name: 'deliveryDestination' },
         'customer-name': { type: 'text', name: 'customerName' },
-        'requested-time': { type: 'text', name: 'requestedTime' },
+        'requested-time': { type: 'text', name: 'requestedDate' },
         'downer-po': { type: 'text', name: 'downerPurchaseOrder' },
         'product': { type: 'text', name: 'product' },
-        'loading-time-in': { type: 'text', name: 'loadingTimeIn' },
-        'loading-time-out': { type: 'text', name: 'loadingTimeOut' },
+
+        'loading-time-in-hour': { type: 'text', name: 'inhour' },
+        'loading-time-in-minute': { type: 'text', name: 'inminute' },
+        'loading-time-in-ampm': { type: 'text', name: 'ampmin' },
+        'loading-time-out-hour': { type: 'text', name: 'outhour' },
+        'loading-time-out-minute': { type: 'text', name: 'outminute' },
+        'loading-time-out-ampm': { type: 'text', name: 'ampmout' },
+
         'bitumen-tanker-number': { type: 'text', name: 'bitumenTankerNumber' },
         'company-name': { type: 'text', name: 'companyName' },
         'refinery-name': { type: 'text', name: 'refineryName' },
@@ -26,8 +32,6 @@ JFCustomWidget.subscribe("ready", function() {
         'net-weight': { type: 'image', name: 'netWeight' }
     };
     let submissionsData = [];
-
-    console.log('subscribing');
 
     // Fetch submissions
     const fetchSubmissions = async () => {
@@ -102,6 +106,32 @@ JFCustomWidget.subscribe("ready", function() {
                             //}
                         } else if (fieldId === 'delivery-point' && answer && answer.answer) {
                             element.value = answer.answer;
+                        } else if (fieldId === 'loading-time-in-hour' && answer && answer.answer) {
+                            const field_m = fields['loading-time-in-minute'];
+                            const answer_m = Object.values(selectedSubmission.answers).find(
+                                ans => ans.name === field_m.name
+                            );
+
+                            const field_a = fields['loading-time-in-ampm'];
+                            const answer_a = Object.values(selectedSubmission.answers).find(
+                                ans => ans.name === field_a.name
+                            );
+
+                            element.value = `${answer.answer}:${answer_m.answer} ${answer_a.answer}`;
+
+                        } else if (fieldId === 'loading-time-out-hour' && answer && answer.answer) {
+                            const field_m = fields['loading-time-out-minute'];
+                            const answer_m = Object.values(selectedSubmission.answers).find(
+                                ans => ans.name === field_m.name
+                            );
+
+                            const field_a = fields['loading-time-out-ampm'];
+                            const answer_a = Object.values(selectedSubmission.answers).find(
+                                ans => ans.name === field_a.name
+                            );
+
+                            element.value = `${answer.answer}:${answer_m.answer} ${answer_a.answer}`;
+                            
                         } else if (fieldId === 'requested-time' && answer && answer.answer && typeof answer.answer === 'object') {
                             // Handle datetime object
                             const { day = '', month = '', year = '' } = answer.answer;
