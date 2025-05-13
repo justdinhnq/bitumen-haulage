@@ -130,8 +130,12 @@ JFCustomWidget.subscribe("ready", function() {
                                 ans => ans.name === field_a.name
                             );
 
+                            print(`${answer.answer}`)
+                            print(`:${answer_m.answer}`)
+                            print(`... ${answer_a.answer}`)
+
                             element.value = `${answer.answer}:${answer_m.answer} ${answer_a.answer}`;
-                            
+
                         } else if (fieldId === 'requested-time' && answer && answer.answer && typeof answer.answer === 'object') {
                             // Handle datetime object
                             const { day = '', month = '', year = '' } = answer.answer;
