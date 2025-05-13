@@ -8,6 +8,7 @@ JFCustomWidget.subscribe("ready", function() {
         'driver-name': { type: 'text', name: 'driverName' },
         'driver-signature': { type: 'image', name: 'driverSignature' },
         'loading-point': { type: 'text', name: 'loadingPoint' },
+        'delivery-point': { type: 'text', name: 'deliveryPoint' },
         'customer-name': { type: 'text', name: 'customerName' },
         'requested-time': { type: 'text', name: 'requestedTime' },
         'downer-po': { type: 'text', name: 'downerPurchaseOrder' },
@@ -80,25 +81,27 @@ JFCustomWidget.subscribe("ready", function() {
                             const { first = '', last = '' } = answer.answer;
                             element.value = `${first} ${last}`.trim() || `No ${field.name} found`;
                         } else if (fieldId === 'loading-point' && answer && answer.answer) {
-                            // Extract lat/lng from Google Maps URL
-                            const url = answer.answer;
-                            const match = url.match(/q=(-?\d+\.\d+),(-?\d+\.\d+)/);
-                            if (match) {
-                                const lat = match[1];
-                                const lng = match[2];
-                                element.value = 'Loading...';
+                            element.value = answer.answer;
+                            //const url = answer.answer;
+                            //const match = url.match(/q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+                            //if (match) {
+                            //    const lat = match[1];
+                            //    const lng = match[2];
+                            //    element.value = 'Loading...';
                                 // Fetch address using Google Maps Geocoding API
-                                fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyDNiOkBAfWzzI5cWSTU7rXLYANzMvLCOKk`)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        element.value = data.results[0]?.formatted_address || `No ${field.name} found`;
-                                    })
-                                    .catch(() => {
-                                        element.value = `No ${field.name} found`;
-                                    });
-                            } else {
-                                element.value = `No ${field.name} found`;
-                            }
+                                //fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyDNiOkBAfWzzI5cWSTU7rXLYANzMvLCOKk`)
+                                //    .then(response => response.json())
+                                //    .then(data => {
+                                //        element.value = data.results[0]?.formatted_address || `No ${field.name} found`;
+                                //    })
+                                //    .catch(() => {
+                                //        element.value = `No ${field.name} found`;
+                                //    });
+                            //} else {
+                            //    element.value = `No ${field.name} found`;
+                            //}
+                        } else if (fieldId === 'delivery-point' && answer && answer.answer) {
+                            element.value = answer.answer;
                         } else if (fieldId === 'requested-time' && answer && answer.answer && typeof answer.answer === 'object') {
                             // Handle datetime object
                             const { day = '', month = '', year = '' } = answer.answer;
