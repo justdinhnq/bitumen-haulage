@@ -118,9 +118,9 @@ JFCustomWidget.subscribe("ready", function() {
                                 ans => ans.name === field_a.name
                             );
 
-                            print(`${answer.answer}`)
-                            print(`:${answer_m.answer}`)
-                            print(`... ${answer_a.answer}`)
+                            console.log(`${answer.answer}`)
+                            console.log(`:${answer_m.answer}`)
+                            console.log(`... ${answer_a.answer}`)
 
                             element.value = `${answer.answer}:${answer_m.answer} ${answer_a.answer}`;
 
@@ -135,9 +135,9 @@ JFCustomWidget.subscribe("ready", function() {
                                 ans => ans.name === field_a.name
                             );
 
-                            print(`${answer.answer}`)
-                            print(`:${answer_m.answer}`)
-                            print(`... ${answer_a.answer}`)
+                            console.log(`${answer.answer}`)
+                            console.log(`:${answer_m.answer}`)
+                            console.log(`... ${answer_a.answer}`)
 
                             element.value = `${answer.answer}:${answer_m.answer} ${answer_a.answer}`;
 
