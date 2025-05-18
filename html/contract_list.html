@@ -28,8 +28,6 @@
   </style>
 </head>
 <body>
-  <div id="loading">Loading contracts...</div>
-  <div id="error"></div>
   <select id="contractDropdown">
     <option value="">Select a contract</option>
   </select>
@@ -41,8 +39,6 @@
     // Initialize the widget
     window.JFCustomWidget.subscribe('ready', function(data) {
         const dropdown = document.getElementById('contractDropdown');
-        const loading = document.getElementById('loading');
-        const error = document.getElementById('error');
 
         // Fetch contract names from Power Automate
         fetch(POWER_AUTOMATE_URL, {
@@ -68,16 +64,13 @@
             }
           })
           .catch(err => {
-            loading.style.display = 'none';
-            error.style.display = 'block';
-            error.textContent = 'Failed to load contracts: ' + err.message;
+            console.error('Error fetching:', error);
           });
 
         // Send selected value to Jotform
         dropdown.addEventListener('change', function () {
           JotForm.setFieldValue('contractDropdown', dropdown.value);
         });
-      }
     });
   </script>
 </body>
