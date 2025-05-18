@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contract Dropdown Widget</title>
+  <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 10px;
+    }
+    select {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      border-radius: 4px;
+    }
+    #loading {
+      display: none;
+      color: #555;
+    }
+    #error {
+      display: none;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">Loading contracts...</div>
+  <div id="error"></div>
+  <select id="contractDropdown">
+    <option value="">Select a contract</option>
+  </select>
+
+  <script>
+    // Replace with your Power Automate HTTP POST URL
+    const POWER_AUTOMATE_URL = 'https://prod-32.australiasoutheast.logic.azure.com:443/workflows/91a909c3d25d40ae915c5d1c999b5386/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=HfFypdeUvtsxJjKaUQrTIp5E6EWTFPg2xD-fqcRzlME';
+
+    // Initialize the widget
+    window.jotformCustomWidget({
+      name: 'contractDropdown',
+      onReady: function () {
+        const dropdown = document.getElementById('contractDropdown');
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+
+        // Show loading message
+        loading.style.display = 'block?;
+
+        // Fetch contract names from Power Automate
+        fetch(POWER_AUTOMATE_URL, {
+          method: 'POST', // Power Automate uses POST for HTTP request triggers
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({}) // Empty body for a simple request
+        })
+          .then(response => response.json())
+          .then(data => {
+            loading.style.display = 'none';
+            if (data.contracts && Array.isArray(data.contracts)) {
+              // Populate dropdown
+              data.contracts.forEach(contract => {
+                const option = document.createElement('option');
+                option.value = contract;
+                option.textContent = contract;
+                dropdown.appendChild(option);
+              });
+            } else {
+              throw new Error('Invalid data format');
+            }
+          })
+          .catch(err => {
+            loading.style.display = 'none';
+            error.style.display = 'block';
+            error.textContent = 'Failed to load contracts: ' + err.message;
+          });
+
+        // Send selected value to Jotform
+        dropdown.addEventListener('change', function () {
+          JotForm.setFieldValue('contractDropdown', dropdown.value);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
