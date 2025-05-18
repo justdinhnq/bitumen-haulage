@@ -46,9 +46,6 @@
         const loading = document.getElementById('loading');
         const error = document.getElementById('error');
 
-        // Show loading message
-        loading.style.display = 'block?;
-
         // Fetch contract names from Power Automate
         fetch(POWER_AUTOMATE_URL, {
           method: 'POST', // Power Automate uses POST for HTTP request triggers
