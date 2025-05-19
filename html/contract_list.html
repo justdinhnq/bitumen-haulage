@@ -49,9 +49,7 @@
         },
         body: JSON.stringify({}) // Empty body for a simple request
       })
-      //.then(
-      //  response => response.json())
-      //  console.log("Response data: ", response)
+      .then(response => response.json())
       .then(data => {
         console.log("Data return: ", data)
         if (data.contracts && Array.isArray(data.contracts)) {
