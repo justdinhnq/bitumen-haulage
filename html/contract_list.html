@@ -38,41 +38,42 @@
 
     // Initialize the widget
     window.JFCustomWidget.subscribe('ready', function(data) {
-        const dropdown = document.getElementById('contractDropdown');
+      console.log("Start to fetch a list of contracts.")
+      const dropdown = document.getElementById('contractDropdown');
 
-        // Fetch contract names from Power Automate
-        fetch(POWER_AUTOMATE_URL, {
-          method: 'POST', // Power Automate uses POST for HTTP request triggers
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({}) // Empty body for a simple request
+      // Fetch contract names from Power Automate
+      fetch(POWER_AUTOMATE_URL, {
+        method: 'POST', // Power Automate uses POST for HTTP request triggers
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({}) // Empty body for a simple request
+      })
+        .then(
+          response => response.json())
+          console.log(response)
+        .then(data => {
+          console.log(data)
+          if (data.contracts && Array.isArray(data.contracts)) {
+            // Populate dropdown
+            data.contracts.forEach(contract => {
+              const option = document.createElement('option');
+              option.value = contract;
+              option.textContent = contract;
+              dropdown.appendChild(option);
+            });
+          } else {
+            throw new Error('Invalid data format');
+          }
         })
-          .then(
-            response => response.json())
-            console.log(response)
-          .then(data => {
-            console.log(data)
-            if (data.contracts && Array.isArray(data.contracts)) {
-              // Populate dropdown
-              data.contracts.forEach(contract => {
-                const option = document.createElement('option');
-                option.value = contract;
-                option.textContent = contract;
-                dropdown.appendChild(option);
-              });
-            } else {
-              throw new Error('Invalid data format');
-            }
-          })
-          .catch(err => {
-            console.error('Error fetching:', error);
-          });
-
-        // Send selected value to Jotform
-        dropdown.addEventListener('change', function () {
-          JotForm.setFieldValue('contractDropdown', dropdown.value);
+        .catch(err => {
+          console.error('Error fetching:', error);
         });
+
+      // Send selected value to Jotform
+      dropdown.addEventListener('change', function () {
+        JotForm.setFieldValue('contractDropdown', dropdown.value);
+      });
     });
   </script>
 </body>
