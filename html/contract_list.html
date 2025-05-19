@@ -52,9 +52,9 @@
       .then(response => response.json())
       .then(data => {
         console.log("Data return: ", data)
-        if (data.contracts && Array.isArray(data.contracts)) {
+        if (data && Array.isArray(data)) {
           // Populate dropdown
-          data.contracts.forEach(contract => {
+          data.forEach(contract => {
             const option = document.createElement('option');
             option.value = contract;
             option.textContent = contract;
