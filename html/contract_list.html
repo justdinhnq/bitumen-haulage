@@ -52,7 +52,7 @@
       .then(response => response.json())
       .then(data => {
         console.log("Data return: ", data)
-        if (data && Array.isArray(data)) {
+        /* if (data && Array.isArray(data)) {
           // Populate dropdown
           data.forEach(contract => {
             const option = document.createElement('option');
@@ -62,7 +62,7 @@
           });
         } else {
           throw new Error('Invalid data format');
-        }
+        } */
       })
       .catch(err => {
         console.error('Error fetching:', error);
