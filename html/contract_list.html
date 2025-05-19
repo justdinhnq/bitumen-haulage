@@ -49,26 +49,26 @@
         },
         body: JSON.stringify({}) // Empty body for a simple request
       })
-        .then(
-          response => response.json())
-          console.log(response)
-        .then(data => {
-          console.log(data)
-          if (data.contracts && Array.isArray(data.contracts)) {
-            // Populate dropdown
-            data.contracts.forEach(contract => {
-              const option = document.createElement('option');
-              option.value = contract;
-              option.textContent = contract;
-              dropdown.appendChild(option);
-            });
-          } else {
-            throw new Error('Invalid data format');
-          }
-        })
-        .catch(err => {
-          console.error('Error fetching:', error);
-        });
+      //.then(
+      //  response => response.json())
+      //  console.log("Response data: ", response)
+      .then(data => {
+        console.log("Data return: ", data)
+        if (data.contracts && Array.isArray(data.contracts)) {
+          // Populate dropdown
+          data.contracts.forEach(contract => {
+            const option = document.createElement('option');
+            option.value = contract;
+            option.textContent = contract;
+            dropdown.appendChild(option);
+          });
+        } else {
+          throw new Error('Invalid data format');
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching:', error);
+      });
 
       // Send selected value to Jotform
       dropdown.addEventListener('change', function () {
