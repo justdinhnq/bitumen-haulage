@@ -50,7 +50,6 @@
         })
           .then(response => response.json())
           .then(data => {
-            loading.style.display = 'none';
             if (data.contracts && Array.isArray(data.contracts)) {
               // Populate dropdown
               data.contracts.forEach(contract => {
@@ -75,3 +74,725 @@
   </script>
 </body>
 </html>
+
+{
+    "content": {
+        "d": {
+            "results": [
+                {
+                    "__metadata": {
+                        "id": "a6b7a970-6bbc-4432-9b52-6ef969d5a03e",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(1)",
+                        "etag": "\"73\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "BOP West NOC (Westlink)"
+                },
+                {
+                    "__metadata": {
+                        "id": "ab6e50bb-a6ab-4a43-82d8-33027370db4d",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(2)",
+                        "etag": "\"71\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Central Waikato NOC"
+                },
+                {
+                    "__metadata": {
+                        "id": "b2ce6e7f-8b44-4091-85f2-b9753761b95b",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(3)",
+                        "etag": "\"58\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Coastal Otago NOC"
+                },
+                {
+                    "__metadata": {
+                        "id": "2236018c-d4f8-402c-a16a-671a66c64b8d",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(5)",
+                        "etag": "\"64\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "North Canterbury NOC"
+                },
+                {
+                    "__metadata": {
+                        "id": "ff28e575-492e-4787-afcc-9f7e14d783c2",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(6)",
+                        "etag": "\"59\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "South Canterbury NOC"
+                },
+                {
+                    "__metadata": {
+                        "id": "fe527902-d9c0-4f80-b2f7-4d048638e4a2",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(7)",
+                        "etag": "\"78\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Southland NOC"
+                },
+                {
+                    "__metadata": {
+                        "id": "173b48bb-9d4a-4a76-a00b-337ceafacd4d",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(8)",
+                        "etag": "\"60\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Tairawhiti Roads Northern NOC"
+                },
+                {
+                    "__metadata": {
+                        "id": "8f9fcee0-cc8d-477f-9327-921b460cb49f",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(9)",
+                        "etag": "\"66\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Tairawhiti NOC"
+                },
+                {
+                    "__metadata": {
+                        "id": "ac60b4f1-5450-4665-8b0b-6ecdb21b029d",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(10)",
+                        "etag": "\"59\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Taranaki NOC (old)"
+                },
+                {
+                    "__metadata": {
+                        "id": "9c6ead90-70f1-4e69-9937-bb97086c30ba",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(11)",
+                        "etag": "\"54\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Central Auckland"
+                },
+                {
+                    "__metadata": {
+                        "id": "385618f0-903f-41b5-bbf6-eb4c2346b5c5",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(12)",
+                        "etag": "\"71\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Central Hawkes Bay DC"
+                },
+                {
+                    "__metadata": {
+                        "id": "a5891f2a-a5c6-4503-9ad3-00b19b68971d",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(13)",
+                        "etag": "\"52\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Dunedin CC (old)"
+                },
+                {
+                    "__metadata": {
+                        "id": "178c476e-b347-43c2-8cde-0812a7f7a005",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(14)",
+                        "etag": "\"58\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Far North DC South"
+                },
+                {
+                    "__metadata": {
+                        "id": "734e7113-ace7-4e09-a31f-6030508dbc12",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(15)",
+                        "etag": "\"63\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Gisborne DC Western"
+                },
+                {
+                    "__metadata": {
+                        "id": "add3f50b-c846-4d1b-be29-372a4be582dd",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(16)",
+                        "etag": "\"75\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Hastings DC"
+                },
+                {
+                    "__metadata": {
+                        "id": "db5dec0d-f607-479c-9eb5-10605c482148",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(17)",
+                        "etag": "\"47\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Hauraki DC"
+                },
+                {
+                    "__metadata": {
+                        "id": "0d5fbcf6-ba9e-4963-a70a-0708a4679c69",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(18)",
+                        "etag": "\"48\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Hauraki Gulf Islands"
+                },
+                {
+                    "__metadata": {
+                        "id": "c906029d-9b1e-4f41-b5fa-1c4537064129",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(19)",
+                        "etag": "\"53\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Invercargill CC (old)"
+                },
+                {
+                    "__metadata": {
+                        "id": "1fc4fc19-3793-4c4b-a05b-0f580900ddda",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(20)",
+                        "etag": "\"49\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Kaikoura DC"
+                },
+                {
+                    "__metadata": {
+                        "id": "3a35221d-482d-4b53-9532-c2de40b0aa38",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(21)",
+                        "etag": "\"56\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Kaipara DC"
+                },
+                {
+                    "__metadata": {
+                        "id": "0460b858-4797-4ceb-93a3-aeefce94f919",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(22)",
+                        "etag": "\"71\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Napier Alliance"
+                },
+                {
+                    "__metadata": {
+                        "id": "ccf5518e-4197-40a5-b6f9-6c7fe1754a04",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(23)",
+                        "etag": "\"48\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "North Rural"
+                },
+                {
+                    "__metadata": {
+                        "id": "8755dcfb-7085-4d14-8163-e01d23cb722b",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(24)",
+                        "etag": "\"52\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "North West Urban"
+                },
+                {
+                    "__metadata": {
+                        "id": "a8809cac-030c-49bd-a890-56f6235d40bd",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(25)",
+                        "etag": "\"56\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Porirua CC"
+                },
+                {
+                    "__metadata": {
+                        "id": "22611725-6202-4314-988f-f35558a19d9d",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(26)",
+                        "etag": "\"71\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Queenstown Lakes DC"
+                },
+                {
+                    "__metadata": {
+                        "id": "6cfce901-33f3-4eb8-93ea-1a51d779ae71",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(27)",
+                        "etag": "\"76\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Queenstown Lakes DC Reseal (old)"
+                },
+                {
+                    "__metadata": {
+                        "id": "0f46e99b-ca01-44bb-96c1-f494ee76c9ea",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(28)",
+                        "etag": "\"45\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Ruapehu DC"
+                },
+                {
+                    "__metadata": {
+                        "id": "87b45b69-5bef-44ab-bafa-a79c04358787",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(29)",
+                        "etag": "\"50\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "South Waikato DC"
+                },
+                {
+                    "__metadata": {
+                        "id": "1bc73422-9db4-4c35-8e69-8f54b50d52bf",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(30)",
+                        "etag": "\"48\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "South West Urban"
+                },
+                {
+                    "__metadata": {
+                        "id": "4c4f6c9a-302f-46b2-87a2-70f2605930f2",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(31)",
+                        "etag": "\"60\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Southland DC Western"
+                },
+                {
+                    "__metadata": {
+                        "id": "a7bb8055-98e2-438a-a4ff-1d0034deaeca",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(32)",
+                        "etag": "\"79\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Tasman Alliance"
+                },
+                {
+                    "__metadata": {
+                        "id": "d07077fb-41bf-46bf-8d34-9615f1208f75",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(33)",
+                        "etag": "\"53\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Wellington CC Northern"
+                },
+                {
+                    "__metadata": {
+                        "id": "b141900c-e701-4249-9831-22acfda6faf6",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(34)",
+                        "etag": "\"50\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Whangarei DC"
+                },
+                {
+                    "__metadata": {
+                        "id": "a1704d5f-df36-467d-b82c-2a05790b0414",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(35)",
+                        "etag": "\"68\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Hamilton Alliance"
+                },
+                {
+                    "__metadata": {
+                        "id": "99d31313-4888-49d8-ac1a-e3d6df87eea1",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(36)",
+                        "etag": "\"70\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Milford Alliance"
+                },
+                {
+                    "__metadata": {
+                        "id": "3823e64d-d0b4-4c65-ba8f-6b1d68238469",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(37)",
+                        "etag": "\"63\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "New Plymouth DC"
+                },
+                {
+                    "__metadata": {
+                        "id": "4bc7986c-3e6c-4e4d-95e4-26c1b354426b",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(38)",
+                        "etag": "\"63\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Tararua Alliance"
+                },
+                {
+                    "__metadata": {
+                        "id": "e74d0c36-650d-4a17-b083-f3c43af6de13",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(39)",
+                        "etag": "\"55\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Waikato Alliance"
+                },
+                {
+                    "__metadata": {
+                        "id": "07d7930f-2edd-4c61-a184-8367d1493237",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(40)",
+                        "etag": "\"57\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Whanganui Alliance"
+                },
+                {
+                    "__metadata": {
+                        "id": "c25d7568-a8ae-4f81-9692-875f6c77d889",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(41)",
+                        "etag": "\"57\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Gisborne DC Northern"
+                },
+                {
+                    "__metadata": {
+                        "id": "88ad32c7-6a29-4514-b8b4-4ae0553806f5",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(42)",
+                        "etag": "\"61\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Taranaki NOC 2020"
+                },
+                {
+                    "__metadata": {
+                        "id": "b47e52ca-304b-4b2f-ab16-a1a7dff5f88b",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(43)",
+                        "etag": "\"75\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Central Hawkes Bay DC Sealing"
+                },
+                {
+                    "__metadata": {
+                        "id": "8cdcb2e1-354f-4466-b1c6-2cec7addc300",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(44)",
+                        "etag": "\"50\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Western Bay of Plenty DC"
+                },
+                {
+                    "__metadata": {
+                        "id": "c4dcaafd-3af9-477c-a7d8-8bcfc5f41a21",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(45)",
+                        "etag": "\"17\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Private Contract - Northern"
+                },
+                {
+                    "__metadata": {
+                        "id": "80b7f0e7-d08c-4970-9307-3a4eddc981ba",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(46)",
+                        "etag": "\"14\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Private Contract - Central"
+                },
+                {
+                    "__metadata": {
+                        "id": "57e4e29e-8de0-4394-a77a-58f8ac432f63",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(47)",
+                        "etag": "\"14\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Private Contract - Southern"
+                },
+                {
+                    "__metadata": {
+                        "id": "18eb847d-f77d-44a3-be4c-a79672a80408",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(48)",
+                        "etag": "\"11\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Buller DC"
+                },
+                {
+                    "__metadata": {
+                        "id": "b4959ac7-aa73-40b5-b597-bde211cd687c",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(49)",
+                        "etag": "\"9\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "AT Waiheke & Rakino"
+                },
+                {
+                    "__metadata": {
+                        "id": "afc8c47f-c341-43d0-875b-06b71d12cfee",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(51)",
+                        "etag": "\"14\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "AT North Rural"
+                },
+                {
+                    "__metadata": {
+                        "id": "9c7d0732-5fed-4147-b47e-b1b620e31209",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(52)",
+                        "etag": "\"6\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Invercargill CC Sealing"
+                },
+                {
+                    "__metadata": {
+                        "id": "ac6a22d6-f053-4ea5-b0b3-253baf247731",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(53)",
+                        "etag": "\"17\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Gisborne DC Uawa"
+                },
+                {
+                    "__metadata": {
+                        "id": "c7086071-bdb0-4917-821b-4ffd90ff33a0",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(54)",
+                        "etag": "\"5\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "South Waikato DC 640/637 Unsealed Rds"
+                },
+                {
+                    "__metadata": {
+                        "id": "25e954ff-ec3f-4c56-a374-1d4d2b76511f",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(55)",
+                        "etag": "\"6\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "South Waikato DC 640/639 Footpath_K&C"
+                },
+                {
+                    "__metadata": {
+                        "id": "25e60e39-15c7-4531-baaf-c2a75a1e571d",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(56)",
+                        "etag": "\"4\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Nelson CC York & Eves Valley"
+                },
+                {
+                    "__metadata": {
+                        "id": "07541a1f-d2eb-4588-8be4-c6179d8bdd45",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(57)",
+                        "etag": "\"3\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Dunedin CC K&C"
+                },
+                {
+                    "__metadata": {
+                        "id": "7af52259-f6eb-48ed-84c3-9b11ea3f948a",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(58)",
+                        "etag": "\"12\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Queenstown Lakes DC Reseal"
+                },
+                {
+                    "__metadata": {
+                        "id": "470c5b62-f02e-4a14-a70b-e1d614c272ab",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(61)",
+                        "etag": "\"11\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "AT Central"
+                },
+                {
+                    "__metadata": {
+                        "id": "7711ae9b-8668-45d7-9dcc-8f5279a2bb91",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(62)",
+                        "etag": "\"21\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Hamilton Alliance 2023"
+                },
+                {
+                    "__metadata": {
+                        "id": "97b2c71b-6d0a-4488-8124-2d7afec41275",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(63)",
+                        "etag": "\"6\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Southland-Milford NOC Sealing"
+                },
+                {
+                    "__metadata": {
+                        "id": "6e380973-1445-40f7-872b-f2fd7460a9d3",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(64)",
+                        "etag": "\"4\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "AT West Sealing"
+                },
+                {
+                    "__metadata": {
+                        "id": "eac13847-ad7d-4cad-afb0-c3dbb48bea69",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(65)",
+                        "etag": "\"5\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Hastings DC Urban Sealing"
+                },
+                {
+                    "__metadata": {
+                        "id": "9838d57f-5312-4e41-a434-0b7a8e38a2b1",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(66)",
+                        "etag": "\"5\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Hauraki DC Sealing"
+                },
+                {
+                    "__metadata": {
+                        "id": "280520b0-6ca4-4cde-9d59-2f5fb76cbd7f",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(67)",
+                        "etag": "\"5\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Waipa DC"
+                },
+                {
+                    "__metadata": {
+                        "id": "505bc532-0f5a-488c-9820-2b48da614581",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(68)",
+                        "etag": "\"9\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Southland DC Eastern Sealing 2023"
+                },
+                {
+                    "__metadata": {
+                        "id": "3265e813-67fb-4a1d-8f3a-d9d8bfcf04cd",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(69)",
+                        "etag": "\"5\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Southland DC Western Sealing 2023"
+                },
+                {
+                    "__metadata": {
+                        "id": "19eee5ce-9cad-45dd-9adf-ad55c060acf0",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(70)",
+                        "etag": "\"6\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Queenstown Lakes DC Sealing 2023"
+                },
+                {
+                    "__metadata": {
+                        "id": "d96d7c89-0c80-4fa8-8c9c-ee96e6e01c4c",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(71)",
+                        "etag": "\"22\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Tairawhiti Alliance TREC"
+                },
+                {
+                    "__metadata": {
+                        "id": "c25064c1-d564-486a-968e-9ebec5360213",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(72)",
+                        "etag": "\"5\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Tairawhiti Roads Northern NOC- Old"
+                },
+                {
+                    "__metadata": {
+                        "id": "559e22a4-fe1d-4432-915f-c96fc422a537",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(73)",
+                        "etag": "\"5\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Tairawhiti Roads Western NOC- Old"
+                },
+                {
+                    "__metadata": {
+                        "id": "cfcf1d38-357a-43cb-8c78-6eae636ac79c",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(74)",
+                        "etag": "\"7\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "WDC Alliance Contract 2017 (old)"
+                },
+                {
+                    "__metadata": {
+                        "id": "175975c0-218b-4368-9afb-05d56e3b4aef",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(75)",
+                        "etag": "\"3\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "BOP West SH"
+                },
+                {
+                    "__metadata": {
+                        "id": "766c1eb1-a594-4d4b-bda0-7a2cd6444fb0",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(76)",
+                        "etag": "\"5\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Upper Hutt CC Sealing"
+                },
+                {
+                    "__metadata": {
+                        "id": "19c2dc9a-45b3-4c30-b4dd-f095b8ac75a8",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(77)",
+                        "etag": "\"19\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "North Canterbury NOC Ext 2024"
+                },
+                {
+                    "__metadata": {
+                        "id": "4d394a6c-6a33-4bac-826a-ffd46fdf0a37",
+                        "uri": "https://downergroup.sharepoint.com/sites/TS-Analytics/_api/Web/Lists(guid'b7154fa3-a458-405b-beff-49843ec53cae')/Items(78)",
+                        "etag": "\"7\"",
+                        "type": "SP.Data.TS_x0020_ContractsListItem"
+                    },
+                    "Contract": "Kaipara DC 2024"
+                }
+            ]
+        }
+    },
+    "schema": {
+        "type": "object",
+        "properties": {
+            "body": {
+                "type": "object",
+                "properties": {
+                    "d": {
+                        "type": "object",
+                        "properties": {
+                            "results": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "__metadata": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "uri": {
+                                                    "type": "string"
+                                                },
+                                                "etag": {
+                                                    "type": "string"
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "Contract": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "__metadata",
+                                        "Contract"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -5,7 +5,7 @@ JFCustomWidget.subscribe("ready", function() {
 
     const dropdown = document.getElementById('submission-dropdown');
     const fields = {
-        'driver-name': { type: 'text', name: 'driverName' },
+        //'driver-name': { type: 'text', name: 'driverName' },
         'driver-signature': { type: 'image', name: 'driverSignature' },
         'loading-point': { type: 'text', name: 'loadingPoint' },
         'delivery-point': { type: 'text', name: 'deliveryDestination' },
@@ -24,7 +24,7 @@ JFCustomWidget.subscribe("ready", function() {
 
         'bitumen-tanker-number': { type: 'text', name: 'bitumenTankerNumber' },
         'company-name': { type: 'text', name: 'companyName' },
-        'refinery-name': { type: 'text', name: 'refineryName' },
+        //'refinery-name': { type: 'text', name: 'refineryName' },
         'batch-number': { type: 'text', name: 'batchNumber' },
         'load-temperature': { type: 'image', name: 'loadTemperature' },
         'tank-temperature': { type: 'image', name: 'tankTemperature' },
@@ -81,11 +81,12 @@ JFCustomWidget.subscribe("ready", function() {
                     );
                     if (field.type === 'text') {
                         console.log('fieldId: ', fieldId, '; answer: ', answer);
-                        if (fieldId === 'driver-name' && answer && answer.answer && typeof answer.answer === 'object') {
+                        //if (fieldId === 'driver-name' && answer && answer.answer && typeof answer.answer === 'object') {
                             // Handle Full Name object
-                            const { first = '', last = '' } = answer.answer;
-                            element.value = `${first} ${last}`.trim() || `No ${field.name} found`;
-                        } else if (fieldId === 'loading-point' && answer && answer.answer) {
+                            //const { first = '', last = '' } = answer.answer;
+                            //element.value = `${first} ${last}`.trim() || `No ${field.name} found`;
+                        //} else 
+                        if (fieldId === 'loading-point' && answer && answer.answer) {
                             element.value = answer.answer;
                             //const url = answer.answer;
                             //const match = url.match(/q=(-?\d+\.\d+),(-?\d+\.\d+)/);
@@ -111,7 +112,7 @@ JFCustomWidget.subscribe("ready", function() {
                             fieldId === 'downer-po' || 
                             fieldId === 'bitumen-tanker-number' || 
                             fieldId === 'company-name' || 
-                            fieldId === 'refinery-name' || 
+                            //fieldId === 'refinery-name' || 
                             fieldId === 'batch-number'
 
                         ) && answer && answer.answer) {
