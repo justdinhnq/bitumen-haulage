@@ -52,6 +52,12 @@
       .then(response => response.json())
       .then(data => {
         console.log("Data return: ", data)
+        data.forEach(contract => {
+          const option = document.createElement('option');
+          option.value = contract;
+          option.textContent = contract;
+          dropdown.appendChild(option);
+        });
         /* if (data && Array.isArray(data)) {
           // Populate dropdown
           data.forEach(contract => {
