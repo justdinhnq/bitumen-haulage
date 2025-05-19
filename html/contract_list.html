@@ -9,21 +9,13 @@
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      padding: 10px;
+      padding: 0px;
     }
     select {
       width: 100%;
-      padding: 8px;
+      padding: 0px;
       font-size: 16px;
       border-radius: 4px;
-    }
-    #loading {
-      display: none;
-      color: #555;
-    }
-    #error {
-      display: none;
-      color: red;
     }
   </style>
 </head>
@@ -58,17 +50,6 @@
           option.textContent = contract;
           dropdown.appendChild(option);
         });
-        /* if (data && Array.isArray(data)) {
-          // Populate dropdown
-          data.forEach(contract => {
-            const option = document.createElement('option');
-            option.value = contract;
-            option.textContent = contract;
-            dropdown.appendChild(option);
-          });
-        } else {
-          throw new Error('Invalid data format');
-        } */
       })
       .catch(err => {
         console.error('Error fetching:', error);
@@ -76,7 +57,7 @@
 
       // Send selected value to Jotform
       dropdown.addEventListener('change', function () {
-        JotForm.setFieldValue('contractDropdown', dropdown.value);
+        //JotForm.setFieldValue('contractDropdown', dropdown.value);
       });
     });
   </script>
