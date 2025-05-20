@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real-Time Textfield Widget</title>
+    <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 10px; }
+        input { width: 100%; padding: 5px; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <input type="text" id="valueField" readonly placeholder="Value will appear here">
+    <script>
+        const timestamp = new Date().toISOString()
+            .replace(/[-:]/g, '')
+            .split('.')[0]
+            .replace(/(\d{2})(\d{2})(\d{2})$/, '_$1_$2_$3');
+
+        let formId = '';
+        let key = '';
+
+        // Initialize Jotform Custom Widget
+        window.JFCustomWidget.subscribe('ready', function(data) {
+            // Get FormID and Key from widget settings
+            formId = JFCustomWidget.getWidgetSetting("formId");
+            key = JFCustomWidget.getWidgetSetting("FormKey");
+            if (!formId) {
+                console.error('FormID not provided in widget settings');
+                return;
+            }
+
+            // Example log with timestamp
+            console.log(`Widget initialized at timestamp: ${timestamp}`);
+
+            // Start listening for real-time updates
+            listenForRealTimeUpdates();
+        });
+
+        function listenForRealTimeUpdates() {
+            if (!formId || !timestamp) {
+                console.warn('FormID or timestamp not provided. Cannot listen for updates.');
+                return;
+            }
+
+            // Initialize Server-Sent Events (SSE)
+            const eventSource = new EventSource(`https://jotformcomms2025.azurewebsites.net/api/storeNRetrieve/${formId}/${timestamp}`);
+
+            // On receiving a message from the server
+            eventSource.onmessage = function(event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    console.log('Received message from Azure:', data);
+
+                    if (data == 'heartbeat') {
+                        console.log('Dont do anything because it is heartbeat only');
+                    } else {
+                        // Update the value field if the message contains relevant data
+                        if (data.formId === formId && data.timestamp === timestamp) {
+                            const object = JSON.parse(data.data);
+                            
+                            document.getElementById('valueField').value = object[key] || 'No message';
+                        }
+                    }                    
+                } catch (error) {
+                    console.error('Error parsing real-time update:', error);
+                }
+            };
+
+            // Handle errors with the SSE connection
+            eventSource.onerror = function(error) {
+                console.error('Error with SSE connection:', error);
+                eventSource.close();
+            };
+        }
+    </script>
+</body>
+</html>

@@ -20,17 +20,24 @@
   </style>
 </head>
 <body>
-  <select id="contractDropdown">
+  <select id="contractDropdown" onchange="handleSelection()">
     <option value="">Select a contract</option>
   </select>
 
   <script>
-    // Replace with your Power Automate HTTP POST URL
     const POWER_AUTOMATE_URL = 'https://prod-32.australiasoutheast.logic.azure.com:443/workflows/91a909c3d25d40ae915c5d1c999b5386/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=HfFypdeUvtsxJjKaUQrTIp5E6EWTFPg2xD-fqcRzlME';
+
+    const timestamp = new Date().toISOString()
+            .replace(/[-:]/g, '')
+            .split('.')[0]
+            .replace(/(\d{2})(\d{2})(\d{2})$/, '_$1_$2_$3');
+
+    let formId = '';
 
     // Initialize the widget
     window.JFCustomWidget.subscribe('ready', function(data) {
       console.log("Start to fetch a list of contracts.")
+      formId = JFCustomWidget.getWidgetSetting("formId"); 
       const dropdown = document.getElementById('contractDropdown');
 
       // Fetch contract names from Power Automate
@@ -60,6 +67,36 @@
         //JotForm.setFieldValue('contractDropdown', dropdown.value);
       });
     });
+
+    function handleSelection() {
+      const selectElement = document.getElementById('contractDropdown');
+      const key = selectElement.value; // Get the selected value
+      const value = selectElement.options[selectElement.selectedIndex].text; // Get the selected option's text
+
+      if (!submissionId || !formId) return;
+
+      // Construct submissionData based on the selected option
+      const submissionData = {
+          key: key,
+          value: value,
+      };
+      
+      const PA_URL = 'https://prod-41.australiasoutheast.logic.azure.com:443/workflows/4bdfa3ffee8d4446a76a4caf2b95789c/triggers/manual/paths/invoke?api-version=2016-06-01';
+
+      // Send data to Azure Functions
+      fetch(PA_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ formId, timestamp, data: submissionData }) 
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log("Data sent!")
+      })
+      .catch(err => {
+        console.error('Error fetching:', error);
+      });
+    }
   </script>
 </body>
 </html>
