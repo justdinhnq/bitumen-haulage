@@ -73,10 +73,8 @@
       const key = selectElement.value; // Get the selected value
       const value = selectElement.options[selectElement.selectedIndex].text; // Get the selected option's text
 
-      if (!submissionId || !formId) return;
-
-      // Construct submissionData based on the selected option
-      const submissionData = {
+      // Construct data based on the selected option
+      const data = {
           key: key,
           value: value,
       };
@@ -87,7 +85,7 @@
       fetch(PA_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ formId, timestamp, data: submissionData }) 
+          body: JSON.stringify({ formId, timestamp, data: data }) 
       })
       .then(response => response.json())
       .then(data => {
