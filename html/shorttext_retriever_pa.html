@@ -26,6 +26,13 @@
                 console.log('Message received:', message);
             }
         }); 
+
+        // Subscribe to form submit event
+        window.JFCustomWidget.subscribe("submit", function () {
+            const value = document.getElementById('valueField').value;
+
+            window.JFCustomWidget.sendData({ value: value });
+        });
     </script>
 </body>
 </html>

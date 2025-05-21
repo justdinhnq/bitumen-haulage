@@ -68,6 +68,14 @@
       });
     });
 
+    // Subscribe to form submit event
+    window.JFCustomWidget.subscribe("submit", function () {
+        const selectElement = document.getElementById('contractDropdown');
+        const value = selectElement.value;
+
+        window.JFCustomWidget.sendData({ value: value });
+    });
+
     // send message to the channel
     function handleSelection() {
       senderName = JFCustomWidget.getWidgetSetting("senderName");
