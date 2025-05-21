@@ -12,17 +12,20 @@
 <body>
     <input type="text" id="valueField" readonly placeholder="Value will appear here">
     <script>
-        senderName = JFCustomWidget.getWidgetSetting("senderName");
-        let sender = 'talk_channel_'+senderName
+        // Initialize the widget
+        window.JFCustomWidget.subscribe('ready', function(data) {
+            senderName = JFCustomWidget.getWidgetSetting("senderName");
+            let sender = 'talk_channel_'+senderName
 
-        console.log("[Retriever]Sender name: ", senderName)
-        const channel = new BroadcastChannel(sender);
+            console.log("[Retriever]Sender name: ", senderName)
+            const channel = new BroadcastChannel(sender);
 
-        channel.onmessage = function(event) {
-            const message = event.data;
-            document.getElementById('valueField').value = message;
-            console.log('Message received:', message);
-        }
+            channel.onmessage = function(event) {
+                const message = event.data;
+                document.getElementById('valueField').value = message;
+                console.log('Message received:', message);
+            }
+        }); 
     </script>
 </body>
 </html>
