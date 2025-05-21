@@ -13,9 +13,9 @@
     <input type="text" id="valueField" readonly placeholder="Value will appear here">
     <script>
         senderName = JFCustomWidget.getWidgetSetting("senderName");
-        const sender = 'talk_channel_'+senderName
+        let sender = 'talk_channel_'+senderName
 
-        console.log("Sender name: ", senderName)
+        console.log("[Retriever]Sender name: ", senderName)
         const channel = new BroadcastChannel(sender);
 
         channel.onmessage = function(event) {
