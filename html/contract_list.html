@@ -51,10 +51,10 @@
       .then(response => response.json())
       .then(data => {
         console.log("Data return: ", data)
-        data.forEach(contract => {
+        data.forEach(item => {
           const option = document.createElement('option');
-          option.value = contract;
-          option.textContent = contract;
+          option.value = item.project; // Use project code as the value
+          option.textContent = item.contract; // Display contract name
           dropdown.appendChild(option);
         });
       })
@@ -77,11 +77,11 @@
       const channel = new BroadcastChannel(sender);
       
       const selectElement = document.getElementById('contractDropdown');
-      const key = selectElement.value; // Get the selected value
-      const value = selectElement.options[selectElement.selectedIndex].text; // Get the selected option's text
+      const value = selectElement.value; // Get the selected value
+      const key = selectElement.options[selectElement.selectedIndex].text; // Get the selected option's text
 
-      channel.postMessage(key); 
-      console.log('Message sent:', key);
+      channel.postMessage(value); 
+      console.log('Message sent:', value);
     }
   </script>
 </body>
