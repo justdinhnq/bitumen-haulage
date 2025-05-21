@@ -68,32 +68,17 @@
       });
     });
 
+    // send message to the channel
     function handleSelection() {
+      senderName = JFCustomWidget.getWidgetSetting("senderName");
+      const channel = new BroadastChannel('talk_channel_'+senderName);
+      
       const selectElement = document.getElementById('contractDropdown');
       const key = selectElement.value; // Get the selected value
       const value = selectElement.options[selectElement.selectedIndex].text; // Get the selected option's text
 
-      // Construct data based on the selected option
-      const data = {
-          key: key,
-          value: value,
-      };
-      
-      const PA_URL = 'https://prod-41.australiasoutheast.logic.azure.com:443/workflows/4bdfa3ffee8d4446a76a4caf2b95789c/triggers/manual/paths/invoke?api-version=2016-06-01';
-
-      // Send data to Azure Functions
-      fetch(PA_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ formId, timestamp, data: data }) 
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log("Data sent!")
-      })
-      .catch(err => {
-        console.error('Error fetching:', error);
-      });
+      channel.postMEssage(key); 
+      console.log('Message sent:', key);
     }
   </script>
 </body>

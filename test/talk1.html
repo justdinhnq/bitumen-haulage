@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Talk1 - Sender</title>
+</head>
+<body>
+  <h1>Send Message from talk1.html</h1>
+  <input type="text" id="messageInput" placeholder="Enter your message">
+  <button onclick="sendMessage()">Send</button>
+
+  <script>
+    // Create a Broadcast Channel
+    const channel = new BroadcastChannel('talk_channel');
+
+    // Function to send message
+    function sendMessage() {
+      const message = document.getElementById('messageInput').value;
+      if (message) {
+        channel.postMessage(message);
+        console.log('Message sent:', message);
+        document.getElementById('messageInput').value = ''; // Clear input
+      }
+    }
+  </script>
+</body>
+</html>

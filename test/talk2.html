@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Talk2 - Receiver</title>
+</head>
+<body>
+  <h1>Received Messages on talk2.html</h1>
+  <div id="messages"></div>
+
+  <script>
+    // Create a Broadcast Channel
+    const channel = new BroadcastChannel('talk_channel');
+
+    // Listen for messages
+    channel.onmessage = function(event) {
+      const message = event.data;
+      const messagesDiv = document.getElementById('messages');
+      messagesDiv.innerHTML += `<p>Received: ${message}</p>`;
+      console.log('Message received:', message);
+    };
+  </script>
+</body>
+</html>
