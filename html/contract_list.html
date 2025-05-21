@@ -38,7 +38,7 @@
     // Initialize the widget
     window.JFCustomWidget.subscribe('ready', function(data) {
       console.log("Start to fetch a list of contracts.")
-      formId = JFCustomWidget.getWidgetSetting("formId"); 
+      country = JFCustomWidget.getWidgetSetting("country"); 
       const dropdown = document.getElementById('contractDropdown');
 
       // Fetch contract names from Power Automate
@@ -47,7 +47,7 @@
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({}) // Empty body for a simple request
+        body: JSON.stringify({'type':country}) // Empty body for a simple request
       })
       .then(response => response.json())
       .then(data => {
