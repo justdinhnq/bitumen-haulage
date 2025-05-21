@@ -71,7 +71,8 @@
     // send message to the channel
     function handleSelection() {
       senderName = JFCustomWidget.getWidgetSetting("senderName");
-      const channel = new BroadcastChannel('talk_channel_'+senderName);
+      const sender = 'talk_channel_'+senderName
+      const channel = new BroadcastChannel(sender);
       
       const selectElement = document.getElementById('contractDropdown');
       const key = selectElement.value; // Get the selected value
