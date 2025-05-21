@@ -41,6 +41,9 @@
       country = JFCustomWidget.getWidgetSetting("country"); 
       const dropdown = document.getElementById('contractDropdown');
 
+      const numberOfOptions = dropdown.options.length;
+      console.log("Number of options: ", numberOfOptions);
+
       // Fetch contract names from Power Automate
       fetch(POWER_AUTOMATE_URL, {
         method: 'POST', // Power Automate uses POST for HTTP request triggers
