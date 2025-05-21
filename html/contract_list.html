@@ -50,7 +50,6 @@
       })
       .then(response => response.json())
       .then(data => {
-        console.log("Data return: ", data)
         data.forEach(item => {
           const option = document.createElement('option');
           option.value = item.project; // Use project code as the value
