@@ -13,7 +13,7 @@
     <input type="text" id="valueField" readonly placeholder="Value will appear here">
     <script>
         senderName = JFCustomWidget.getWidgetSetting("senderName");
-        const channel = new BroadastChannel('talk_channel_'+senderName);
+        const channel = new BroadcastChannel('talk_channel_'+senderName);
 
         channel.onmessage = function(event) {
             const message = event.data;
