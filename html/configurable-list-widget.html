@@ -21,8 +21,9 @@
             align-items: center;
         }
         .field {
-            flex: 1;
-            min-width: 150px;
+            /* flex: 1;
+            min-width: 150px; */
+            width: 100%;
         }
         .field input, .field select {
             width: 100%;
@@ -81,7 +82,7 @@
                 { label: "Time", type: "time" }
             ],
             minRows: 1,
-            maxRows: 10, // 0 for unlimited
+            maxRows: 0, // 0 for unlimited
             addButtonLabel: "Add Row",
             customCSS: `
                 .field input, .field select {
