@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -109,21 +70,21 @@
         // Widget configuration
         const config = {
             fields: [
-                { label: "Name", type: "text", placeholder: "Enter name" },
-                { label: "Quantity", type: "number", min: 1, max: 100 },
+                { label: "Short Text", type: "text", placeholder: "Enter text" },
                 { 
-                    label: "Category", 
+                    label: "Dropdown", 
                     type: "dropdown", 
-                    options: ["Option 1", "Option 2", "Option 3"], 
-                    default: "Option 1" 
+                    options: ["one", "two", "three"], 
+                    default: "one" 
                 },
-                { label: "Date", type: "date" }
+                { label: "Calendar", type: "date" },
+                { label: "Time", type: "time" }
             ],
             minRows: 1,
             maxRows: 10, // 0 for unlimited
             addButtonLabel: "Add Row",
             customCSS: `
-                .field input {
+                .field input, .field select {
                     border: 1px solid #666;
                 }
                 .add-btn {
@@ -151,6 +112,21 @@
 
             // Update add button label
             document.querySelector('.add-btn').textContent = config.addButtonLabel;
+
+            // Subscribe to Jotform's ready event
+            window.JFCustomWidget.subscribe("ready", function() {
+                // Notify Jotform that widget is ready
+                window.JFCustomWidget.sendReady();
+            });
+
+            // Subscribe to form submit event
+            window.JFCustomWidget.subscribe("submit", function() {
+                const data = getFormData();
+                // Send data to Jotform as a single string, joining rows with newlines
+                window.JFCustomWidget.sendData({
+                    value: data.join('\n')
+                });
+            });
         }
 
         // Add a new row
@@ -200,6 +176,10 @@
                         input = document.createElement('input');
                         input.type = 'date';
                         break;
+                    case 'time':
+                        input = document.createElement('input');
+                        input.type = 'time';
+                        break;
                     default:
                         input = document.createElement('input');
                         input.type = 'text';
@@ -235,16 +215,29 @@
             rowCount--;
         }
 
-        // Collect form data
+        // Collect form data in Jotform Table format
         function getFormData() {
             const data = [];
             const rows = document.querySelectorAll('.row');
             rows.forEach(row => {
-                const rowData = {};
-                config.fields.forEach(field => {
+                const rowData = config.fields.map(field => {
                     const input = row.querySelector(`[name="${field.label.toLowerCase().replace(' ', '-')}-${row.id.split('-')[1]}"]`);
-                    rowData[field.label] = input.value;
-                });
+                    let value = input.value;
+                    // Format date to MM-DD-YYYY if it's a date field
+                    if (field.type === 'date' && value) {
+                        const date = new Date(value);
+                        value = `${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}-${date.getFullYear()}`;
+                    }
+                    // Format time to HH:MM AM/PM if it's a time field
+                    if (field.type === 'time' && value) {
+                        const [hours, minutes] = value.split(':');
+                        const hoursInt = parseInt(hours);
+                        const period = hoursInt >= 12 ? 'PM' : 'AM';
+                        const formattedHours = hoursInt % 12 === 0 ? 12 : hoursInt % 12;
+                        value = `${formattedHours.toString().padStart(2, '0')}:${minutes} ${period}`;
+                    }
+                    return `${field.label}: ${value || ''}`;
+                }).join(', ');
                 data.push(rowData);
             });
             return data;
