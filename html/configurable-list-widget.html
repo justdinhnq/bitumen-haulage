@@ -1,0 +1,257 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Configurable List Widget</title>
+    <style>
+        .configurable-list-container {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .field {
+            flex: 1;
+            min-width: 150px;
+        }
+        .field input, .field select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .remove-btn, .add-btn {
+            padding: 8px 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        .remove-btn {
+            background-color: #dc3545;
+        }
+        .add-btn:hover {
+            background-color: #0056b3;
+        }
+        .remove-btn:hover {
+            background-color: #c82333;
+        }
+        @media (max-width: 600px) {
+            .row {
+                flex-direction: column;
+            }
+            .field {
+                min-width: 100%;
+            }
+        }
+        /* Custom CSS placeholder */
+        .custom-css {
+            /* Add custom CSS here via configuration */
+        }
+    </style>
+</head>
+<body>
+    <div class="configurable-list-container">
+        <div id="rows"></div>
+        <button class="add-btn" onclick="addRow()">Add Row</button>
+    </div>
+
+    <script>
+        // Widget configuration
+        const config = {
+            fields: [
+                { label: "Name", type: "text", placeholder: "Enter name" },
+                { label: "Quantity", type: "number", min: 1, max: 100 },
+                { 
+                    label: "Category", 
+                    type: "dropdown", 
+                    options: ["Option 1", "Option 2", "Option 3"], 
+                    default: "Option 1" 
+                },
+                { label: "Date", type: "date" }
+            ],
+            minRows: 1,
+            maxRows: 10, // 0 for unlimited
+            addButtonLabel: "Add Row",
+            customCSS: `
+                .field input {
+                    border: 1px solid #666;
+                }
+                .add-btn {
+                    background-color: #28a745;
+                }
+                .add-btn:hover {
+                    background-color: #218838;
+                }
+            `
+        };
+
+        let rowCount = 0;
+
+        // Initialize widget
+        function initWidget() {
+            // Apply custom CSS
+            const styleSheet = document.createElement('style');
+            styleSheet.textContent = config.customCSS;
+            document.head.appendChild(styleSheet);
+
+            // Set initial rows
+            for (let i = 0; i < config.minRows; i++) {
+                addRow();
+            }
+
+            // Update add button label
+            document.querySelector('.add-btn').textContent = config.addButtonLabel;
+        }
+
+        // Add a new row
+        function addRow() {
+            if (config.maxRows !== 0 && rowCount >= config.maxRows) {
+                alert("Maximum number of rows reached!");
+                return;
+            }
+
+            rowCount++;
+            const row = document.createElement('div');
+            row.className = 'row';
+            row.id = `row-${rowCount}`;
+
+            config.fields.forEach((field, index) => {
+                const fieldDiv = document.createElement('div');
+                fieldDiv.className = 'field';
+
+                const label = document.createElement('label');
+                label.textContent = field.label;
+                fieldDiv.appendChild(label);
+
+                let input;
+                switch (field.type) {
+                    case 'text':
+                        input = document.createElement('input');
+                        input.type = 'text';
+                        input.placeholder = field.placeholder || '';
+                        break;
+                    case 'number':
+                        input = document.createElement('input');
+                        input.type = 'number';
+                        input.min = field.min || '';
+                        input.max = field.max || '';
+                        break;
+                    case 'dropdown':
+                        input = document.createElement('select');
+                        field.options.forEach(option => {
+                            const opt = document.createElement('option');
+                            opt.value = option;
+                            opt.textContent = option;
+                            if (option === field.default) opt.selected = true;
+                            input.appendChild(opt);
+                        });
+                        break;
+                    case 'date':
+                        input = document.createElement('input');
+                        input.type = 'date';
+                        break;
+                    default:
+                        input = document.createElement('input');
+                        input.type = 'text';
+                }
+                input.name = `${field.label.toLowerCase().replace(' ', '-')}-${rowCount}`;
+                fieldDiv.appendChild(input);
+                row.appendChild(fieldDiv);
+            });
+
+            // Add remove button
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.textContent = 'Remove';
+            removeBtn.onclick = () => removeRow(row.id);
+            row.appendChild(removeBtn);
+
+            document.getElementById('rows').appendChild(row);
+
+            // Hide remove button for minimum rows
+            if (rowCount <= config.minRows) {
+                removeBtn.style.display = 'none';
+            }
+        }
+
+        // Remove a row
+        function removeRow(rowId) {
+            if (rowCount <= config.minRows) {
+                alert("Cannot remove row: Minimum row limit reached!");
+                return;
+            }
+            const row = document.getElementById(rowId);
+            row.remove();
+            rowCount--;
+        }
+
+        // Collect form data
+        function getFormData() {
+            const data = [];
+            const rows = document.querySelectorAll('.row');
+            rows.forEach(row => {
+                const rowData = {};
+                config.fields.forEach(field => {
+                    const input = row.querySelector(`[name="${field.label.toLowerCase().replace(' ', '-')}-${row.id.split('-')[1]}"]`);
+                    rowData[field.label] = input.value;
+                });
+                data.push(rowData);
+            });
+            return data;
+        }
+
+        // Initialize the widget on page load
+        window.onload = initWidget;
+    </script>
+</body>
+</html>
