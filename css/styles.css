@@ -12,7 +12,7 @@
 }
 
 #submission-dropdown {
-    width: 100%;
+    width: 310[x];
     padding: 8px;
     margin-top: 5px;
     margin-bottom: 10px;
@@ -27,8 +27,10 @@
     margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    background-color: #f5f5f5;
-    font-size: 14px;
+    font-family: Inter, sans-serif;
+    font-size: 16px;
+    background-color: #f3f3fe;
+    color: #2c3345;
 }
 
 #custom-widget input[readonly] {
