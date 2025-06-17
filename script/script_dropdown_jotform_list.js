@@ -32,7 +32,7 @@ JFCustomWidget.subscribe("ready", function() {
                 dropdown.appendChild(option);
             });
 
-            document.getElementById('submission-label').value = label;
+            document.getElementById('submission-label').innerText = label;
         } catch (error) {
             console.error('Error fetching submissions:', error);
             dropdown.innerHTML = '<option value="">Error loading submissions</option>';
