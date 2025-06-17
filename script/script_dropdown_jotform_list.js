@@ -1,10 +1,12 @@
 let apiKey = '';
 let formId = '';
+let label = '';
 
 // Main widget logic
 JFCustomWidget.subscribe("ready", function() {
     formId = JFCustomWidget.getWidgetSetting("formId");
     apiKey = JFCustomWidget.getWidgetSetting("apiKey")
+    label = JFCustomWidget.getWidgetSetting("submissionLabel")
 
     const dropdown = document.getElementById('submission-dropdown');
     let submissionsData = [];
@@ -29,6 +31,8 @@ JFCustomWidget.subscribe("ready", function() {
                 option.text = `Submission ${submission.id}`;
                 dropdown.appendChild(option);
             });
+
+            document.getElementById('submission-label').value = label;
         } catch (error) {
             console.error('Error fetching submissions:', error);
             dropdown.innerHTML = '<option value="">Error loading submissions</option>';
