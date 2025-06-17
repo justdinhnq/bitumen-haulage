@@ -12,18 +12,18 @@
 }
 
 #submission-dropdown {
-    width: 310[x];
-    padding-top: 0px;
-    padding-bottom: 0px;
+    width: 310px;
+    padding-top: 6px;
+    padding-bottom: 6px;
     padding-left: 10px;
     padding-right: 30px;
     margin-top: 5px;
     margin-bottom: 10px;
+    margin-left: 1px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-family: Inter, sans-serif;
     font-size: 16px;
-    background-color: #f3f3fe;
     color: #2c3345;
 }
 
