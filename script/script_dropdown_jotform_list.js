@@ -26,10 +26,20 @@ JFCustomWidget.subscribe("ready", function() {
             // Populate dropdown
             dropdown.innerHTML = '<option value="">Select Training Session</option>';
             submissionsData.forEach(submission => {
-                const option = document.createElement('option');
-                option.value = submission.id;
-                option.text = `Submission ${submission.id}`;
-                dropdown.appendChild(option);
+                console.log('data: ', submission.answers)
+
+                const now = new Date();
+                const endDate = Object.values(submission.answers).find(
+                    answer => answer.name === 'endDatetime'
+                );
+                const oneWeekInMs = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+
+                if (endDate - now > oneWeekInMs) {
+                    const option = document.createElement('option');
+                    option.value = submission.id;
+                    option.text = `${submission.training}`;
+                    dropdown.appendChild(option);
+                }
             });
 
             document.getElementById('submission-label').innerText = label;
