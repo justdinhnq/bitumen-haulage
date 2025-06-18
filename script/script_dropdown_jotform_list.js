@@ -32,6 +32,7 @@ JFCustomWidget.subscribe("ready", function() {
                 const endDate = Object.values(submission.answers).find(
                     answer => answer.name === 'endDatetime'
                 );
+                
                 const oneWeekInMs = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
                 if (endDate - now > oneWeekInMs) {
