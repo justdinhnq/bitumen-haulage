@@ -25,8 +25,7 @@ JFCustomWidget.subscribe("ready", function() {
             // Populate dropdown
             dropdown.innerHTML = '<option value="">Select Training Session</option>';
             submissionsData.forEach(submission => {
-                console.log('submission: ', submission);
-                
+                console.log('Each submission: ', submission);
                 console.log('data of each submission: ', submission.answers)
 
                 const now = new Date();
