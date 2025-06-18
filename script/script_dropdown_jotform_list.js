@@ -13,7 +13,6 @@ JFCustomWidget.subscribe("ready", function() {
 
     // Fetch submissions
     const fetchSubmissions = async () => {
-        console.log('start fetching submissions');
         try {
             const response = await fetch(
                 `https://api.jotform.com/form/${formId}/submissions?apiKey=${apiKey}`
