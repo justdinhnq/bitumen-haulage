@@ -26,17 +26,21 @@ JFCustomWidget.subscribe("ready", function() {
             // Populate dropdown
             dropdown.innerHTML = '<option value="">Select Training Session</option>';
             submissionsData.forEach(submission => {
-                console.log('Each submission: ', submission);
-
                 console.log('data of each submission: ', submission.answers)
 
                 const now = new Date();
                 const end = Object.values(submission.answers).find(
                     answer => answer.name === 'endDatetime50'
                 );
-                console.log('End date 1: ', end.datetime);
-                console.log('End date 2: ', end.ampm);
-                const endDateStr = end.datetime + ' ' + end.ampm;
+                const endDateTime = Object.values(end.answer).find(
+                    answer => answer.name === 'datetime'
+                );
+                const endAM = Object.values(end.answer).find(
+                    answer => answer.name === 'ampm'
+                );
+                console.log('End date 1: ', endDateTime);
+                console.log('End date 2: ', endAM);
+                const endDateStr = endDateTime + ' ' + endAM;
                 console.log('End date string: ', endDateStr);
                 const endDate = new Date(endDateStr);
                 console.log('End date: ', endDate);
