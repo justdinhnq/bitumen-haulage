@@ -62,7 +62,7 @@ JFCustomWidget.subscribe("ready", function() {
 
                 if (endDate - now > oneWeekInMs) {
                     const option = document.createElement('option');
-                    option.value = submission.id + '-' + textVal.answer;
+                    option.value = textOpt.answer;
                     console.log('Option value: ', option.value);
                     option.text = `${textOpt.answer}`;
                     dropdown.appendChild(option);
@@ -79,11 +79,9 @@ JFCustomWidget.subscribe("ready", function() {
     // Send data to Jotform when submitted
     JFCustomWidget.subscribe("submit", function() {
         const selectedId = dropdown.value;
-        console.log('Selected ID: ', selectedId);
-        console.log('Submissions data: ', selectedId.split('-')[1]);
         JFCustomWidget.sendSubmit({
             valid: true,
-            value: selectedId.split('-')[1],
+            value: selectedId,
         });
     });
 
