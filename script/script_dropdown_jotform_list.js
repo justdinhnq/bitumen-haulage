@@ -1,4 +1,4 @@
-import { parse } from 'date-fns';
+import { parse } from 'https://cdn.jsdelivr.net/npm/date-fns@3.6.0/+esm';
 
 let apiKey = '';
 let formId = '';
