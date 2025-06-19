@@ -30,8 +30,10 @@ JFCustomWidget.subscribe("ready", function() {
 
                 const now = new Date();
                 const end = Object.values(submission.answers).find(
-                    answer => answer.name === 'endDatetime50'
+                    answer => answer.name === 'endDatetime'
                 );
+                console.log('End: ', end);
+                console.log('End date name: ', end.name);
                 const endDateTime = end.prettyFormat;
                 console.log('End date string: ', endDateTime);
                 const endDate = new Date(endDateTime);
