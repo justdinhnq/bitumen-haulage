@@ -31,11 +31,7 @@ JFCustomWidget.subscribe("ready", function() {
                 const textOpt = Object.values(submission.answers).find(
                     answer => answer.name === 'training16'
                 );
-                const textVal = Object.values(submission.answers).find(
-                    answer => answer.name === 'trainingTitle'
-                );
-
-                const now = new Date();
+                
                 const end = Object.values(submission.answers).find(
                     answer => answer.name === 'endDatetime'
                 );
@@ -58,9 +54,10 @@ JFCustomWidget.subscribe("ready", function() {
                 console.log('textVal.answer: ', textVal.answer);
 
 
-                const oneWeekInMs = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
-
-                if (endDate - now > oneWeekInMs) {
+                const oneWeekInMs = 1 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+                const now = new Date();
+                const gapTime = endDate - now;
+                if (gapTime > oneWeekInMs) {
                     const option = document.createElement('option');
                     option.value = textOpt.answer;
                     console.log('Option value: ', option.value);
