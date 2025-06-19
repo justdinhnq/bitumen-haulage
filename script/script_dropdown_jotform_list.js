@@ -32,17 +32,9 @@ JFCustomWidget.subscribe("ready", function() {
                 const end = Object.values(submission.answers).find(
                     answer => answer.name === 'endDatetime50'
                 );
-                const endDateTime = Object.values(end.answer).find(
-                    answer => answer.name === 'datetime'
-                );
-                const endAM = Object.values(end.answer).find(
-                    answer => answer.name === 'ampm'
-                );
-                console.log('End date 1: ', endDateTime);
-                console.log('End date 2: ', endAM);
-                const endDateStr = endDateTime + ' ' + endAM;
-                console.log('End date string: ', endDateStr);
-                const endDate = new Date(endDateStr);
+                const endDateTime = end.prettyFormat;
+                console.log('End date string: ', endDateTime);
+                const endDate = new Date(endDateTime);
                 console.log('End date: ', endDate);
 
 
