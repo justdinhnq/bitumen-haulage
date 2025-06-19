@@ -46,7 +46,7 @@ JFCustomWidget.subscribe("ready", function() {
                 const [datePart, timePart, meridian] = endDateTime.split(/[\s:]+/); // ['17/11/1983', '12', '20', 'PM']
                 const [day, month, year] = datePart.split('/').map(Number);
                 let hour = Number(timePart);
-                const minute = Number(input.split(/[\s:]+/)[2]);
+                const minute = Number(endDateTime.split(/[\s:]+/)[2]);
 
                 // Convert hour to 24-hour format
                 if (meridian === 'PM' && hour !== 12) hour += 12;
