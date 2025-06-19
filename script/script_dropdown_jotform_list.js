@@ -59,7 +59,6 @@ JFCustomWidget.subscribe("ready", function() {
                 if (gapTime > oneWeekInMs) {
                     const option = document.createElement('option');
                     option.value = textOpt.answer;
-                    console.log('Option value: ', option.value);
                     option.text = `${textOpt.answer}`;
                     dropdown.appendChild(option);
                 }
