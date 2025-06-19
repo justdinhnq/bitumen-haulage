@@ -28,10 +28,6 @@ JFCustomWidget.subscribe("ready", function() {
                 const textOpt = Object.values(submission.answers).find(
                     answer => answer.name === 'training16'
                 );
-
-                if (!textOpt || !('answer' in textOpt)) {
-                    continue; // Skip if the answer is not present
-                }
                 
                 const end = Object.values(submission.answers).find(
                     answer => answer.name === 'endDatetime'
