@@ -34,9 +34,9 @@ JFCustomWidget.subscribe("ready", function() {
                 const end = Object.values(submission.answers).find(
                     answer => answer.name === 'endDatetime'
                 );
-                console.log('End date 1: ', endDate.datetime);
-                console.log('End date 2: ', endDate.ampm);
-                const endDateStr = endDate.datetime + ' ' + endDate.ampm;
+                console.log('End date 1: ', end.datetime);
+                console.log('End date 2: ', end.ampm);
+                const endDateStr = end.datetime + ' ' + end.ampm;
                 console.log('End date string: ', endDateStr);
                 const endDate = new Date(endDateStr);
                 console.log('End date: ', endDate);
