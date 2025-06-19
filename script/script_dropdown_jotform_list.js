@@ -1,3 +1,5 @@
+import { parse } from 'date-fns';
+
 let apiKey = '';
 let formId = '';
 let label = '';
@@ -31,6 +33,9 @@ JFCustomWidget.subscribe("ready", function() {
                 const textOpt = Object.values(submission.answers).find(
                     answer => answer.name === 'training16'
                 );
+                const textVal = Object.values(submission.answers).find(
+                    answer => answer.name === 'trainingTitle'
+                );
 
                 const now = new Date();
                 const end = Object.values(submission.answers).find(
@@ -38,7 +43,8 @@ JFCustomWidget.subscribe("ready", function() {
                 );
                 const endDateTime = end.prettyFormat;
                 console.log('End date string: ', endDateTime);
-                const endDate = new Date(endDateTime);
+                //const endDate = new Date(endDateTime);
+                const endDate = parse(endDateTime, "dd/MM/yyyy hh:mm a", new Date());
                 console.log('End date: ', endDate);
 
 
@@ -46,7 +52,7 @@ JFCustomWidget.subscribe("ready", function() {
 
                 if (endDate - now > oneWeekInMs) {
                     const option = document.createElement('option');
-                    option.value = submission.id;
+                    option.value = submission.id + '-' + textOpt.answer;
                     option.text = `${textOpt.answer}`;
                     dropdown.appendChild(option);
                 }
@@ -65,7 +71,7 @@ JFCustomWidget.subscribe("ready", function() {
 
         JFCustomWidget.sendSubmit({
             valid: true,
-            value: selectedId
+            value: selectedId.split('-')[1],
         });
     });
 
