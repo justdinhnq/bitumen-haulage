@@ -26,8 +26,6 @@ JFCustomWidget.subscribe("ready", function() {
             // Populate dropdown
             dropdown.innerHTML = '<option value="">Select Training Session</option>';
             submissionsData.forEach(submission => {
-                console.log('data of each submission: ', submission.answers)
-
                 const textOpt = Object.values(submission.answers).find(
                     answer => answer.name === 'training16'
                 );
@@ -36,7 +34,6 @@ JFCustomWidget.subscribe("ready", function() {
                     answer => answer.name === 'endDatetime'
                 );
                 const endDateTime = end.prettyFormat;
-                console.log('End date string: ', endDateTime);
 
                 // Split the date and time parts
                 const [datePart, timePart, meridian] = endDateTime.split(/[\s:]+/); // ['17/11/1983', '12', '20', 'PM']
@@ -50,12 +47,10 @@ JFCustomWidget.subscribe("ready", function() {
 
                 // Construct the Date object
                 const endDate = new Date(year, month - 1, day, hour, minute);
-                console.log('End date: ', endDate);
 
                 const oneWeekInMs = 1 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
                 const now = new Date();
                 const gapTime = Math.abs(now - endDate);
-                console.log('Gap time in ms: ', gapTime, 'One week in ms: ', oneWeekInMs);
                 if (gapTime > oneWeekInMs) {
                     const option = document.createElement('option');
                     option.value = textOpt.answer;
