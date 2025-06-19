@@ -32,7 +32,7 @@ JFCustomWidget.subscribe("ready", function() {
 
                 const now = new Date();
                 const end = Object.values(submission.answers).find(
-                    answer => answer.name === 'endDatetime'
+                    answer => answer.name === 'endDatetime50'
                 );
                 console.log('End date 1: ', end.datetime);
                 console.log('End date 2: ', end.ampm);
