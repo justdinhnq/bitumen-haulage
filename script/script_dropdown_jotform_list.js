@@ -46,13 +46,14 @@ JFCustomWidget.subscribe("ready", function() {
                 //const endDate = new Date(endDateTime);
                 const endDate = parse(endDateTime, "dd/MM/yyyy hh:mm a", new Date());
                 console.log('End date: ', endDate);
+                console.log('textVal.answer: ', textVal.answer);
 
 
                 const oneWeekInMs = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
                 if (endDate - now > oneWeekInMs) {
                     const option = document.createElement('option');
-                    option.value = submission.id + '-' + textVal.answer;
+                    option.value = submission.id;// + '-' + textVal.answer;
                     option.text = `${textOpt.answer}`;
                     dropdown.appendChild(option);
                 }
