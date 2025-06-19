@@ -1,5 +1,3 @@
-import { parse } from 'https://cdn.jsdelivr.net/npm/date-fns@3.6.0/+esm';
-
 let apiKey = '';
 let formId = '';
 let label = '';
@@ -43,8 +41,19 @@ JFCustomWidget.subscribe("ready", function() {
                 );
                 const endDateTime = end.prettyFormat;
                 console.log('End date string: ', endDateTime);
-                //const endDate = new Date(endDateTime);
-                const endDate = parse(endDateTime, "dd/MM/yyyy hh:mm a", new Date());
+
+                // Split the date and time parts
+                const [datePart, timePart, meridian] = endDateTime.split(/[\s:]+/); // ['17/11/1983', '12', '20', 'PM']
+                const [day, month, year] = datePart.split('/').map(Number);
+                let hour = Number(timePart);
+                const minute = Number(input.split(/[\s:]+/)[2]);
+
+                // Convert hour to 24-hour format
+                if (meridian === 'PM' && hour !== 12) hour += 12;
+                if (meridian === 'AM' && hour === 12) hour = 0;
+
+                // Construct the Date object
+                const endDate = new Date(year, month - 1, day, hour, minute);
                 console.log('End date: ', endDate);
                 console.log('textVal.answer: ', textVal.answer);
 
