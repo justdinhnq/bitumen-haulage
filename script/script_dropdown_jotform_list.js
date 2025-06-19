@@ -31,10 +31,13 @@ JFCustomWidget.subscribe("ready", function() {
                 console.log('data of each submission: ', submission.answers)
 
                 const now = new Date();
-                const endDate = Object.values(submission.answers).find(
+                const end = Object.values(submission.answers).find(
                     answer => answer.name === 'endDatetime'
                 );
-                console.log('End date: ', endDate)
+                const endDateStr = endDate.datetime + ' ' + endDate.ampm;
+                console.log('End date string: ', endDateStr);
+                const endDate = new Date(endDateStr);
+                console.log('End date: ', endDate);
 
 
                 const oneWeekInMs = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
@@ -42,7 +45,7 @@ JFCustomWidget.subscribe("ready", function() {
                 if (endDate - now > oneWeekInMs) {
                     const option = document.createElement('option');
                     option.value = submission.id;
-                    option.text = `${submission.training}`;
+                    option.text = `${submission.training16}`;
                     dropdown.appendChild(option);
                 }
             });
