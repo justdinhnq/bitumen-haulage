@@ -17,12 +17,11 @@ JFCustomWidget.subscribe("ready", function() {
             const response = await fetch(
                 `https://downer.jotform.com/API/form/${formId}/submissions?apiKey=${apiKey}`
             );
-            console.log('response: ', response);
             const data = await response.json();
             
             submissionsData = data.content || [];
+            console.log('submissionsData: ', submissionsData);
 
-            console.log('Start here.');
             // Populate dropdown
             dropdown.innerHTML = '<option value="">Select Training Session</option>';
             submissionsData.forEach(submission => {
@@ -54,7 +53,7 @@ JFCustomWidget.subscribe("ready", function() {
                 if (gapTime > oneWeekInMs) {
                     const option = document.createElement('option');
                     option.value = textOpt.answer;
-                    option.text = `${textOpt.answer}`;
+                    option.text = textOpt.answer;
                     dropdown.appendChild(option);
                 }
             });
