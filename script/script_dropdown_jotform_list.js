@@ -62,7 +62,7 @@ JFCustomWidget.subscribe("ready", function() {
 
                 if (endDate - now > oneWeekInMs) {
                     const option = document.createElement('option');
-                    option.value = submission.id;// + '-' + textVal.answer;
+                    option.value = submission.id + '-' + textVal.answer;
                     option.text = `${textOpt.answer}`;
                     dropdown.appendChild(option);
                 }
