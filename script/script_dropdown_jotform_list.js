@@ -51,8 +51,6 @@ JFCustomWidget.subscribe("ready", function() {
                 // Construct the Date object
                 const endDate = new Date(year, month - 1, day, hour, minute);
                 console.log('End date: ', endDate);
-                console.log('textVal.answer: ', textVal.answer);
-
 
                 const oneWeekInMs = 1 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
                 const now = new Date();
