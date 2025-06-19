@@ -28,12 +28,14 @@ JFCustomWidget.subscribe("ready", function() {
             submissionsData.forEach(submission => {
                 console.log('data of each submission: ', submission.answers)
 
+                const textOpt = Object.values(submission.answers).find(
+                    answer => answer.name === 'training16'
+                );
+
                 const now = new Date();
                 const end = Object.values(submission.answers).find(
                     answer => answer.name === 'endDatetime'
                 );
-                console.log('End: ', end);
-                console.log('End date name: ', end.name);
                 const endDateTime = end.prettyFormat;
                 console.log('End date string: ', endDateTime);
                 const endDate = new Date(endDateTime);
@@ -45,7 +47,7 @@ JFCustomWidget.subscribe("ready", function() {
                 if (endDate - now > oneWeekInMs) {
                     const option = document.createElement('option');
                     option.value = submission.id;
-                    option.text = `${submission.training16}`;
+                    option.text = `${textOpt.answer}`;
                     dropdown.appendChild(option);
                 }
             });
