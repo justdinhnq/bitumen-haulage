@@ -57,6 +57,7 @@ JFCustomWidget.subscribe("ready", function() {
                 const oneWeekInMs = 1 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
                 const now = new Date();
                 const gapTime = endDate - now;
+                console.log('Gap time in ms: ', gapTime, 'One week in ms: ', oneWeekInMs);
                 if (gapTime > oneWeekInMs) {
                     const option = document.createElement('option');
                     option.value = textOpt.answer;
