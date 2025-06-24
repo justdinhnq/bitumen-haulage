@@ -1,17 +1,23 @@
 ﻿#custom-widget {
-    max-width: 400px;
+    max-width: 700px;
     margin: 0px;
-    font-family: Arial, sans-serif;
+    margin-bottom: 0;
+    padding: 0px;
+    border-radius: 4px;
+    font-family: 'Roboto', sans-serif;
+    background-color: transparent !important;
 }
 
 #custom-widget label {
     display: block;
     margin-top: 10px;
     color: #333;
+    font-weight: 500;
+    margin-bottom: 8px;
 }
 
 #submission-dropdown {
-    width: 310px;
+    width: 700px;
     padding-top: 7px;
     padding-bottom: 7px;
     padding-left: 10px;
