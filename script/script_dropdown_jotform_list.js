@@ -51,10 +51,10 @@ JFCustomWidget.subscribe("ready", function() {
                 // Construct the Date object
                 const endDate = new Date(year, month - 1, day, hour, minute);
 
-                const oneWeekInMs = 3 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+                const oneWeekInMs = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
                 const now = new Date();
-                const gapTime = Math.abs(now - endDate);
-                if ((gapTime > oneWeekInMs) && (status.answer === 'OPEN') && ('answer' in textOpt)) {
+                const gapTime = now - endDate;
+                if ((gapTime <= oneWeekInMs) && (status.answer === 'OPEN') && ('answer' in textOpt)) {
                     const option = document.createElement('option');
                     option.value = textOpt.answer;
                     option.text = textOpt.answer;
