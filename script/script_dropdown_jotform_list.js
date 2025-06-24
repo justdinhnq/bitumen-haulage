@@ -25,6 +25,10 @@ JFCustomWidget.subscribe("ready", function() {
             // Populate dropdown
             dropdown.innerHTML = '<option value="">Select Training Session</option>';
             submissionsData.forEach(submission => {
+                const status = Object.values(submission.answers).find(
+                    answer => answer.name === 'typeA55'
+                );
+
                 const textOpt = Object.values(submission.answers).find(
                     answer => answer.name === 'training16'
                 );
@@ -47,10 +51,10 @@ JFCustomWidget.subscribe("ready", function() {
                 // Construct the Date object
                 const endDate = new Date(year, month - 1, day, hour, minute);
 
-                const oneWeekInMs = 1 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+                const oneWeekInMs = 3 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
                 const now = new Date();
                 const gapTime = Math.abs(now - endDate);
-                if (gapTime > oneWeekInMs) {
+                if (gapTime > oneWeekInMs && status != 'CLOSED') {
                     const option = document.createElement('option');
                     option.value = textOpt.answer;
                     option.text = textOpt.answer;
