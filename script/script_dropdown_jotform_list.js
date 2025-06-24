@@ -54,7 +54,7 @@ JFCustomWidget.subscribe("ready", function() {
                 const oneWeekInMs = 3 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
                 const now = new Date();
                 const gapTime = Math.abs(now - endDate);
-                if (gapTime > oneWeekInMs && status != 'CLOSED') {
+                if ((gapTime > oneWeekInMs) && (status.answer === 'OPEN') && ('answer' in textOpt)) {
                     const option = document.createElement('option');
                     option.value = textOpt.answer;
                     option.text = textOpt.answer;
