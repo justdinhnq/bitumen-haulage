@@ -1,4 +1,15 @@
-﻿#custom-widget {
+﻿#body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0px;
+}
+
+#select {
+    width: 100%;
+    padding: 0px;
+}
+
+#custom-widget {
     max-width: 700px;
     margin: 0px;
     margin-bottom: 0;
