@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jotform Dropdown List Widget</title>
+    <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0px;
+        }
+        select {
+            width: 100%;
+            height: 35px;
+            padding: 0px;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="custom-widget">
+        <label id="submission-label"></label>
+        <select id="submission-dropdown">
+            <option value="">Select a Submission</option>
+        </select>
+    </div>
+    <script src="../script/script_dropdown_jotform_list_general.js"></script>
+</body>
+</html>
