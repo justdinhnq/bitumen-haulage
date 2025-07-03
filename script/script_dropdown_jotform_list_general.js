@@ -27,7 +27,7 @@ JFCustomWidget.subscribe("ready", function() {
             console.log('submissionsData: ', submissionsData);
 
             // Populate dropdown
-            dropdown.innerHTML = '<option value="">Select Training Session</option>';
+            dropdown.innerHTML = '<option value="">Select a value</option>';
             submissionsData.forEach(submission => {
                 const status = Object.values(submission.answers).find(
                     answer => answer.name === 'typeA55'
