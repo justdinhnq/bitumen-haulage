@@ -1,10 +1,10 @@
 let apiKey = '';
-let formId = '';
+let id4Form = '';
 let label = '';
 
 // Main widget logic
 JFCustomWidget.subscribe("ready", function() {
-    formId = JFCustomWidget.getWidgetSetting("id4Form");
+    id4Form = JFCustomWidget.getWidgetSetting("id4Form");
     apiKey = JFCustomWidget.getWidgetSetting("apiKey")
     label = JFCustomWidget.getWidgetSetting("label")
     
@@ -18,12 +18,12 @@ JFCustomWidget.subscribe("ready", function() {
     const fetchSubmissions = async () => {
         try {
             const response = await fetch(
-                `https://downer.jotform.com/API/form/${formId}/submissions?apiKey=${apiKey}`
+                `https://downer.jotform.com/API/form/${id4Form}/submissions?apiKey=${apiKey}`
             );
             const data = await response.json();
             
             submissionsData = data.content || [];
-            console.log('https://downer.jotform.com/API/form/',formId,'/submissions?apiKey=',apiKey);
+            console.log('https://downer.jotform.com/API/form/',id4Form,'/submissions?apiKey=',apiKey);
             console.log('submissionsData: ', submissionsData);
 
             // Populate dropdown
