@@ -1,6 +1,8 @@
 let apiKey = '';
 let formId = '';
 let label = '';
+let sub_PartA = ''; 
+let subIDs = {};
 
 // Main widget logic
 JFCustomWidget.subscribe("ready", function() {
@@ -59,6 +61,8 @@ JFCustomWidget.subscribe("ready", function() {
                     option.value = textOpt.answer;
                     option.text = textOpt.answer;
                     dropdown.appendChild(option);
+
+                    subIDs[textOpt.answer] = submission.id; // Store the submission ID
                 }
             });
 
@@ -81,3 +85,21 @@ JFCustomWidget.subscribe("ready", function() {
     // Initial fetch
     fetchSubmissions();
 });
+
+// send message to the channel
+function handleSelection() {
+    senderName = JFCustomWidget.getWidgetSetting("senderName");
+    let sender = 'talk_channel_'+senderName
+
+    console.log("[Sender]Sender name: ", senderName)
+    const channel = new BroadcastChannel(sender);
+    
+    const selectElement = document.getElementById('submission-dropdown');
+    const value = selectElement.value; // Get the selected value
+    //const key = selectElement.options[selectElement.selectedIndex].text; // Get the selected option's text
+
+    sub_PartA = subIDs[value]; // Get the submission ID from the subIDs map
+
+    channel.postMessage(sub_PartA); 
+    console.log('Message sent:', sub_PartA);
+}
