@@ -4,7 +4,7 @@ let label = '';
 
 // Main widget logic
 JFCustomWidget.subscribe("ready", function() {
-    formId = JFCustomWidget.getWidgetSetting("formID");
+    formId = JFCustomWidget.getWidgetSetting("id4Form");
     apiKey = JFCustomWidget.getWidgetSetting("apiKey")
     label = JFCustomWidget.getWidgetSetting("label")
     
