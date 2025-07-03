@@ -23,6 +23,7 @@ JFCustomWidget.subscribe("ready", function() {
             const data = await response.json();
             
             submissionsData = data.content || [];
+            console.log('https://downer.jotform.com/API/form/',formId,'/submissions?apiKey=',apiKey);
             console.log('submissionsData: ', submissionsData);
 
             // Populate dropdown
