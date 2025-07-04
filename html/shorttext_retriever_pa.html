@@ -34,9 +34,12 @@
 
         // Subscribe to form submit event
         window.JFCustomWidget.subscribe("submit", function () {
-            const value = document.getElementById('valueField').value;
+            const widgetContent = document.getElementById('valueField').value;
 
-            window.JFCustomWidget.sendData({ value: value });
+            window.JFCustomWidget.sendSubmit({ 
+                valid: true,
+                value: widgetContent 
+            });
         });
     </script>
 </body>
