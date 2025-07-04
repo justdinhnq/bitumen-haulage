@@ -1,12 +1,12 @@
 let apiKey = '';
 let id4Form = '';
-let label = '';
+//let label = '';
 
 // Main widget logic
 JFCustomWidget.subscribe("ready", function() {
     id4Form = JFCustomWidget.getWidgetSetting("id4Form");
     apiKey = JFCustomWidget.getWidgetSetting("apiKey")
-    label = JFCustomWidget.getWidgetSetting("label")
+    //label = JFCustomWidget.getWidgetSetting("label")
     
     column4Show = JFCustomWidget.getWidgetSetting("column4Show")
     column4Value = JFCustomWidget.getWidgetSetting("column4Value")
@@ -27,7 +27,7 @@ JFCustomWidget.subscribe("ready", function() {
             console.log('submissionsData: ', submissionsData);
 
             // Populate dropdown
-            dropdown.innerHTML = '<option value="">Select a value</option>';
+            const options = []
             submissionsData.forEach(submission => {
                 const status = Object.values(submission.answers).find(
                     answer => answer.name === 'typeA55'
@@ -45,10 +45,16 @@ JFCustomWidget.subscribe("ready", function() {
                 const option = document.createElement('option');
                 option.value = textOptValue.answer;
                 option.text = textOpt.answer;
-                dropdown.appendChild(option);
+                options.push(option);
             });
 
-            document.getElementById('submission-label').innerText = label;
+            // repopulate dropdown
+            dropdown.innerHTML = '<option value="">Select a value</option>';
+            options.sort((a, b) => a.text.localeCompare(b.text)); // Sort options alphabetically
+            options.forEach(option => {
+                dropdown.appendChild(option);
+            });
+            //document.getElementById('submission-label').innerText = label;
         } catch (error) {
             console.error('Error fetching submissions:', error);
             dropdown.innerHTML = '<option value="">Error loading submissions</option>';
