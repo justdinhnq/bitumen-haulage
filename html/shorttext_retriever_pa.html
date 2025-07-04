@@ -47,6 +47,7 @@
         // Subscribe to form submit event
         window.JFCustomWidget.subscribe("submit", function () {
             const widgetContent = document.getElementById('valueField').value;
+            console.log('Submitting value:', widgetContent);
 
             window.JFCustomWidget.sendSubmit({ 
                 valid: true,
