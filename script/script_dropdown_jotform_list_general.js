@@ -6,7 +6,7 @@ let label = '';
 JFCustomWidget.subscribe("ready", function() {
     id4Form = JFCustomWidget.getWidgetSetting("id4Form");
     apiKey = JFCustomWidget.getWidgetSetting("apiKey")
-    label = JFCustomWidget.getWidgetSetting("label")
+    label = JFCustomWidget.getWidgetSetting("submissionLabel")
     
     column4Show = JFCustomWidget.getWidgetSetting("column4Show")
     column4Value = JFCustomWidget.getWidgetSetting("column4Value")
