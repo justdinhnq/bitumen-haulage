@@ -43,6 +43,7 @@ JFCustomWidget.subscribe("ready", function() {
                 option.text = textOpt.answer;
                 options.push(option);
             });
+            console.log('options: ', options)
 
             // repopulate dropdown
             dropdown.innerHTML = '<option value="">Select a value</option>';
