@@ -18,7 +18,7 @@ JFCustomWidget.subscribe("ready", function() {
     const fetchSubmissions = async () => {
         try {
             const response = await fetch(
-                `https://downer.jotform.com/API/form/${id4Form}/submissions?apiKey=${apiKey}`
+                `https://downer.jotform.com/API/form/${id4Form}/submissions?apiKey=${apiKey}&limit=10000`
             );
             const data = await response.json();
             
