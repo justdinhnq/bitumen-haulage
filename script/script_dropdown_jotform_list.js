@@ -4,13 +4,14 @@ let label = '';
 let sub_PartA = ''; 
 let subIDs = {};
 
+const dropdown = document.getElementById('submission-dropdown');
+
 // Main widget logic
 JFCustomWidget.subscribe("ready", function() {
     formId = JFCustomWidget.getWidgetSetting("formId");
     apiKey = JFCustomWidget.getWidgetSetting("apiKey")
     label = JFCustomWidget.getWidgetSetting("submissionLabel")
 
-    const dropdown = document.getElementById('submission-dropdown');
     let submissionsData = [];
 
     // Fetch submissions
