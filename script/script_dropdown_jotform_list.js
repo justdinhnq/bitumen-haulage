@@ -74,18 +74,21 @@ JFCustomWidget.subscribe("ready", function() {
         }
     };
 
+    // Send data to Jotform when submitted
+    JFCustomWidget.subscribe("submit", function() {
+        const selectedId = dropdown.value;
+        var msg = {
+            valid: true,
+            value: selectedId,
+        }
+        JFCustomWidget.sendSubmit(msg);
+    });
+
     // Initial fetch
     fetchSubmissions();
 });
 
-// Send data to Jotform when submitted
-JFCustomWidget.subscribe("submit", function() {
-    const selectedId = dropdown.value;
-    JFCustomWidget.sendSubmit({
-        valid: true,
-        value: selectedId,
-    });
-});
+
 
 // send message to the channel
 function handleSelection() {
