@@ -75,9 +75,7 @@ JFCustomWidget.subscribe("ready", function() {
     };
 
     // Send data to Jotform when submitted
-    JFCustomWidget.subscribe("submit", function() {
-        console.log("Submit: ", selectedId);
-        
+    JFCustomWidget.subscribe("submit", function() {        
         JFCustomWidget.sendData({ value: dropdown.value });
     });
 
