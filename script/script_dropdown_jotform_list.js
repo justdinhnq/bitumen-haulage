@@ -75,7 +75,7 @@ JFCustomWidget.subscribe("ready", function() {
     };
 
     // Send data to Jotform when submitted
-    /* JFCustomWidget.subscribe("submit", function() {
+    JFCustomWidget.subscribe("submit", function() {
         const selectedId = dropdown.value;
 
         console.log("Submit: ", selectedId);
@@ -84,7 +84,7 @@ JFCustomWidget.subscribe("ready", function() {
             value: selectedId,
         }
         JFCustomWidget.sendSubmit(msg);
-    }); */
+    });
 
     // Initial fetch
     fetchSubmissions();
