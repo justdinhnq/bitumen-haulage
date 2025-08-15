@@ -40,7 +40,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Handle search button click
   searchButton.addEventListener("click", function () {
     const value = input.value.trim().toUpperCase();
-    fetchEmails(value);
+    if (value.length > 3) {
+      fetchEmails(value);
+    }
   });
 
   // Handle email selection
