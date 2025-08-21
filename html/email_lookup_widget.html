@@ -1,81 +1,29 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>Email Lookup Widget</title>
-  <style>
-    .widget-container {
-      font-family: Arial, sans-serif;
-      max-width: 300px;
-      padding: 10px;
-    }
-    .input-field {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      box-sizing: border-box;
-    }
-    .search-button {
-      padding: 8px 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 100%;
-      margin-bottom: 10px;
-    }
-    .search-button:hover {
-      background-color: #0056b3;
-    }
-    .email-search {
-      width: 100%;
-      padding: 8px;
-      box-sizing: border-box;
-      margin-bottom: 5px;
-    }
-    .email-list {
-      max-height: 150px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      display: none;
-    }
-    .email-option {
-      padding: 8px;
-      cursor: pointer;
-    }
-    .email-option:hover {
-      background-color: #f0f0f0;
-    }
-    .email-option.selected {
-      background-color: #007bff;
-      color: white;
-    }
-    .error-message {
-      color: red;
-      font-size: 12px;
-      display: none;
-      margin-top: 5px;
-    }
-    .loading {
-      font-size: 12px;
-      color: gray;
-      display: none;
-      margin-top: 5px;
-    }
-  </style>
-</head>
-<body>
-  <div class="widget-container">
-    <input type="text" class="input-field" id="charInput" maxlength="100" placeholder="Enter characters">
-    <button class="search-button" id="searchButton" disabled>Search</button>
-    <div id="loading" class="loading">Loading emails...</div>
-    <div id="error" class="error-message"></div>
-    <input type="text" class="email-search" id="emailSearch" placeholder="Search emails..." disabled>
-    <div class="email-list" id="emailList"></div>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Email Lookup Widget</title>
+    <link rel="stylesheet" href="../css/dropdown_list_general.css" />
+  </head>
+  <body>
+    <div class="widget-container">
+      <input
+        type="text"
+        class="input-field"
+        id="charInput"
+        maxlength="100"
+        placeholder="Enter characters"
+      />
+      <button class="search-button" id="searchButton" disabled>Search</button>
+      <div id="loading" class="loading">Loading emails...</div>
+      <div id="error" class="error-message"></div>
+      <!-- <input type="text" class="input-field" id="emailSearch" placeholder="Search emails..." disabled> -->
+      <!-- <div class="input-field" id="emailList"></div> -->
+      <select id="emailList" class="input-field">
+        <option value="">Please Select</option>
+      </select>
+    </div>
 
-  <script src="../script/email_lookup_script.js"></script>
-</body>
+    <script src="../script/email_lookup_script.js"></script>
+  </body>
 </html>
