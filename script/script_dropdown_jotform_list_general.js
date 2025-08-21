@@ -6,7 +6,7 @@ let label = '';
 JFCustomWidget.subscribe("ready", function() {
     id4Form = JFCustomWidget.getWidgetSetting("id4Form");
     apiKey = JFCustomWidget.getWidgetSetting("apiKey")
-    label = JFCustomWidget.getWidgetSetting("submissionLabel")
+    // label = JFCustomWidget.getWidgetSetting("submissionLabel")
     
     column4Show = JFCustomWidget.getWidgetSetting("column4Show")
     column4Value = JFCustomWidget.getWidgetSetting("column4Value")
@@ -51,7 +51,7 @@ JFCustomWidget.subscribe("ready", function() {
             options.forEach(option => {
                 dropdown.appendChild(option);
             });
-            document.getElementById('submission-label').innerText = label;
+            // document.getElementById('submission-label').innerText = label;
         } catch (error) {
             console.error('Error fetching submissions:', error);
             dropdown.innerHTML = '<option value="">Error loading submissions</option>';
