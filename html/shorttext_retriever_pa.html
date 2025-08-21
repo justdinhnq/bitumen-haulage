@@ -4,63 +4,10 @@
     <meta charset="UTF-8">
     <title>Real-Time Textfield Widget</title>
     <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0px;
-        }
-        select {
-            width: 100%;
-            height: 35px;
-            padding: 0px;
-            font-size: 16px;
-            border-radius: 4px;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            color: #333;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-        #valueField {
-            width: 100%;
-            height: 35px;
-            padding: 0px;
-            font-size: 16px;
-            border-radius: 4px;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/dropdown_list_general.css">
 </head>
 <body>
-    <input type="text" id="valueField" readonly placeholder="">
-    <script>
-        // Initialize the widget
-        window.JFCustomWidget.subscribe('ready', function(data) {
-            senderName = JFCustomWidget.getWidgetSetting("senderName");
-            let sender = 'talk_channel_'+senderName
-
-            console.log("[Retriever]Sender name: ", senderName)
-            const channel = new BroadcastChannel(sender);
-
-            channel.onmessage = function(event) {
-                const message = event.data;
-                document.getElementById('valueField').value = message;
-                console.log('Message received:', message);
-            }
-        }); 
-
-        // Subscribe to form submit event
-        window.JFCustomWidget.subscribe("submit", function () {
-            const widgetContent = document.getElementById('valueField').value;
-            console.log('Submitting value:', widgetContent);
-
-            window.JFCustomWidget.sendSubmit({ 
-                valid: true,
-                value: widgetContent 
-            });
-        });
-    </script>
+    <input type="text" id="valueField" class="input-field">
+    <script src="../script/retriever_short-text.js"></script>
 </body>
 </html>
