@@ -1,4 +1,10 @@
-﻿.form-group {
+﻿body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0px;
+}
+
+.form-group {
   width: 400px;
   font-family: Inter,-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
@@ -14,7 +20,7 @@
 .input-field {
   width: 80%;
   height: 40px;
-  padding: 8px 4px;
+  padding: 8px 6px;
   border: 1px solid #d1d5db;
   border-radius: 4px;
   background-color: #ffffff;

@@ -46,7 +46,7 @@ JFCustomWidget.subscribe("ready", function() {
             console.log('options: ', options)
 
             // repopulate dropdown
-            dropdown.innerHTML = '<option value="">Select a value</option>';
+            dropdown.innerHTML = '<option value="">Please Select</option>';
             options.sort((a, b) => a.text.localeCompare(b.text)); // Sort options alphabetically
             options.forEach(option => {
                 dropdown.appendChild(option);
