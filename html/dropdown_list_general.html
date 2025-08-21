@@ -3,36 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jotform Dropdown List Widget</title>
+    <title>Downer - Dropdown Widget</title>
     <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
-    <style>
-        body {
-            font-family: Inter;
-            margin: 0;
-            padding: 0px;
-        }
-        select {
-            width: 100%;
-            height: 35px;
-            padding: 0px;
-            font-size: 14px;
-            border-radius: 4px;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            color: #4a4a4a;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/dropdown_list_general.css">
 </head>
 <body>
-    <div id="custom-widget">
-        <label id="submission-label"></label>
-        <select id="submission-dropdown">
-            <option value="">Select a Submission</option>
+    <div id="custom-widget" class="form-group">
+        <label id="submission-label" class="main-label"></label>
+        <select id="submission-dropdown" class="input-field">
+            <option value="">Please select</option>
         </select>
+        <div id="submission-sub-label" class="sub-label"></div>
     </div>
     <script src="../script/script_dropdown_jotform_list_general.js"></script>
 </body>
