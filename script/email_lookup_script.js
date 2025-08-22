@@ -18,7 +18,7 @@ window.addEventListener("message", function (event) {
 document.addEventListener("DOMContentLoaded", function () {
   const input = document.getElementById("charInput");
   const searchButton = document.getElementById("searchButton");
-  const emailSearch = document.getElementById("emailSearch");
+  //   const emailSearch = document.getElementById("emailSearch");
   const emailList = document.getElementById("emailList");
   const errorDiv = document.getElementById("error");
   const loadingDiv = document.getElementById("loading");
@@ -30,11 +30,11 @@ document.addEventListener("DOMContentLoaded", function () {
     searchButton.disabled = value.length <= 3;
     errorDiv.style.display = "none";
     loadingDiv.style.display = "none";
-    emailSearch.disabled = true;
-    emailSearch.value = "";
-    emailList.innerHTML = "";
-    emailList.style.display = "none";
-    emails = [];
+    // emailSearch.disabled = true;
+    // emailSearch.value = "";
+    // emailList.innerHTML = "";
+    // emailList.style.display = "none";
+    // emails = [];
   });
 
   // Handle search button click
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
   emailList.addEventListener("click", function (e) {
     if (e.target.classList.contains("email-option")) {
       const selectedEmail = e.target.dataset.email;
-      emailSearch.value = selectedEmail;
+      //   emailSearch.value = selectedEmail;
       const options = emailList.getElementsByClassName("email-option");
       for (let option of options) {
         option.classList.remove("selected");
@@ -66,22 +66,22 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Filter emails based on search input
-  emailSearch.addEventListener("input", function () {
-    const filter = emailSearch.value.toLowerCase();
-    const options = emailList.getElementsByClassName("email-option");
-    for (let option of options) {
-      const email = option.dataset.email.toLowerCase();
-      option.style.display = email.includes(filter) ? "" : "none";
-    }
-    emailList.style.display = emails.length > 0 ? "block" : "none";
-  });
+  //   emailSearch.addEventListener("input", function () {
+  //     const filter = emailSearch.value.toLowerCase();
+  //     const options = emailList.getElementsByClassName("email-option");
+  //     for (let option of options) {
+  //       const email = option.dataset.email.toLowerCase();
+  //       option.style.display = email.includes(filter) ? "" : "none";
+  //     }
+  //     emailList.style.display = emails.length > 0 ? "block" : "none";
+  //   });
 
   // Function to fetch emails from Azure Logic Apps
   function fetchEmails(chars) {
     loadingDiv.style.display = "block";
-    emailSearch.disabled = true;
-    emailSearch.value = "";
-    emails = [];
+    // emailSearch.disabled = true;
+    // emailSearch.value = "";
+    // emails = [];
 
     const endpoint =
       "https://prod-11.australiasoutheast.logic.azure.com:443/workflows/eacee289c4be4a2bb25017c648038abf/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=za94ZC2QrQmONvsO7dsLbw_WSkzbE7qVirC51g6OTIY";
@@ -103,9 +103,10 @@ document.addEventListener("DOMContentLoaded", function () {
         loadingDiv.style.display = "none";
         if (Array.isArray(data) && data.length > 0) {
           emails = data.filter((item) => item.Mail).map((item) => item.Mail);
+          console.log("Fetched emails:", emails);
           if (emails.length > 0) {
             updateEmailList(emails);
-            emailSearch.disabled = false;
+            // emailSearch.disabled = false;
           } else {
             errorDiv.textContent = "No valid emails found";
             errorDiv.style.display = "block";
@@ -126,15 +127,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Update the content of the dropdown list with id 'emailList'
 function updateEmailList(emails) {
-    const emailList = document.getElementById("emailList");
-    emailList.innerHTML = ""; // Clear previous options
+  const emailList = document.getElementById("emailList");
+  // emailList.innerHTML = ""; // Clear previous options
 
-    emails.forEach(email => {
-        const option = document.createElement("option");
-        option.value = email;
-        option.textContent = email;
-        emailList.appendChild(option);
-    });
+  emails.forEach((email) => {
+    const option = document.createElement("option");
+    option.value = email;
+    option.textContent = email;
+    emailList.appendChild(option);
+  });
 
-    emailList.style.display = emails.length > 0 ? "block" : "none";
+  emailList.style.display = emails.length > 0 ? "block" : "none";
 }
