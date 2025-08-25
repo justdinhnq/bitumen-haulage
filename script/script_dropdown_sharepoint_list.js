@@ -7,11 +7,8 @@ const timestamp = new Date()
   .split(".")[0]
   .replace(/(\d{2})(\d{2})(\d{2})$/, "_$1_$2_$3");
 
-let formId = "";
-
 // Initialize the widget
 window.JFCustomWidget.subscribe("ready", function (data) {
-  console.log("Start to fetch a list of contracts.");
   site_address = JFCustomWidget.getWidgetSetting("site_address");
   conditional_column = JFCustomWidget.getWidgetSetting("conditional_column");
   conditional_value = JFCustomWidget.getWidgetSetting("conditional_value");
