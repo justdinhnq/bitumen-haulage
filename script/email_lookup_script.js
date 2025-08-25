@@ -123,6 +123,15 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Fetch error:", error);
       });
   }
+
+  // Send data to Jotform when submitted
+  JFCustomWidget.subscribe("submit", function() {
+      const selectedId = document.getElementById("emailList").value;
+      JFCustomWidget.sendSubmit({
+          valid: true,
+          value: selectedId,
+      });
+  });
 });
 
 // Update the content of the dropdown list with id 'emailList'
