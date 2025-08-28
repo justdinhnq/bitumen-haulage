@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Email Lookup Widget</title>
+    <script src="https://js.jotform.com/JotFormCustomWidget.min.js"></script>
+    <link rel="stylesheet" href="../css/dropdown_list_general.css" />
+  </head>
+  <body>
+    <div>
+      <input
+        type="text"
+        class="input-field-half"
+        id="charInput"
+        placeholder="Enter at least 3 letters"
+      />
+      <button class="search-button" id="searchButton" disabled>Search</button>
+      <div id="loading" class="loading">Loading emails...</div>
+      <div id="error" class="error-message"></div>
+      <!-- <input type="text" class="input-field" id="emailSearch" placeholder="Search emails..." disabled> -->
+      <!-- <div class="input-field" id="emailList"></div> -->
+      <select id="emailList" class="input-field-full">
+        <option value="">Please Select</option>
+      </select>
+      <br />
+      <button class="search-button" id="confirmButton" style="display:none;">Is it your email? Click here!</button>
+    </div>
+
+    <script src="../script/email_lookup_script_v2.js"></script>
+  </body>
+</html>
