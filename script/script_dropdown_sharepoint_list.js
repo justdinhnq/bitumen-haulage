@@ -27,12 +27,12 @@ window.JFCustomWidget.subscribe("ready", function (data) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ 
-        site_addr: 'site_address',
-        conditional_col: 'conditional_column',
-        conditional_val: 'conditional_value',
-        col_to_show: 'column_to_show',
-        col_to_value: 'column_to_value',
-        table_name: 'table'
+        site_addr: site_address,
+        conditional_col: conditional_column,
+        conditional_val: conditional_value,
+        col_to_show: column_to_show,
+        col_to_value: column_to_value,
+        table_name: table
     }), 
   })
     .then((response) => response.json())
