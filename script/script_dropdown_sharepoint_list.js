@@ -34,7 +34,7 @@ window.JFCustomWidget.subscribe("ready", function (data) {
         conditional_val: conditional_value,
         col_to_show: column_to_show,
         col_to_value: column_to_value,
-        table_name: table
+        table_name: tableSP
     }), 
   })
     .then((response) => response.json())
