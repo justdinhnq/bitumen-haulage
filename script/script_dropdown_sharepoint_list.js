@@ -9,7 +9,7 @@ window.JFCustomWidget.subscribe("ready", function (data) {
   var conditional_value = JFCustomWidget.getWidgetSetting("conditional_value");
   var column_to_show = JFCustomWidget.getWidgetSetting("column_to_show");
   var column_to_value = JFCustomWidget.getWidgetSetting("column_to_value");
-  var  tableSP = JFCustomWidget.getWidgetSetting("tableInSharePoint");
+  var  tableSP = JFCustomWidget.getWidgetSetting("table");
   
 
   const dropdown = document.getElementById("lookup_list");
