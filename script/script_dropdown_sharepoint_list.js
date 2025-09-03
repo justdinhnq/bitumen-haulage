@@ -9,7 +9,7 @@ window.JFCustomWidget.subscribe("ready", function (data) {
   var conditional_value = JFCustomWidget.getWidgetSetting("conditional_value");
   var column_to_show = JFCustomWidget.getWidgetSetting("column_to_show");
   var column_to_value = JFCustomWidget.getWidgetSetting("column_to_value");
-  var table = JFCustomWidget.getWidgetSetting("table");
+  var  tableSP = JFCustomWidget.getWidgetSetting("tableInSharePoint");
   
 
   const dropdown = document.getElementById("lookup_list");
@@ -19,7 +19,7 @@ window.JFCustomWidget.subscribe("ready", function (data) {
   console.log("Conditional Value: ", conditional_value);
   console.log("Column to Show: ", column_to_show);
   console.log("Column to Value: ", column_to_value);
-  console.log("Table: ", JFCustomWidget.getWidgetSetting("table"));
+  console.log("Table: ", tableSP);
   
 
   // Fetch contract names from Power Automate
