@@ -9,14 +9,12 @@ const timestamp = new Date()
 
 // Initialize the widget
 window.JFCustomWidget.subscribe("ready", function (data) {
-  site_address = JFCustomWidget.getWidgetSetting("site_address");
-  conditional_column = JFCustomWidget.getWidgetSetting("conditional_column");
-  conditional_value = JFCustomWidget.getWidgetSetting("conditional_value");
-
-  column_to_show = JFCustomWidget.getWidgetSetting("column_to_show");
-  column_to_value = JFCustomWidget.getWidgetSetting("column_to_value");
-
-  table = JFCustomWidget.getWidgetSetting("table");
+  const site_address = JFCustomWidget.getWidgetSetting("site_address");
+  const conditional_column = JFCustomWidget.getWidgetSetting("conditional_column");
+  const conditional_value = JFCustomWidget.getWidgetSetting("conditional_value");
+  const column_to_show = JFCustomWidget.getWidgetSetting("column_to_show");
+  const column_to_value = JFCustomWidget.getWidgetSetting("column_to_value");
+  const table = JFCustomWidget.getWidgetSetting("table");
 
   const dropdown = document.getElementById("lookup_list");
 
