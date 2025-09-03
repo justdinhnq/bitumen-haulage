@@ -20,6 +20,11 @@ window.JFCustomWidget.subscribe("ready", function (data) {
 
   const dropdown = document.getElementById("lookup_list");
 
+  console.log("Site Address: ", site_address);
+  console.log("Conditional Column: ", conditional_column);  
+  console.log("Conditional Value: ", conditional_value);
+  console.log("Column to Show: ", column_to_show);
+
   // Fetch contract names from Power Automate
   fetch(POWER_AUTOMATE_URL, {
     method: "POST",
