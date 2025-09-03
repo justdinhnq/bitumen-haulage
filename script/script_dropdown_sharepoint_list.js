@@ -22,6 +22,9 @@ window.JFCustomWidget.subscribe("ready", function (data) {
   console.log("Conditional Column: ", conditional_column);  
   console.log("Conditional Value: ", conditional_value);
   console.log("Column to Show: ", column_to_show);
+  console.log("Column to Value: ", column_to_value);
+  console.log("Table: ", table);
+  
 
   // Fetch contract names from Power Automate
   fetch(POWER_AUTOMATE_URL, {
