@@ -50,7 +50,7 @@ window.JFCustomWidget.subscribe("ready", function (data) {
       console.log("Number of options: ", numberOfOptions);
     })
     .catch((err) => {
-      console.error("Error fetching:", error);
+      console.error("Error fetching:", err);
     });
 });
 
