@@ -4,11 +4,11 @@ const POWER_AUTOMATE_URL =
 
 // Initialize the widget
 window.JFCustomWidget.subscribe("ready", function (data) {
-  var site_address = JFCustomWidget.getWidgetSetting("site_address");
-  var conditional_column = JFCustomWidget.getWidgetSetting("conditional_column");
-  var conditional_value = JFCustomWidget.getWidgetSetting("conditional_value");
-  var column_to_show = JFCustomWidget.getWidgetSetting("column_to_show");
-  var column_to_value = JFCustomWidget.getWidgetSetting("column_to_value");
+  var site_address = JFCustomWidget.getWidgetSetting("siteAddress");
+  var conditional_column = JFCustomWidget.getWidgetSetting("conditionalColumn");
+  var conditional_value = JFCustomWidget.getWidgetSetting("conditionalValue");
+  var column_to_show = JFCustomWidget.getWidgetSetting("columnShow");
+  var column_to_value = JFCustomWidget.getWidgetSetting("columnValue");
   var  tableSP = JFCustomWidget.getWidgetSetting("table");
   
 
