@@ -39,10 +39,10 @@ window.JFCustomWidget.subscribe("ready", function (data) {
   })
     .then((response) => response.json())
     .then((data) => {
-      data.forEach((item) => {
+      data.foreach((item) => {
         const option = document.createElement("option");
-        option.value = item.project; // Use project code as the value
-        option.textContent = item.contract; // Display contract name
+        option.value = item.col_to_show; // Use project code as the value
+        option.textContent = item.col_to_value; // Display contract name
         dropdown.appendChild(option);
       });
 
