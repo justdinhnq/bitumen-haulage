@@ -4,12 +4,12 @@ const POWER_AUTOMATE_URL =
 
 // Initialize the widget
 window.JFCustomWidget.subscribe("ready", function (data) {
-  var site_address = JFCustomWidget.getWidgetSetting("siteAddress");
-  var conditional_column = JFCustomWidget.getWidgetSetting("conditionalColumn");
-  var conditional_value = JFCustomWidget.getWidgetSetting("conditionalValue");
-  var column_to_show = JFCustomWidget.getWidgetSetting("columnShow");
-  var column_to_value = JFCustomWidget.getWidgetSetting("columnValue");
-  var  tableSP = JFCustomWidget.getWidgetSetting("table");
+  var site_address = JFCustomWidget.getWidgetSetting("siteaddress");
+  var conditional_column = JFCustomWidget.getWidgetSetting("conditionalcolumn");
+  var conditional_value = JFCustomWidget.getWidgetSetting("conditionalvalue");
+  var column_to_show = JFCustomWidget.getWidgetSetting("columnshow");
+  var column_to_value = JFCustomWidget.getWidgetSetting("columnvalue");
+  var  table = JFCustomWidget.getWidgetSetting("table");
   
 
   const dropdown = document.getElementById("lookup_list");
@@ -19,7 +19,7 @@ window.JFCustomWidget.subscribe("ready", function (data) {
   console.log("Conditional Value: ", conditional_value);
   console.log("Column to Show: ", column_to_show);
   console.log("Column to Value: ", column_to_value);
-  console.log("Table: ", tableSP);
+  console.log("Table: ", table);
   
 
   // Fetch contract names from Power Automate
@@ -34,7 +34,7 @@ window.JFCustomWidget.subscribe("ready", function (data) {
         conditional_val: conditional_value,
         col_to_show: column_to_show,
         col_to_value: column_to_value,
-        table_name: tableSP
+        table_name: table
     }), 
   })
     .then((response) => response.json())
