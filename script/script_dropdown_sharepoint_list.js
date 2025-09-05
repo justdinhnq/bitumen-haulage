@@ -6,7 +6,7 @@ const POWER_AUTOMATE_URL =
 window.JFCustomWidget.subscribe("ready", function () {
   JFCustomWidget.getWidgetSettings();
   JFCustomWidget.getWidgetSetting("columnshow");
-  
+
   const settings = JFCustomWidget.getWidgetSettings();
   console.log("Loaded widget settings:", settings);
 
@@ -71,7 +71,7 @@ window.JFCustomWidget.subscribe("submit", function () {
 
 // send message to the channel
 function handleSelection() {
-  senderName = JFCustomWidget.getWidgetSetting("senderName");
+  /* senderName = JFCustomWidget.getWidgetSetting("senderName");
   let sender = "talk_channel_" + senderName;
 
   console.log("[Sender]Sender name: ", senderName);
@@ -82,5 +82,5 @@ function handleSelection() {
   const key = selectElement.options[selectElement.selectedIndex].text; // Get the selected option's text
 
   channel.postMessage(value);
-  console.log("Message sent:", value);
+  console.log("Message sent:", value); */
 }
