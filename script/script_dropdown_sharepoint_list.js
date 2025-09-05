@@ -59,16 +59,25 @@ window.JFCustomWidget.subscribe("ready", function () {
     .catch((err) => {
       console.error("Error fetching:", err);
     });
+
+    // Send data to Jotform when submitted
+    JFCustomWidget.subscribe("submit", function() {
+        const selectedId = dropdown.value;
+        JFCustomWidget.sendSubmit({
+            valid: true,
+            value: selectedId,
+        });
+    });
 });
 
 // Subscribe to form submit event
-window.JFCustomWidget.subscribe("submit", function () {
+/* window.JFCustomWidget.subscribe("submit", function () {
   const selectElement = document.getElementById("lookup_list");
   const value = selectElement.value;
   console.log("Selected value on submit:", value);
 
   window.JFCustomWidget.sendData({ value: value });
-});
+}); */
 
 // send message to the channel
 function handleSelection() {
