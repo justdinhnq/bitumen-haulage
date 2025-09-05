@@ -65,6 +65,7 @@ window.JFCustomWidget.subscribe("ready", function () {
 window.JFCustomWidget.subscribe("submit", function () {
   const selectElement = document.getElementById("lookup_list");
   const value = selectElement.value;
+  console.log("Selected value on submit:", value);
 
   window.JFCustomWidget.sendData({ value: value });
 });
