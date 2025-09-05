@@ -42,8 +42,8 @@ window.JFCustomWidget.subscribe("ready", function (data) {
       console.log("Data received:", data);
       data.forEach((item) => {
         const option = document.createElement("option");
-        option.value = item.col_to_show; // Use project code as the value
-        option.textContent = item.col_to_value; // Display contract name
+        option.textContent = item.col_to_show; // Use project code as the value
+        option.value = item.col_to_value; // Display contract name
         dropdown.appendChild(option);
       });
 
