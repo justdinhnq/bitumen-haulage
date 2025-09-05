@@ -3,7 +3,13 @@ const POWER_AUTOMATE_URL =
 
 
 // Initialize the widget
-window.JFCustomWidget.subscribe("ready", function (data) {
+window.JFCustomWidget.subscribe("ready", function () {
+  JFCustomWidget.getWidgetSettings();
+  JFCustomWidget.getWidgetSetting("columnshow");
+  
+  const settings = JFCustomWidget.getWidgetSettings();
+  console.log("Loaded widget settings:", settings);
+
   var site_address = JFCustomWidget.getWidgetSetting("siteaddress");
   var conditional_column = JFCustomWidget.getWidgetSetting("conditionalcolumn");
   var conditional_value = JFCustomWidget.getWidgetSetting("conditionalvalue");
