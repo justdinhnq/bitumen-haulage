@@ -9,11 +9,6 @@ JFCustomWidget.subscribe("ready", function() {
     apiKey = JFCustomWidget.getWidgetSetting("apiKey")
     // label = JFCustomWidget.getWidgetSetting("submissionLabel")
     
-    column4Show = JFCustomWidget.getWidgetSetting("column4Show")
-    column4Value = JFCustomWidget.getWidgetSetting("column4Value")
-
-    let submissionsData = [];
-
     // Fetch submissions
     const fetchSubmissions = async () => {
         try {
@@ -22,8 +17,7 @@ JFCustomWidget.subscribe("ready", function() {
             );
             const data = await response.json();
             
-            submissionsData = data.content || [];
-            console.log('submissionsData: ', submissionsData);
+            console.log('submission info: ', data.content);
 
             // Populate dropdown
             /* const options = []
@@ -44,7 +38,7 @@ JFCustomWidget.subscribe("ready", function() {
             console.log('options: ', options)
             handleSelection(options); */
             
-            handleSelection(submissionsData);
+            handleSelection(data.content);
         } catch (error) {
             console.error('Error fetching submissions:', error);
             dropdown.innerHTML = '<option value="">Error loading submissions</option>';
