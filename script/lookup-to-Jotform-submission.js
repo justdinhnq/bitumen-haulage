@@ -1,65 +1,33 @@
-let apiKey = '';
+apiKey = '38253712fa8d8d79431cd7ec2ca697ee';//JFCustomWidget.getWidgetSetting("apiKey")
+// label = JFCustomWidget.getWidgetSetting("submissionLabel")
 
-// Main widget logic
-JFCustomWidget.subscribe("ready", function() {
-    
-    apiKey = JFCustomWidget.getWidgetSetting("apiKey")
-    // label = JFCustomWidget.getWidgetSetting("submissionLabel")
-    
-    // Fetch submissions
-    const fetchSubmissions = async () => {
-        try {
-            let submissionID_A = document.getElementById("submission-textfield").value;
+// Fetch submissions
+const fetchSubmissions = async () => {
+    try {
+        submissionID_A = '6291102641966994926'; //document.getElementById("submission-textfield").value;
 
-            const response = await fetch(
-                'https://downer.jotform.com/API/submission/${submissionID_A}?apiKey=${apiKey}'
-            );
-            const data = await response.json();
-            
-            console.log('submission info: ', data.content);
+        const url = `https://downer.jotform.com/API/submission/${submissionID_A}?apiKey=${apiKey}`;
+        console.log('Fetch URL: ', url);
+        const response = await fetch(
+            url
+        );
+        const data = await response.json();
+        
+        console.log('submission info: ', data.content);
+        
+        handleSelection(data.content);
+    } catch (error) {
+        console.error('Error fetching submissions:', error);
+        dropdown.innerHTML = '<option value="">Error loading submissions</option>';
+    }
+};
 
-            // Populate dropdown
-            /* const options = []
-            submissionsData.forEach(submission => {
-                const val1 = Object.values(submission.answers).find(
-                    answer => answer.name === column4Show
-                );
-
-                const val2 = Object.values(submission.answers).find(
-                    answer => answer.name === column4Value
-                );
-                
-                // Only add if both values exist
-                if (val1 && val2) {
-                    options.push([val1.answer, val2.answer]);
-                }
-            });
-            console.log('options: ', options)
-            handleSelection(options); */
-            
-            handleSelection(data.content);
-        } catch (error) {
-            console.error('Error fetching submissions:', error);
-            dropdown.innerHTML = '<option value="">Error loading submissions</option>';
-        }
-    };
-
-    // Send data to Jotform when submitted
-   /*  JFCustomWidget.subscribe("submit", function() {
-        const selectedId = dropdown.value;
-        JFCustomWidget.sendSubmit({
-            valid: true,
-            value: selectedId,
-        });
-    }); */
-
-    // Listen for changes in the textfield and run fetchSubmissions when it has a value
-    const textfield = document.getElementById("submission-textfield");
-    textfield.addEventListener("input", function() {
-        if (textfield.value && textfield.value.trim() !== "") {
-            fetchSubmissions();
-        }
-    });
+// Listen for changes in the textfield and run fetchSubmissions when it has a value
+const textfield = document.getElementById("submission-textfield");
+textfield.addEventListener("input", function() {
+    if (textfield.value && textfield.value.trim() !== "") {
+        fetchSubmissions();
+    }
 });
 
 // send message to the channel
