@@ -33,14 +33,14 @@ JFCustomWidget.subscribe("ready", function() {
 
 // send message to the channel
 function handleSelection(input) {
-    for (const key in element) {
-        let name = element[key].name;
+    for (const key in input) {
+        let name = input[key].name;
         let sender = 'talk_channel_'+name
   
         console.log("[Sender]Sender name: ", sender)
         const channel = new BroadcastChannel(sender);
         
-        const value = element[key].answer !== undefined ? element[key].answer : '';
+        const value = input[key].answer !== undefined ? input[key].answer : '';
     
         channel.postMessage(value); 
         console.log('Message sent:', value);
