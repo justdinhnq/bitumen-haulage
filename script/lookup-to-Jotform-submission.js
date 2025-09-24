@@ -21,14 +21,14 @@ JFCustomWidget.subscribe("ready", function() {
             dropdown.innerHTML = '<option value="">Error loading submissions</option>';
         }
     };
-});
-
-// Listen for changes in the textfield and run fetchSubmissions when it has a value
-const textfield = document.getElementById("submission-textfield");
-textfield.addEventListener("input", function() {
-    if (textfield.value && textfield.value.trim() !== "") {
-        fetchSubmissions();
-    }
+    
+    // Listen for changes in the textfield and run fetchSubmissions when it has a value
+    const textfield = document.getElementById("submission-textfield");
+    textfield.addEventListener("input", function() {
+        if (textfield.value && textfield.value.trim() !== "") {
+            fetchSubmissions();
+        }
+    });
 });
 
 // send message to the channel
