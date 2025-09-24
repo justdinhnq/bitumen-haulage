@@ -1,19 +1,18 @@
 let apiKey = '';
-let submissionID_A = '';
-let label = '';
 
 // Main widget logic
 JFCustomWidget.subscribe("ready", function() {
-    submissionID_A = document.getElementById("submission-textfield").value;
-
+    
     apiKey = JFCustomWidget.getWidgetSetting("apiKey")
     // label = JFCustomWidget.getWidgetSetting("submissionLabel")
     
     // Fetch submissions
     const fetchSubmissions = async () => {
         try {
+            let submissionID_A = document.getElementById("submission-textfield").value;
+
             const response = await fetch(
-                `https://downer.jotform.com/API/submission/${submissionID_A}?apiKey=${apiKey}`
+                'https://downer.jotform.com/API/submission/${submissionID_A}?apiKey=${apiKey}'
             );
             const data = await response.json();
             
