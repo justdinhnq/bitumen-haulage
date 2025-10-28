@@ -13,6 +13,7 @@ window.JFCustomWidget.subscribe("ready", function () {
   var site_address = JFCustomWidget.getWidgetSetting("siteaddress");
   var conditional_column = JFCustomWidget.getWidgetSetting("conditionalcolumn");
   var conditional_value = JFCustomWidget.getWidgetSetting("conditionalvalue");
+  var true_false_col = JFCustomWidget.getWidgetSetting("true_false_col");
   var column_to_show = JFCustomWidget.getWidgetSetting("columnshow");
   var column_to_value = JFCustomWidget.getWidgetSetting("columnvalue");
   var  table = JFCustomWidget.getWidgetSetting("table");
@@ -40,6 +41,7 @@ window.JFCustomWidget.subscribe("ready", function () {
         conditional_val: conditional_value,
         col_to_show: column_to_show,
         col_to_value: column_to_value,
+        true_false_col: true_false_col,
         table_name: table
     }), 
   })
