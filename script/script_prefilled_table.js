@@ -117,26 +117,24 @@ document.querySelectorAll('td[contenteditable="true"]').forEach(makeCellEditable
 updateAllSums();
 
 function getTableData() {
-    console.log("Before we get data...");
-    
-    const data = [];
-    document.querySelectorAll('tbody tr').forEach(row => {
-        data.push({
-        row: row.cells[0].textContent,
-        a: row.cells[1].textContent,
-        b: row.cells[2].textContent,
-        total: row.cells[3].textContent
-        });
-    });
-
-    console.log("Data we have:", data)
-
-    return JSON.stringify(data);
+  let html = '<table style="border-collapse: collapse; width: 100%;"><tr style="background: #3498db; color: white;"><th style="border: 1px solid #ddd; padding: 8px;">#</th><th style="border: 1px solid #ddd; padding: 8px;">A</th><th style="border: 1px solid #ddd; padding: 8px;">B</th><th style="border: 1px solid #ddd; padding: 8px;">Total</th></tr>';
+  
+  document.querySelectorAll('tbody tr').forEach(row => {
+    const cells = row.cells;
+    html += `<tr><td style="border: 1px solid #ddd; padding: 8px;">${cells[0].textContent}</td>
+                   <td style="border: 1px solid #ddd; padding: 8px;">${cells[1].textContent}</td>
+                   <td style="border: 1px solid #ddd; padding: 8px;">${cells[2].textContent}</td>
+                   <td style="border: 1px solid #ddd; padding: 8px; background: #e8f5e9; font-weight: bold;">${cells[3].textContent}</td></tr>`;
+  });
+  
+  html += '</table>';
+  return html;
 }
 
-// Send data when form submits
+// In submit handler:
 JFCustomWidget.subscribe('submit', function(){
   JFCustomWidget.sendSubmit({
-    value: getTableData()
+    valid: true,
+    value: getTableData()  // Now sends HTML table
   });
 });
