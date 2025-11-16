@@ -53,7 +53,7 @@
       margin: 25px 0;
     }
     button {
-      padding: 12px 24px;
+      padding: 6px 12px;
       margin: 8px;
       font-size: 16px;
       border: none;
@@ -71,14 +71,11 @@
 <body>
 
 <div class="container">
-  <h1>Dynamic Table with Auto-Sum</h1>
-  <p class="subtitle">Last column = Sum of the two previous columns • Updates live!</p>
-
   <div class="controls">
     <button onclick="addRow()">Add Row</button>
-    <button onclick="addColumn()">Add Column (before Total)</button>
-    <button onclick="deleteLastRow()">Delete Last Row</button>
-    <button onclick="deleteLastColumn()">Delete Last Data Column</button>
+    <button onclick="addColumn()">Add Column</button>
+    <button onclick="deleteLastRow()">Delete Row</button>
+    <button onclick="deleteLastColumn()">Delete Column</button>
   </div>
 
   <table id="dynamicTable">
