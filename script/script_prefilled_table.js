@@ -117,24 +117,22 @@ document.querySelectorAll('td[contenteditable="true"]').forEach(makeCellEditable
 updateAllSums();
 
 function getTableData() {
-  let html = '<table style="border-collapse: collapse; width: 100%;"><tr style="background: #3498db; color: white;"><th style="border: 1px solid #ddd; padding: 8px;">#</th><th style="border: 1px solid #ddd; padding: 8px;">A</th><th style="border: 1px solid #ddd; padding: 8px;">B</th><th style="border: 1px solid #ddd; padding: 8px;">Total</th></tr>';
-  
-  document.querySelectorAll('tbody tr').forEach(row => {
+  const data = {};
+  document.querySelectorAll('tbody tr').forEach((row, index) => {
     const cells = row.cells;
-    html += `<tr><td style="border: 1px solid #ddd; padding: 8px;">${cells[0].textContent}</td>
-                   <td style="border: 1px solid #ddd; padding: 8px;">${cells[1].textContent}</td>
-                   <td style="border: 1px solid #ddd; padding: 8px;">${cells[2].textContent}</td>
-                   <td style="border: 1px solid #ddd; padding: 8px; background: #e8f5e9; font-weight: bold;">${cells[3].textContent}</td></tr>`;
+    const rowNum = index + 1;
+    data[`Row ${rowNum} #`] = cells[0].textContent;
+    data[`Row ${rowNum} A`] = cells[1].textContent;
+    data[`Row ${rowNum} B`] = cells[2].textContent;
+    data[`Row ${rowNum} Total`] = cells[3].textContent;
   });
-  
-  html += '</table>';
-  return html;
+  return JSON.stringify(data);  // Or just data if sending as object
 }
 
 // In submit handler:
 JFCustomWidget.subscribe('submit', function(){
   JFCustomWidget.sendSubmit({
     valid: true,
-    value: getTableData()  // Now sends HTML table
+    value: getTableData()  // Sends { "Row 1 A": "15", ... }
   });
 });
