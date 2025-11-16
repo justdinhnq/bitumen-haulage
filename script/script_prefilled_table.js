@@ -117,16 +117,21 @@ document.querySelectorAll('td[contenteditable="true"]').forEach(makeCellEditable
 updateAllSums();
 
 function getTableData() {
-  const data = [];
-  document.querySelectorAll('tbody tr').forEach(row => {
-    data.push({
-      row: row.cells[0].textContent,
-      a: row.cells[1].textContent,
-      b: row.cells[2].textContent,
-      total: row.cells[3].textContent
+    console.log("Before we get data...");
+    
+    const data = [];
+    document.querySelectorAll('tbody tr').forEach(row => {
+        data.push({
+        row: row.cells[0].textContent,
+        a: row.cells[1].textContent,
+        b: row.cells[2].textContent,
+        total: row.cells[3].textContent
+        });
     });
-  });
-  return JSON.stringify(data);
+
+    console.log("Data we have:", data)
+
+    return JSON.stringify(data);
 }
 
 // Send data when form submits
