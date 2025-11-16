@@ -1,8 +1,22 @@
 // Get User Parameter
 JFCustomWidget.subscribe('ready', function() {
-    const newLocal = JFCustomWidget.getWidgetSetting('initialRows');
-    const initial = parseInt(newLocal);
-    for (let i = 0; i < initial; i++) addRow();
+    const moreRows = JFCustomWidget.getWidgetSetting('initialRows');
+    const moreColumns = JFCustomWidget.getWidgetSetting('initialColumns');
+
+    const lessRows = JFCustomWidget.getWidgetSetting('lessRows');
+    const lessColumns = JFCustomWidget.getWidgetSetting('lessColumns');
+
+    const noRows = parseInt(moreRows);
+    const noColumns = parseInt(moreColumns);
+
+    const noLessRows = parseInt(lessRows);
+    const noLessColumns = parseInt(lessColumns);
+
+    for (let i = 0; i < noRows; i++) addRow();
+    for (let i = 0; i < noColumns; i++) addColumn();
+
+    for (let i = 0; i < noLessRows; i++) deleteLastRow();
+    for (let i = 0; i < noLessColumns; i++) deleteLastColumn();
 });
 
 const table = document.getElementById('dynamicTable');
@@ -61,6 +75,7 @@ function addColumn() {
     const headerRow = table.querySelector('thead tr');
     const newTh = document.createElement('th');
     newTh.textContent = `Extra ${extraColCount}`;
+    newTh.setAttribute(contentEditable, "true");
     headerRow.appendChild(newTh);               // **after** everything (including Total)
 
     // Body rows

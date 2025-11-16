@@ -73,30 +73,30 @@
 
 <div class="container">
   <div class="controls">
-    <button onclick="addRow()">Add Row</button>
-    <button onclick="addColumn()">Add Column</button>
-    <button onclick="deleteLastRow()">Delete Row</button>
-    <button onclick="deleteLastColumn()">Delete Column</button>
+    <button onclick="addRow()">+ Row</button>
+    <button onclick="addColumn()">+ Column</button>
+    <button onclick="deleteLastRow()">- Row</button>
+    <button onclick="deleteLastColumn()">- Column</button>
   </div>
 
   <table id="dynamicTable">
     <thead>
       <tr>
-        <th>#</th>
-        <th>Value A</th>
-        <th>Value B</th>
-        <th>Total (A+B)</th>
+        <th contenteditable="true">#</th>
+        <th contenteditable="true">Value A</th>
+        <th contenteditable="true">Value B</th>
+        <th contenteditable="true">Total (A+B)</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>1</td>
+        <td contenteditable="true">1</td>
         <td contenteditable="true">0</td>
         <td contenteditable="true">0</td>
         <td class="sum-cell">0</td>
       </tr>
       <tr>
-        <td>2</td>
+        <td contenteditable="true">2</td>
         <td contenteditable="true">0</td>
         <td contenteditable="true">0</td>
         <td class="sum-cell">0</td>
