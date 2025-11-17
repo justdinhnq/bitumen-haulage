@@ -120,7 +120,7 @@ function getTableData() {
   const rows = [];
   let rowId = 0;
 
-  document.querySelectorAll('#table tbody tr').forEach(tr => {
+  table.querySelectorAll('tbody tr').forEach(tr => {
     const cells = tr.cells;
     const rowData = {
       text: `Row ${cells[0].textContent}`,  // e.g., "Row 1"
@@ -139,7 +139,7 @@ function getTableData() {
 
   // Extract actual values per row
   const data = [];
-  document.querySelectorAll('#table tbody tr').forEach(tr => {
+  table.querySelectorAll('tbody tr').forEach(tr => {
     const cells = tr.cells;
     const rowEntry = {
       "0": cells[0].textContent,        // Row #
