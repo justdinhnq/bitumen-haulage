@@ -117,22 +117,62 @@ document.querySelectorAll('td[contenteditable="true"]').forEach(makeCellEditable
 updateAllSums();
 
 function getTableData() {
-  const data = {};
-  document.querySelectorAll('tbody tr').forEach((row, index) => {
-    const cells = row.cells;
-    const rowNum = index + 1;
-    data[`Row ${rowNum} #`] = cells[0].textContent;
-    data[`Row ${rowNum} A`] = cells[1].textContent;
-    data[`Row ${rowNum} B`] = cells[2].textContent;
-    data[`Row ${rowNum} Total`] = cells[3].textContent;
+  const rows = [];
+  let rowId = 0;
+
+  document.querySelectorAll('#table tbody tr').forEach(tr => {
+    const cells = tr.cells;
+    const rowData = {
+      text: `Row ${cells[0].textContent}`,  // e.g., "Row 1"
+      id: rowId.toString()
+    };
+    rows.push(rowData);
+    rowId++;
   });
-  return JSON.stringify(data);  // Or just data if sending as object
+
+  const columns = [
+    { type: "Text Box", text: "Row #", id: "0" },
+    { type: "Text Box", text: "Value A", id: "1" },
+    { type: "Text Box", text: "Value B", id: "2" },
+    { type: "Text Box", text: "Total", id: "3" }
+  ];
+
+  // Extract actual values per row
+  const data = [];
+  document.querySelectorAll('#table tbody tr').forEach(tr => {
+    const cells = tr.cells;
+    const rowEntry = {
+      "0": cells[0].textContent,        // Row #
+      "1": cells[1].textContent,        // A
+      "2": cells[2].textContent,        // B
+      "3": cells[3].textContent         // Total
+    };
+    data.push(rowEntry);
+  });
+
+  // Build final object in Configurable List format
+  return {
+    dcolumns: JSON.stringify(columns),
+    drows: JSON.stringify(rows),
+    featureSet: JSON.stringify(["useDcols", "useIds"]),
+    inputType: "Text Box",
+    mcolumns: "Row #|Value A|Value B|Total",
+    mrows: rows.map(r => r.text).join("|"),
+    name: "dynamicTable",
+    text: "Dynamic Sum Table",
+    type: "control_matrix",
+    // Store actual data in a way Jotform can parse (optional: use hidden field)
+    value: JSON.stringify(data)  // This is what gets submitted
+  };
 }
 
-// In submit handler:
-JFCustomWidget.subscribe('submit', function(){
+// Send data on form submit
+JFCustomWidget.subscribe('submit', function() {
+  const tableData = getTableData();
   JFCustomWidget.sendSubmit({
+    value: tableData.value,           // Actual table values
     valid: true,
-    value: getTableData()  // Sends { "Row 1 A": "15", ... }
+    // Optional: send full structure for debugging
+    // debug: JSON.stringify(tableData, null, 2)
   });
 });
