@@ -138,6 +138,7 @@ JFCustomWidget.subscribe('submit', function() {
   JFCustomWidget.sendSubmit({
     value: getTableData(),
     valid: true,
-    name: "typeA"   // Same as your real Configurable List field name
+    cfname: "Configurable List",
+    text: "Configurable list"   // Same as your real Configurable List field name
   });
 });
