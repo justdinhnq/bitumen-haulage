@@ -135,10 +135,9 @@ function getTableData() {
 
 // ON SUBMIT — Send data exactly like Configurable List does
 JFCustomWidget.subscribe('submit', function() {
-  const configListFormat = getTableData();
-
   JFCustomWidget.sendSubmit({
-    value: configListFormat,    // This is what Jotform expects from Configurable List
-    valid: true
+    value: getTableData(),
+    valid: true,
+    name: "typeA"   // Same as your real Configurable List field name
   });
 });
