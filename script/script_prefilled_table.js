@@ -169,6 +169,10 @@ function getTableData() {
 // Send data on form submit
 JFCustomWidget.subscribe('submit', function() {
   const tableData = getTableData();
+  console.log(tableData);
+  console.log("...........");
+  console.log("tableData.value: ", tableData.value);
+  
   JFCustomWidget.sendSubmit({
     value: tableData.value,           // Actual table values
     valid: true,
