@@ -117,66 +117,28 @@ document.querySelectorAll('td[contenteditable="true"]').forEach(makeCellEditable
 updateAllSums();
 
 function getTableData() {
-  const rows = [];
-  let rowId = 0;
-
-  table.querySelectorAll('tbody tr').forEach(tr => {
-    const cells = tr.cells;
-    const rowData = {
-      text: `Row ${cells[0].textContent}`,  // e.g., "Row 1"
-      id: rowId.toString()
-    };
-    rows.push(rowData);
-    rowId++;
-  });
-
-  const columns = [
-    { type: "Text Box", text: "Row #", id: "0" },
-    { type: "Text Box", text: "Value A", id: "1" },
-    { type: "Text Box", text: "Value B", id: "2" },
-    { type: "Text Box", text: "Total", id: "3" }
-  ];
-
-  // Extract actual values per row
   const data = [];
+
   table.querySelectorAll('tbody tr').forEach(tr => {
     const cells = tr.cells;
-    const rowEntry = {
-      "0": cells[0].textContent,        // Row #
-      "1": cells[1].textContent,        // A
-      "2": cells[2].textContent,        // B
-      "3": cells[3].textContent         // Total
-    };
-    data.push(rowEntry);
+    data.push({
+      "Col1": cells[0].textContent,   // Row # (as text)
+      "Col2": cells[1].textContent,   // Value A
+      "Col3": cells[2].textContent,   // Value B
+      "Col4": cells[3].textContent    // Total
+    });
   });
 
-  // Build final object in Configurable List format
-  return {
-    dcolumns: JSON.stringify(columns),
-    drows: JSON.stringify(rows),
-    featureSet: JSON.stringify(["useDcols", "useIds"]),
-    inputType: "Text Box",
-    mcolumns: "Row #|Value A|Value B|Total",
-    mrows: rows.map(r => r.text).join("|"),
-    name: "dynamicTable",
-    text: "Dynamic Sum Table",
-    type: "control_matrix",
-    // Store actual data in a way Jotform can parse (optional: use hidden field)
-    value: JSON.stringify(data)  // This is what gets submitted
-  };
+  // This EXACT format matches Configurable List
+  return JSON.stringify(data);
 }
 
-// Send data on form submit
+// ON SUBMIT — Send data exactly like Configurable List does
 JFCustomWidget.subscribe('submit', function() {
-  const tableData = getTableData();
-  console.log(tableData);
-  console.log("...........");
-  console.log("tableData.value: ", tableData.value);
-  
+  const configListFormat = getTableData();
+
   JFCustomWidget.sendSubmit({
-    value: tableData.value,           // Actual table values
-    valid: true,
-    // Optional: send full structure for debugging
-    // debug: JSON.stringify(tableData, null, 2)
+    value: configListFormat,    // This is what Jotform expects from Configurable List
+    valid: true
   });
 });
