@@ -118,27 +118,29 @@ updateAllSums();
 
 /* ---------- SUBMIT HANDLER ---------- */
 
-function getTableData() {
-  const data = [];
+// --- THIS IS THE ONLY CORRECT WAY ---
+JFCustomWidget.subscribe("submit", function () {
+  const rows = table.querySelectorAll('tbody tr');
+  const data = {};
 
-  table.querySelectorAll('tbody tr').forEach((tr, index) => {
+  rows.forEach((tr, rowIndex) => {
     const cells = tr.cells;
-    data.push({
-      "0": cells[1].textContent.trim(),   // Col2 → first column of Configurable List
-      "1": cells[2].textContent.trim(),   // Col3 → second column
-      "2": cells[3].textContent.trim()    // Col4 → Total (third column)
-    });
+    // Map your table columns to Configurable List columns:
+    // cells[1] → column 0 (first editable)
+    // cells[2] → column 1 (second editable)
+    // cells[3] → column 2 (total)
+    data[`q7_typeA7[${rowIndex}][0]`] = cells[1].textContent.trim();
+    data[`q7_typeA7[${rowIndex}][1]`] = cells[2].textContent.trim();
+    data[`q7_typeA7[${rowIndex}][2]`] = cells[3].textContent.trim();
   });
 
-  return JSON.stringify(data);
-}
+  // Fixed column & row IDs (must match exactly)
+  data["q7_typeA5[colIds]"] = JSON.stringify(["0", "1", "2"]);
+  data["q7_typeA5[rowIds]"] = JSON.stringify(Array.from({length: rows.length}, (_, i) => i + ""));
 
-// CORRECT SUBMIT – mimics real Configurable List field q5
-JFCustomWidget.subscribe("submit", function () {
+  // Send all fields at once
   JFCustomWidget.sendSubmit({
     valid: true,
-    value: getTableData(),                     // ← this exact JSON string
-    name: "q5_typeA5"                          // ← EXACT field name Jotform expects
-    // Do NOT add cfname or text – they break compatibility
+    value: data
   });
 });
