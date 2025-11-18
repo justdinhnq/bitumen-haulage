@@ -125,10 +125,6 @@ JFCustomWidget.subscribe("submit", function () {
 
   rows.forEach((tr, rowIndex) => {
     const cells = tr.cells;
-    // Map your table columns to Configurable List columns:
-    // cells[1] → column 0 (first editable)
-    // cells[2] → column 1 (second editable)
-    // cells[3] → column 2 (total)
     data[`q7_typeA7[${rowIndex}][0]`] = cells[1].textContent.trim();
     data[`q7_typeA7[${rowIndex}][1]`] = cells[2].textContent.trim();
     data[`q7_typeA7[${rowIndex}][2]`] = cells[3].textContent.trim();
@@ -137,6 +133,9 @@ JFCustomWidget.subscribe("submit", function () {
   // Fixed column & row IDs (must match exactly)
   data["q7_typeA5[colIds]"] = JSON.stringify(["0", "1", "2"]);
   data["q7_typeA5[rowIds]"] = JSON.stringify(Array.from({length: rows.length}, (_, i) => i + ""));
+
+  console.log(data);
+  
 
   // Send all fields at once
   JFCustomWidget.sendSubmit({
