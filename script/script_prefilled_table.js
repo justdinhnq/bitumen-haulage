@@ -117,29 +117,30 @@ document.querySelectorAll('td[contenteditable="true"]').forEach(makeCellEditable
 updateAllSums();
 
 /* ---------- SUBMIT HANDLER ---------- */
+//const rows = table.querySelectorAll('tbody tr');
 
-// --- THIS IS THE ONLY CORRECT WAY ---
 JFCustomWidget.subscribe("submit", function () {
   const rows = table.querySelectorAll('tbody tr');
-  const data = {};
+  const submitData = {};
 
-  rows.forEach((tr, rowIndex) => {
-    const cells = tr.cells;
-    data[`q7_typeA7[${rowIndex}][0]`] = cells[1].textContent.trim();
-    data[`q7_typeA7[${rowIndex}][1]`] = cells[2].textContent.trim();
-    data[`q7_typeA7[${rowIndex}][2]`] = cells[3].textContent.trim();
+  // Fill each cell exactly like native Configurable List
+  rows.forEach((row, rowIndex) => {
+    const cells = row.cells;
+    submitData[`q5_typeA5[${rowIndex}][0]`] = cells[1].textContent.trim(); // Value A
+    submitData[`q5_typeA5[${rowIndex}][1]`] = cells[2].textContent.trim(); // Value B
+    // If you want Total as third column, add:
+    // submitData[`q5_typeA5[${rowIndex}][2]`] = cells[3].textContent.trim();
   });
 
-  // Fixed column & row IDs (must match exactly)
-  data["q7_typeA5[colIds]"] = JSON.stringify(["0", "1", "2"]);
-  data["q7_typeA5[rowIds]"] = JSON.stringify(Array.from({length: rows.length}, (_, i) => i + ""));
+  // Critical: these two lines MUST be present and correct
+  submitData["q5_typeA5[colIds]"] = '["0","1"]';           
+  submitData["q5_typeA5[rowIds]"] = JSON.stringify(
+    Array.from(rows.keys(), i => i.toString())
+  ); // ["0","1","2",...]
 
-  console.log(data);
-  
-
-  // Send all fields at once
+  // Send everything at once
   JFCustomWidget.sendSubmit({
     valid: true,
-    value: data
+    value: submitData
   });
 });
