@@ -116,29 +116,29 @@ function deleteLastRow() {
 document.querySelectorAll('td[contenteditable="true"]').forEach(makeCellEditable);
 updateAllSums();
 
+/* ---------- SUBMIT HANDLER ---------- */
+
 function getTableData() {
   const data = [];
 
-  table.querySelectorAll('tbody tr').forEach(tr => {
+  table.querySelectorAll('tbody tr').forEach((tr, index) => {
     const cells = tr.cells;
     data.push({
-      "Col1": cells[0].textContent,   // Row # (as text)
-      "Col2": cells[1].textContent,   // Value A
-      "Col3": cells[2].textContent,   // Value B
-      "Col4": cells[3].textContent    // Total
+      "0": cells[1].textContent.trim(),   // Col2 → first column of Configurable List
+      "1": cells[2].textContent.trim(),   // Col3 → second column
+      "2": cells[3].textContent.trim()    // Col4 → Total (third column)
     });
   });
 
-  // This EXACT format matches Configurable List
   return JSON.stringify(data);
 }
 
-// ON SUBMIT — Send data exactly like Configurable List does
-JFCustomWidget.subscribe('submit', function() {
+// CORRECT SUBMIT – mimics real Configurable List field q5
+JFCustomWidget.subscribe("submit", function () {
   JFCustomWidget.sendSubmit({
-    value: getTableData(),
     valid: true,
-    cfname: "Configurable List",
-    text: "Configurable list"   // Same as your real Configurable List field name
+    value: getTableData(),                     // ← this exact JSON string
+    name: "q5_typeA5"                          // ← EXACT field name Jotform expects
+    // Do NOT add cfname or text – they break compatibility
   });
 });
