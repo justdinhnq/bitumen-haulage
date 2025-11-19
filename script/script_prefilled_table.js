@@ -116,20 +116,38 @@ function deleteLastRow() {
 document.querySelectorAll('td[contenteditable="true"]').forEach(makeCellEditable);
 updateAllSums();
 
-/* ---------- SUBMIT HANDLER ---------- */
-//const rows = table.querySelectorAll('tbody tr');
+function getTableData() {
+  const rows = [];
+  let rowId = 0;
 
-JFCustomWidget.subscribe("submit", function () {
-  const rows = table.querySelectorAll('tbody tr');
-  const submitData = {};
+  table.querySelectorAll('tbody tr').forEach(tr => {
+    const cells = tr.cells;
+    const rowData = {
+      text: `Row ${cells[0].textContent}`,  // e.g., "Row 1"
+      id: rowId.toString()
+    };
+    rows.push(rowData);
+    rowId++;
+  });
 
-  // Fill each cell exactly like native Configurable List
-  rows.forEach((row, rowIndex) => {
-    const cells = row.cells;
-    submitData[`q5_typeA5[${rowIndex}][0]`] = cells[1].textContent.trim(); // Value A
-    submitData[`q5_typeA5[${rowIndex}][1]`] = cells[2].textContent.trim(); // Value B
-    // If you want Total as third column, add:
-    // submitData[`q5_typeA5[${rowIndex}][2]`] = cells[3].textContent.trim();
+  const columns = [
+    { type: "Text Box", text: "Row #", id: "0" },
+    { type: "Text Box", text: "Value A", id: "1" },
+    { type: "Text Box", text: "Value B", id: "2" },
+    { type: "Text Box", text: "Total", id: "3" }
+  ];
+
+  // Extract actual values per row
+  const data = [];
+  table.querySelectorAll('tbody tr').forEach(tr => {
+    const cells = tr.cells;
+    const rowEntry = {
+      "0": cells[0].textContent,        // Row #
+      "1": cells[1].textContent,        // A
+      "2": cells[2].textContent,        // B
+      "3": cells[3].textContent         // Total
+    };
+    data.push(rowEntry);
   });
 
   // Critical: these two lines MUST be present and correct
