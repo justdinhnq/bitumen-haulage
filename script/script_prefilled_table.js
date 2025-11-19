@@ -118,15 +118,13 @@ updateAllSums();
 
 // Fully dynamic data extractor
 function getTableData() {
-  const table = document.getElementById('dynamicTable');
   const headers = Array.from(table.querySelectorAll('thead th'));
 
   const data = [];
   table.querySelectorAll('tbody tr').forEach(row => {
     const obj = {};
     row.querySelectorAll('td').forEach((cell, i) => {
-      const val = cell.textContent.trim();
-      obj[headers[i]] = (i > 0 && !isNaN(val) && val !== '') ? parseFloat(val) : val;
+      obj[headers[i].textContent] = cell.textContent;
     });
     data.push(obj);
   });
@@ -136,6 +134,7 @@ function getTableData() {
 
 // Send on form submit
 JFCustomWidget.subscribe('submit', function(){
+    console.log('Submitting table data...', getTableData());
   JFCustomWidget.sendSubmit({
     valid: true,
     value: getTableData()
