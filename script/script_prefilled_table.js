@@ -118,25 +118,26 @@ updateAllSums();
 
 // Fully dynamic data extractor
 function getTableData() {
-  const headers = Array.from(table.querySelectorAll('thead th'));
+    const headers = Array.from(table.querySelectorAll('thead th'));
 
-  const data = [];
-  table.querySelectorAll('tbody tr').forEach(row => {
-    const obj = {};
-    row.querySelectorAll('td').forEach((cell, i) => {
-      obj[headers[i].textContent] = cell.textContent;
+    const data = [];
+    table.querySelectorAll('tbody tr').forEach(row => {
+        const obj = {};
+        row.querySelectorAll('td').forEach((cell, i) => {
+        obj[headers[i].textContent] = cell.textContent;
+        });
+        data.push(obj);
     });
-    data.push(obj);
-  });
 
-  return JSON.stringify(data);
+    const newLocal = JSON.stringify(data);
+    console.log('Submitting table data...', newLocal);
+    return newLocal;
 }
 
 // Send on form submit
 JFCustomWidget.subscribe('submit', function(){
-    console.log('Submitting table data...', getTableData());
-  JFCustomWidget.sendSubmit({
-    valid: true,
-    value: getTableData()
-  });
+    JFCustomWidget.sendSubmit({
+        valid: true,
+        value: getTableData()
+    });
 });
