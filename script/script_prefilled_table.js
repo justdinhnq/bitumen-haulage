@@ -116,22 +116,28 @@ function deleteLastRow() {
 document.querySelectorAll('td[contenteditable="true"]').forEach(makeCellEditable);
 updateAllSums();
 
+// Fully dynamic data extractor
 function getTableData() {
+  const table = document.getElementById('dynamicTable');
+  const headers = Array.from(table.querySelectorAll('thead th'));
+
   const data = [];
-  document.querySelectorAll('tbody tr').forEach(row => {
-    data.push({
-      row: row.cells[0].textContent,
-      a: row.cells[1].textContent,
-      b: row.cells[2].textContent,
-      total: row.cells[3].textContent
+  table.querySelectorAll('tbody tr').forEach(row => {
+    const obj = {};
+    row.querySelectorAll('td').forEach((cell, i) => {
+      const val = cell.textContent.trim();
+      obj[headers[i]] = (i > 0 && !isNaN(val) && val !== '') ? parseFloat(val) : val;
     });
+    data.push(obj);
   });
+
   return JSON.stringify(data);
 }
 
-// Send data when form submits
+// Send on form submit
 JFCustomWidget.subscribe('submit', function(){
   JFCustomWidget.sendSubmit({
+    valid: true,
     value: getTableData()
   });
 });
