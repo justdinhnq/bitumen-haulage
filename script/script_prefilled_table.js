@@ -117,48 +117,21 @@ document.querySelectorAll('td[contenteditable="true"]').forEach(makeCellEditable
 updateAllSums();
 
 function getTableData() {
-  const rows = [];
-  let rowId = 0;
-
-  table.querySelectorAll('tbody tr').forEach(tr => {
-    const cells = tr.cells;
-    const rowData = {
-      text: `Row ${cells[0].textContent}`,  // e.g., "Row 1"
-      id: rowId.toString()
-    };
-    rows.push(rowData);
-    rowId++;
-  });
-
-  const columns = [
-    { type: "Text Box", text: "Row #", id: "0" },
-    { type: "Text Box", text: "Value A", id: "1" },
-    { type: "Text Box", text: "Value B", id: "2" },
-    { type: "Text Box", text: "Total", id: "3" }
-  ];
-
-  // Extract actual values per row
   const data = [];
-  table.querySelectorAll('tbody tr').forEach(tr => {
-    const cells = tr.cells;
-    const rowEntry = {
-      "0": cells[0].textContent,        // Row #
-      "1": cells[1].textContent,        // A
-      "2": cells[2].textContent,        // B
-      "3": cells[3].textContent         // Total
-    };
-    data.push(rowEntry);
+  document.querySelectorAll('tbody tr').forEach(row => {
+    data.push({
+      row: row.cells[0].textContent,
+      a: row.cells[1].textContent,
+      b: row.cells[2].textContent,
+      total: row.cells[3].textContent
+    });
   });
+  return JSON.stringify(data);
+}
 
-  // Critical: these two lines MUST be present and correct
-  submitData["q5_typeA5[colIds]"] = '["0","1"]';           
-  submitData["q5_typeA5[rowIds]"] = JSON.stringify(
-    Array.from(rows.keys(), i => i.toString())
-  ); // ["0","1","2",...]
-
-  // Send everything at once
+// Send data when form submits
+JFCustomWidget.subscribe('submit', function(){
   JFCustomWidget.sendSubmit({
-    valid: true,
-    value: submitData
+    value: getTableData()
   });
 });
