@@ -1,6 +1,7 @@
 let ColumnNames = [];
 let ColumnsToSum = [];
 let ColumnToShowSumResult = "";
+let PrefilledCellData = [];
 
 // Get User Parameter
 JFCustomWidget.subscribe('ready', function() {
@@ -11,6 +12,8 @@ JFCustomWidget.subscribe('ready', function() {
     const _ColumnsToSum = JFCustomWidget.getWidgetSetting('ColumnsToSum'); //strings: "Col1, Col2"
 
     const _ColumnToShowSumResult = JFCustomWidget.getWidgetSetting('ColumnToShowSumResult'); //string: "Total"
+
+    const _PrefilledCellData = JFCustomWidget.getWidgetSetting('PrefilledCellData'); //cell00, cell01, Marc Bom; row 2 cell 1, hello, Marc Bom; (for next rows...)
 
     const noRows = parseInt(moreRows);
     const noColumns = parseInt(moreColumns);
@@ -23,7 +26,24 @@ JFCustomWidget.subscribe('ready', function() {
 
     ColumnsToSum = parseColumnNames(_ColumnsToSum);
     ColumnToShowSumResult = _ColumnToShowSumResult;
+    PrefilledCellData = parsePrefilledCellData(_PrefilledCellData);
+
+    // Fill prefilled data  
+    applyPrefilledCellData();
 });
+
+function parsePrefilledCellData(str) {
+    if (!str) return [];
+
+    return str
+        .split(';')                     // rows
+        .map(r => r.trim())
+        .filter(r => r.length > 0)
+        .map(r =>
+            r.split(',')                // cells
+             .map(c => c.trim())        // keep empty string ""
+        );
+}
 
 function parseColumnNames(str) {
     return str
@@ -70,6 +90,28 @@ function updateAllSums() {
         row.cells[sumColIndex].textContent = total.toFixed(2);
     });
 }
+
+function applyPrefilledCellData() {
+    if (!PrefilledCellData.length) return;
+
+    const rows = table.querySelectorAll('tbody tr');
+
+    PrefilledCellData.forEach((rowData, r) => {
+        if (!rows[r]) return;
+
+        const cells = rows[r].querySelectorAll('td');
+
+        rowData.forEach((val, c) => {
+            if (cells[c + 1]) {          
+                // +1 because column 0 is the # column
+                cells[c + 1].textContent = val;
+            }
+        });
+    });
+
+    updateAllSums();
+}
+
 
 /* ---------- EDITABLE CELLS ---------- */
 function makeCellEditable(cell) {
