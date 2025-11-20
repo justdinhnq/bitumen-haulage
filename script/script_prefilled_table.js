@@ -102,9 +102,8 @@ function applyPrefilledCellData() {
         const cells = rows[r].querySelectorAll('td');
 
         rowData.forEach((val, c) => {
-            if (cells[c + 1]) {          
-                // +1 because column 0 is the # column
-                cells[c + 1].textContent = val;
+            if (cells[c]) {          
+                cells[c].textContent = val;
             }
         });
     });
