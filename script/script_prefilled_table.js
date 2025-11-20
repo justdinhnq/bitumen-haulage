@@ -89,7 +89,7 @@ function addRow() {
         makeCellEditable(c);
     }
     const sumCell = row.insertCell();                       // Total column
-    sumCell.className = 'sum-cell';
+    //sumCell.className = 'sum-cell';
     sumCell.textContent = '0';
     for (let i = 0; i < extraColCount; i++) {               // extra columns after Total
         const c = row.insertCell();
