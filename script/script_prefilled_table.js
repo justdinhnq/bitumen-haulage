@@ -1,14 +1,46 @@
+let ColumnNames = [];
+let ColumnsToSum = [];
+let ColumnToShowSumResult = "";
+
 // Get User Parameter
 JFCustomWidget.subscribe('ready', function() {
     const moreRows = JFCustomWidget.getWidgetSetting('initialRows');
     const moreColumns = JFCustomWidget.getWidgetSetting('initialColumns');
+
+    const _ColumnNames = JFCustomWidget.getWidgetSetting('ColumnNames');   //strings: "Col1, Col2, Col3"
+    const _ColumnsToSum = JFCustomWidget.getWidgetSetting('ColumnsToSum'); //strings: "Col1, Col2"
+
+    const _ColumnToShowSumResult = JFCustomWidget.getWidgetSetting('ColumnToShowSumResult'); //string: "Total"
 
     const noRows = parseInt(moreRows);
     const noColumns = parseInt(moreColumns);
 
     for (let i = 0; i < noRows; i++) addRow();
     for (let i = 0; i < noColumns; i++) addColumn();
+
+    ColumnNames = parseColumnNames(_ColumnNames);
+    renameAllColumns(ColumnNames);
+
+    ColumnsToSum = parseColumnNames(_ColumnsToSum);
+    ColumnToShowSumResult = _ColumnToShowSumResult;
 });
+
+function parseColumnNames(str) {
+    return str
+        .split(',')
+        .map(s => s.trim())
+        .filter(s => s.length > 0);
+}
+
+function renameAllColumns(newNamesArray) {
+    const headerRow = table.querySelector('thead tr');
+    const ths = headerRow.querySelectorAll('th');
+
+    newNamesArray.forEach((name, i) => {
+        if (ths[i]) ths[i].textContent = name;
+    });
+}
+
 
 const table = document.getElementById('dynamicTable');
 let rowCount = 2;
@@ -17,16 +49,25 @@ let extraColCount = 0;         // columns **after** the Total column
 
 /* ---------- SUM LOGIC ---------- */
 function updateAllSums() {
-    if (dataColCount < 2) return;
+    if (ColumnsToSum.length === 0) return;
+
+    const headers = Array.from(table.querySelectorAll('thead th'));
+    const sumColIndex = headers.findIndex(h => h.textContent === ColumnToShowSumResult);
+
+    if (sumColIndex === -1) return;
+
     table.querySelectorAll('tbody tr').forEach(row => {
-        const cells = row.cells;
-        const len = cells.length;
-        if (len < 4) return;                         // need at least #, A, B, Total
-        const idxA = len - 2 - extraColCount - 1;    // second-last data col
-        const idxB = len - 2 - extraColCount;        // last data col before Total
-        const valA = parseFloat(cells[idxA].textContent) || 0;
-        const valB = parseFloat(cells[idxB].textContent) || 0;
-        cells[len - 1 - extraColCount].textContent = (valA + valB).toFixed(2);
+        let total = 0;
+
+        ColumnsToSum.forEach(colName => {
+            const colIndex = headers.findIndex(h => h.textContent === colName);
+            if (colIndex !== -1) {
+                const v = parseFloat(row.cells[colIndex].textContent) || 0;
+                total += v;
+            }
+        });
+
+        row.cells[sumColIndex].textContent = total.toFixed(2);
     });
 }
 
