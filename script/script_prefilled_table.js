@@ -85,7 +85,7 @@ function addRow() {
     row.insertCell(0).textContent = rowCount;               // #
     for (let i = 0; i < dataColCount; i++) {                // data columns before Total
         const c = row.insertCell();
-        c.textContent = '0';
+        //c.textContent = '0';
         makeCellEditable(c);
     }
     const sumCell = row.insertCell();                       // Total column
@@ -93,7 +93,7 @@ function addRow() {
     sumCell.textContent = '0';
     for (let i = 0; i < extraColCount; i++) {               // extra columns after Total
         const c = row.insertCell();
-        c.textContent = '0';
+        //c.textContent = '0';
         makeCellEditable(c);
     }
     updateAllSums();
