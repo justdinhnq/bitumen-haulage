@@ -320,24 +320,18 @@ function addColumn() {
     updateAllSums();
 }
 
-/* ---------- DELETE LAST DATA COLUMN (the column just before Total) ---------- */
+/* ---------- DELETE LAST DATA COLUMN ---------- */
 function deleteLastColumn() {
-    if (dataColCount <= 2) {
-        alert('Cannot delete – at least 2 data columns are required for the sum!');
-        return;
-    }
-    dataColCount--;
-
-    // Header: delete the column right before Total
     const headerRow = table.querySelector('thead tr');
-    headerRow.deleteCell(headerRow.cells.length - 2 - extraColCount); // before Total
-
+    headerRow.deleteCell(-1);  // Delete last TH
+    
     // Body
     table.querySelectorAll('tbody tr').forEach(row => {
-        row.deleteCell(row.cells.length - 2 - extraColCount);
+        row.deleteCell(-1);  // Delete last TD
     });
-
+    
     updateAllSums();
+    extraColCount--;
 }
 
 /* ---------- DELETE LAST ROW ---------- */
@@ -349,7 +343,7 @@ function deleteLastRow() {
     }
     tbody.deleteRow(-1);
     rowCount--;
-    table.querySelectorAll('tbody tr').forEach((r, i) => r.cells[0].textContent = i + 1);
+    //table.querySelectorAll('tbody tr').forEach((r, i) => r.cells[0].textContent = i + 1);
 }
 
 /* ---------- INITIALISE ---------- */
