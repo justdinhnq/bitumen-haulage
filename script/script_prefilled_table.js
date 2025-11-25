@@ -64,7 +64,7 @@ function renameAllColumns(newNamesArray) {
 
 const table = document.getElementById('dynamicTable');
 let rowCount = 2;
-let dataColCount = 2;          // editable columns **before** the Total column
+let dataColCount = 3;          // editable columns **before** the Total column
 let extraColCount = 0;         // columns **after** the Total column
 
 /* ---------- SUM LOGIC ---------- */
@@ -131,7 +131,7 @@ function addRow() {
     }
     const sumCell = row.insertCell();                       // Total column
     //sumCell.className = 'sum-cell';
-    sumCell.textContent = '0';
+    //sumCell.textContent = '0';
     for (let i = 0; i < extraColCount; i++) {               // extra columns after Total
         const c = row.insertCell();
         //c.textContent = '0';
@@ -154,7 +154,7 @@ function addColumn() {
     // Body rows
     table.querySelectorAll('tbody tr').forEach(row => {
         const newCell = row.insertCell();         // append at end
-        newCell.textContent = '0';
+        //newCell.textContent = '0';
         makeCellEditable(newCell);
     });
 
