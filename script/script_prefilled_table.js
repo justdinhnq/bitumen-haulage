@@ -123,7 +123,7 @@ function makeCellEditable(cell) {
 function addRow() {
     rowCount++;
     const row = table.querySelector('tbody').insertRow();
-    row.insertCell(0).textContent = rowCount;               // #
+    //row.insertCell(0).textContent = rowCount;               // #
     for (let i = 0; i < dataColCount; i++) {                // data columns before Total
         const c = row.insertCell();
         //c.textContent = '0';

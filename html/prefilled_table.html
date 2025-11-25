@@ -9,7 +9,7 @@
     body {
       font-family: 'Segoe UI', sans-serif;
       background: #f5f7fa;
-      padding: 20px;
+      padding: 0px;
     }
     h1 { text-align: center; color: #2c3e50; margin-bottom: 8px; }
     .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 20px; }
@@ -24,12 +24,12 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 25px 0;
+      margin: 5px 0;
       font-size: 15px;
     }
     th, td {
       border: 1px solid #ddd;
-      padding: 14px;
+      padding: 4px;
       text-align: center;
     }
     th {
@@ -71,7 +71,7 @@
 </head>
 <body>
 
-<div class="container">
+<div>
   <div class="controls">
     <button onclick="addRow()">+ Row</button>
     <button onclick="addColumn()">+ Column</button>
@@ -90,16 +90,16 @@
     </thead>
     <tbody>
       <tr>
-        <td contenteditable="true">1</td>
-        <td contenteditable="true">0</td>
-        <td contenteditable="true">0</td>
-        <td contenteditable="true">0</td> <!-- Sum cell - to be auto-calculated class="sum-cell"-->
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td> <!-- Sum cell - to be auto-calculated class="sum-cell"-->
       </tr>
       <tr>
-        <td contenteditable="true">2</td>
-        <td contenteditable="true">0</td>
-        <td contenteditable="true">0</td>
-        <td contenteditable="true">0</td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
       </tr>
     </tbody>
   </table>
