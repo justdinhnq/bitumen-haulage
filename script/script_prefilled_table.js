@@ -1,36 +1,192 @@
 let ColumnNames = [];
-let ColumnsToSum = [];
-let ColumnToShowSumResult = "";
 let PrefilledCellData = [];
 
-// Get User Parameter
-JFCustomWidget.subscribe('ready', function() {
-    const moreRows = JFCustomWidget.getWidgetSetting('initialRows');
-    const moreColumns = JFCustomWidget.getWidgetSetting('initialColumns');
+let EquationsAsColumnNames = [];     // Original string format: [["col01", "*", "col02", "-", "col03", "=", "col04"], ...]
+let EquationsByYAsColumnNames = [];  // Grouped by result column: { col04: ["col01", "*", "col02", "-", "col03"], ... }
+let EquationsByY = [];               // FINAL: { resultColIndex: [op1, operator, op2, operator, ..., opN] } — using 0-based indices
 
-    const _ColumnNames = JFCustomWidget.getWidgetSetting('ColumnNames');   //strings: "Col1, Col2, Col3"
-    const _ColumnsToSum = JFCustomWidget.getWidgetSetting('ColumnsToSum'); //strings: "Col1, Col2"
+// Main: Runs when widget is ready
+JFCustomWidget.subscribe('ready', function () {
+    const Equations = JFCustomWidget.getWidgetSetting('Equations') || '';   
+    const moreRows = JFCustomWidget.getWidgetSetting('initialRows') || '2';
+    const moreColumns = JFCustomWidget.getWidgetSetting('initialColumns') || '2';
+    const _ColumnNames = JFCustomWidget.getWidgetSetting('ColumnNames') || '';
+    const _PrefilledCellData = JFCustomWidget.getWidgetSetting('PrefilledCellData') || '';
 
-    const _ColumnToShowSumResult = JFCustomWidget.getWidgetSetting('ColumnToShowSumResult'); //string: "Total"
+    const noRows = parseInt(moreRows) || 2;
+    const noColumns = parseInt(moreColumns) || 2;
 
-    const _PrefilledCellData = JFCustomWidget.getWidgetSetting('PrefilledCellData'); //cell00, cell01, Marc Bom; row 2 cell 1, hello, Marc Bom; (for next rows...)
-
-    const noRows = parseInt(moreRows);
-    const noColumns = parseInt(moreColumns);
-
+    // Create initial structure
     for (let i = 0; i < noRows; i++) addRow();
     for (let i = 0; i < noColumns; i++) addColumn();
 
+    // Parse column names
     ColumnNames = parseColumnNames(_ColumnNames);
     renameAllColumns(ColumnNames);
 
-    ColumnsToSum = parseColumnNames(_ColumnsToSum);
-    ColumnToShowSumResult = _ColumnToShowSumResult;
+    // Parse prefilled data
     PrefilledCellData = parsePrefilledCellData(_PrefilledCellData);
-
-    // Fill prefilled data  
     applyPrefilledCellData();
+
+    // === NEW: Parse Equations and build EquationsByY ===
+    if (Equations.trim()) {
+        EquationsAsColumnNames = parseEquationsSetting(Equations);
+        EquationsByYAsColumnNames = groupEquationsByResultColumn(EquationsAsColumnNames);
+        EquationsByY = convertToIndexBasedEquations(EquationsByYAsColumnNames);
+        
+        console.log('EquationsByY (final index-based):', EquationsByY);
+        
+        // Apply formulas immediately + listen for changes
+        applyFormulasAndWatch();
+    }
 });
+
+// ————————————————————————
+// PARSING HELPERS
+// ————————————————————————
+
+function parseColumnNames(str) {
+    if (!str) return [];
+    return str.split(',').map(s => s.trim()).filter(Boolean);
+}
+
+function parsePrefilledCellData(str) {
+    // Format: "row1col1, value; row2col2, another value"
+    // We'll implement later if needed
+    return [];
+}
+
+function applyPrefilledCellData() {
+    // Implement when needed
+}
+
+// Parse the raw Equations string into array of arrays
+function parseEquationsSetting(equationsStr) {
+    return equationsStr
+        .split(';')                                 // separate equations
+        .map(eq => eq.trim())
+        .filter(Boolean)
+        .map(eq => eq.split(/\s+/).filter(token => token !== '=')) // remove '='
+        .map(parts => {
+            const equalsIndex = parts.indexOf('=');
+            if (equalsIndex === -1) return null;
+            return parts.slice(0, equalsIndex).concat('=', parts.slice(equalsIndex + 1));
+        })
+        .filter(Boolean);
+}
+
+// Group equations by result column (the one after =)
+function groupEquationsByResultColumn(equations) {
+    const map = {};
+    equations.forEach(eq => {
+        const eqIndex = eq.indexOf('=');
+        if (eqIndex === -1 || eqIndex === eq.length - 1) return;
+        const resultCol = eq[eqIndex + 1];
+        const formula = eq.slice(0, eqIndex); // everything before "="
+        map[resultCol] = formula;
+    });
+    return map;
+}
+
+// Convert column names → 0-based column indices (excluding row number column)
+function convertToIndexBasedEquations(equationsByColName) {
+    const result = {};
+
+    Object.keys(equationsByColName).forEach(resultColName => {
+        const formulaTokens = equationsByColName[resultColName];
+        const formulaIndices = [];
+
+        for (let token of formulaTokens) {
+            if (['+', '-', '*', '/'].includes(token)) {
+                formulaIndices.push(token);
+            } else {
+                // Find index of this column name
+                const colIndex = ColumnNames.indexOf(token);
+                if (colIndex !== -1) {
+                    formulaIndices.push(colIndex); // 0-based real data column index
+                } else {
+                    console.warn(`Column "${token}" not found in ColumnNames`);
+                }
+            }
+        }
+
+        if (formulaIndices.length > 0) {
+            const resultColIndex = ColumnNames.indexOf(resultColName);
+            if (resultColIndex !== -1) {
+                result[resultColIndex] = formulaIndices;
+            }
+        }
+    });
+
+    return result;
+}
+
+// ————————————————————————
+// APPLY FORMULAS & AUTO-UPDATE
+// ————————————————————————
+
+function applyFormulasAndWatch() {
+    // Initial calculation
+    updateAllFormulaCells();
+
+    // Watch all editable cells for changes
+    table.querySelectorAll('tbody td[contenteditable="true"]').forEach(cell => {
+        cell.addEventListener('input', updateAllFormulaCells);
+        cell.addEventListener('paste', () => setTimeout(updateAllFormulaCells, 10));
+    });
+}
+
+function updateAllFormulaCells() {
+    if (Object.keys(EquationsByY).length === 0) return;
+
+    table.querySelectorAll('tbody tr').forEach(row => {
+        const cells = row.cells;
+
+        Object.keys(EquationsByY).forEach(resultColIdx => {
+            const formula = EquationsByY[resultColIdx];
+            if (!formula || formula.length === 0) return;
+
+            let result = evaluateFormula(formula, cells);
+            if (typeof result === 'number') {
+                result = result.toFixed(2).replace(/\.00$/, '');
+            } else if (result === Infinity || isNaN(result)) {
+                result = 'Error';
+            }
+
+            // resultColIdx is 0-based in data columns → actual DOM index = resultColIdx + 1 (skip row number)
+            const targetCell = cells[resultColIdx + 1];
+            if (targetCell) {
+                targetCell.textContent = result;
+                targetCell.contentEditable = false; // optional: make formula cells read-only
+                targetCell.style.backgroundColor = '#e8f5e9';
+                targetCell.style.fontWeight = 'bold';
+            }
+        });
+    });
+}
+
+function evaluateFormula(formulaTokens, cells) {
+    let value = 0;
+    let operator = '+';
+
+    for (let i = 0; i < formulaTokens.length; i++) {
+        const token = formulaTokens[i];
+
+        if (typeof token === 'number') {
+            // token is column index
+            const cellValue = parseFloat(cells[token + 1]?.textContent) || 0; // +1 for row number column
+
+            if (operator === '+') value += cellValue;
+            if (operator === '-') value -= cellValue;
+            if (operator === '*') value *= cellValue;
+            if (operator === '/') value /= cellValue;
+        } else if (['+', '-', '*', '/'].includes(token)) {
+            operator = token;
+        }
+    }
+
+    return value;
+}
 
 function parsePrefilledCellData(str) {
     if (!str) return [];
