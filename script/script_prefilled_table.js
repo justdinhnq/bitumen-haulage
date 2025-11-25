@@ -7,24 +7,25 @@ let EquationsByY = [];               // FINAL: { resultColIndex: [op1, operator,
 
 // Main: Runs when widget is ready
 JFCustomWidget.subscribe('ready', function () {
-    const Equations = JFCustomWidget.getWidgetSetting('Equations') || '';   
-    const moreRows = JFCustomWidget.getWidgetSetting('initialRows') || '2';
-    const moreColumns = JFCustomWidget.getWidgetSetting('initialColumns') || '2';
-    const _ColumnNames = JFCustomWidget.getWidgetSetting('ColumnNames') || '';
-    const _PrefilledCellData = JFCustomWidget.getWidgetSetting('PrefilledCellData') || '';
-
-    const noRows = parseInt(moreRows) || 2;
-    const noColumns = parseInt(moreColumns) || 2;
-
-    // Create initial structure
+    //col01, *, col02, -, col03, =, col04; col10, -, col01, /, col03, =, col11
+    const Equations = JFCustomWidget.getWidgetSetting('Equations');
+    
+    const moreRows = JFCustomWidget.getWidgetSetting('initialRows');
+    const moreColumns = JFCustomWidget.getWidgetSetting('initialColumns');
+    const _ColumnNames = JFCustomWidget.getWidgetSetting('ColumnNames');   //strings: "Col1, Col2, Col3"
+    
+    const _PrefilledCellData = JFCustomWidget.getWidgetSetting('PrefilledCellData'); //cell00, cell01, Marc Bom; row 2 cell 1, hello, Marc Bom; (for next rows...)
+    
+    const noRows = parseInt(moreRows);
+    const noColumns = parseInt(moreColumns);
+    
     for (let i = 0; i < noRows; i++) addRow();
     for (let i = 0; i < noColumns; i++) addColumn();
-
-    // Parse column names
+    
     ColumnNames = parseColumnNames(_ColumnNames);
     renameAllColumns(ColumnNames);
-
-    // Parse prefilled data
+    
+    // Fill prefilled data
     PrefilledCellData = parsePrefilledCellData(_PrefilledCellData);
     applyPrefilledCellData();
 
