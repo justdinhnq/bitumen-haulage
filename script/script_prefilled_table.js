@@ -20,6 +20,7 @@ const ResultColumnIndices = new Set();    // Columns that are auto-calculated (r
    ================================================================== */
 
 JFCustomWidget.subscribe('ready', () => {
+    createInitialStructure();   // ← NEW: reads settings & creates rows/cols
     setupColumnNames();
     setupEquations();
     setupPrefilledData();
@@ -35,7 +36,54 @@ window.onload = () => {
 }
 */
 /* ==================================================================
-   1. COLUMN NAMES
+   1. CREATE INITIAL ROWS & COLUMNS FROM SETTINGS
+   ================================================================== */
+
+function createInitialStructure() {
+    const initialRows = parseInt(JFCustomWidget.getWidgetSetting('initialRows') || '2');
+    const initialCols = parseInt(JFCustomWidget.getWidgetSetting('initialColumns') || '3');
+
+    // Create rows
+    for (let i = 0; i < Math.max(1, initialRows); i++) {
+        addRowSilently(); // no formula update yet
+    }
+
+    // Create columns (excluding the row number column)
+    const currentCols = table.querySelector('thead tr').cells.length - 1; // -1 for #
+    const colsToAdd = Math.max(0, initialCols - currentCols);
+    for (let i = 0; i < colsToAdd; i++) {
+        addColumnSilently();
+    }
+
+    // Now safe to trigger formulas
+    updateAllFormulas();
+}
+
+/* Silent versions — used during init only */
+function addRowSilently() {
+    const row = table.querySelector('tbody').insertRow();
+    const colCount = table.querySelector('thead tr').cells.length;
+
+    for (let i = 0; i < colCount; i++) {
+        const cell = row.insertCell();
+        // We'll make editable later in setupEditableCellsAndFormulas()
+    }
+}
+
+function addColumnSilently() {
+    const headerRow = table.querySelector('thead tr');
+    const th = document.createElement('th');
+    th.textContent = `Column ${headerRow.cells.length}`;
+    th.contentEditable = true;
+    headerRow.appendChild(th);
+
+    table.querySelectorAll('tbody tr').forEach(row => {
+        row.insertCell();
+    });
+}
+
+/* ==================================================================
+   2. COLUMN NAMES
    ================================================================== */
 
 function setupColumnNames() {
@@ -52,7 +100,7 @@ function renameHeaders() {
 }
 
 /* ==================================================================
-   2. EQUATIONS & FORMULA ENGINE
+   3. EQUATIONS & FORMULA ENGINE
    ================================================================== */
 
 function setupEquations() {
@@ -189,6 +237,7 @@ function evaluateFormula(tokens, cells) {
 
         if (typeof token === 'number') {
             let tmp = cells[token]?.textContent.trim();
+            
             if (tmp.includes(':')) {
                 const [h, m] = tmp.split(':').map(Number);
                 value = (h || 0) + ((m || 0) / 60);
