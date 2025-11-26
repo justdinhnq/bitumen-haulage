@@ -1,0 +1,61 @@
+﻿#body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f7fa;
+    padding: 2px;
+}
+#h1 { text-align: center; color: #2c3e50; margin-bottom: 8px; }
+.subtitle { text-align: center; color: #7f8c8d; margin-bottom: 20px; }
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0px 0;
+    font-size: 15px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 2px;
+    text-align: center;
+}
+th {
+    background-color: #3498db;
+    color: white;
+    font-weight: 600;
+}
+tr:nth-child(even) { background-color: #f8f9fa; }
+tr:hover { background-color: #e8f5fd; }
+td[contenteditable="true"]:focus {
+    background-color: #fffde7 !important;
+    outline: 2px solid #f39c12;
+}
+.sum-cell {
+    background-color: #e8f5e9 !important;
+    font-weight: bold;
+    color: #27ae60;
+    cursor: not-allowed;
+}
+.controls {
+    text-align: center;
+    margin: 2px 0;
+}
+button {
+    padding: 6px 6px;
+    margin: 1px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+button:nth-child(1) { background: #2ecc71; }
+button:nth-child(2) { background: #3498db; }
+button:nth-child(3), button:nth-child(4) { background: #e74c3c; }
+button:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
