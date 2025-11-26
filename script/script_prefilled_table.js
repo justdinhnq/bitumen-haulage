@@ -208,7 +208,19 @@ function evaluateFormula(formulaTokens, cells) {
             if (operator === '-') value -= cellValue;
             if (operator === '*') value *= cellValue;
             if (operator === '/') value /= cellValue;
-        } else if (['+', '-', '*', '/'].includes(token)) {
+        } // if token is in the format of hourly such as 17:30
+        else if (typeof token === 'string' && token.includes(':')) {
+            const parts = token.split(':');
+            const hours = parseFloat(parts[0]) || 0;
+            const minutes = parseFloat(parts[1]) || 0;
+            const cellValue = hours + (minutes / 60);
+            console.log(`Token is time "${token}", cell value:`, cellValue);
+            
+            if (operator === '+') value += cellValue;
+            if (operator === '-') value -= cellValue;
+            if (operator === '*') value *= cellValue;
+            if (operator === '/') value /= cellValue;
+        }else if (['+', '-', '*', '/'].includes(token)) {
             console.log('Token is operator:', token);
             operator = token;
         }
