@@ -10,7 +10,7 @@ JFCustomWidget.subscribe('ready', function () {
     Start();
 });
 
-window.onload = Start;
+//window.onload = Start;
 
 function Start() {
     // Setup column names
