@@ -171,7 +171,7 @@ function updateAllFormulaCells() {
 
             let result = evaluateFormula(formula, cells);
             if (typeof result === 'number') {
-                result = result.toFixed(2).replace(/\.00$/, '');
+                //result = result.toFixed(2).replace(/\.00$/, '');
             } else if (result === Infinity || isNaN(result)) {
                 result = 'Error';
             }
@@ -182,7 +182,7 @@ function updateAllFormulaCells() {
             const targetCell = cells[resultColIdx];
             if (targetCell) {
                 targetCell.textContent = result;
-                targetCell.contentEditable = false; // optional: make formula cells read-only
+                targetCell.contentEditable = true; 
                 targetCell.style.backgroundColor = '#e8f5e9';
                 targetCell.style.fontWeight = 'bold';
             }
@@ -191,6 +191,7 @@ function updateAllFormulaCells() {
 }
 
 function evaluateFormula(formulaTokens, cells) {
+    //value is float number
     let value = 0;
     let operator = '+';
 
