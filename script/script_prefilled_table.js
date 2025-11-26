@@ -7,42 +7,66 @@ let EquationsByY = [];               // FINAL: { resultColIndex: [op1, operator,
 
 // Main: Runs when widget is ready
 JFCustomWidget.subscribe('ready', function () {
-    //col01, *, col02, -, col03, =, col04; col10, -, col01, /, col03, =, col11
-    const Equations = JFCustomWidget.getWidgetSetting('Equations');
+    Start();
+});
+
+window.onload = Start;
+
+function Start() {
+    // Setup column names
+    SetupColumnNames();
     
+    // Setup prefilled cell data
+    //SetupPrefilledCellData();
+
+    // Setup initial rows and columns
+    //SetupRowsAndColumns();
+
+    // Setup equations
+    SetupEquations();
+}
+
+function SetupPrefilledCellData() {
+    const prefilledDataStr = JFCustomWidget.getWidgetSetting('PrefilledCellData');
+    PrefilledCellData = parsePrefilledCellData(prefilledDataStr);
+    console.log('Parsed PrefilledCellData:', PrefilledCellData);
+    applyPrefilledCellData();
+}
+
+function SetupColumnNames() {
+    const colNamesStr = '#, Value A, Value B, Total (A+B)';//JFCustomWidget.getWidgetSetting('ColumnNames');
+    ColumnNames = parseColumnNames(colNamesStr);
+    console.log('Parsed ColumnNames:', ColumnNames);
+    renameAllColumns(ColumnNames);
+}
+
+function SetupRowsAndColumns() {
     const moreRows = JFCustomWidget.getWidgetSetting('initialRows');
     const moreColumns = JFCustomWidget.getWidgetSetting('initialColumns');
-    const _ColumnNames = JFCustomWidget.getWidgetSetting('ColumnNames');   //strings: "Col1, Col2, Col3"
-    
-    const _PrefilledCellData = JFCustomWidget.getWidgetSetting('PrefilledCellData'); //cell00, cell01, Marc Bom; row 2 cell 1, hello, Marc Bom; (for next rows...)
-    
+
     const noRows = parseInt(moreRows);
     const noColumns = parseInt(moreColumns);
     
     for (let i = 0; i < noRows; i++) addRow();
     for (let i = 0; i < noColumns; i++) addColumn();
-    
-    ColumnNames = parseColumnNames(_ColumnNames);
-    console.log('Parsed ColumnNames:', ColumnNames);
-    renameAllColumns(ColumnNames);
-    
-    // Fill prefilled data
-    PrefilledCellData = parsePrefilledCellData(_PrefilledCellData);
-    applyPrefilledCellData();
+}
 
+function SetupEquations() {
+    //col01, *, col02, -, col03, =, col04; col10, -, col01, /, col03, =, col11
+    const Equations = "Value A, +, Value B, =, Total (A+B)"//JFCustomWidget.getWidgetSetting('Equations');
     // === NEW: Parse Equations and build EquationsByY ===
     if (Equations.trim()) {
         EquationsAsColumnNames = parseEquationsSetting(Equations);
         EquationsByYAsColumnNames = groupEquationsByResultColumn(EquationsAsColumnNames);
         EquationsByY = convertToIndexBasedEquations(EquationsByYAsColumnNames);
-        
+        console.log('EquationsAsColumnNames:', EquationsAsColumnNames);
+        console.log('EquationsByYAsColumnNames:', EquationsByYAsColumnNames);
         console.log('EquationsByY (final index-based):', EquationsByY);
         
         // Apply formulas immediately + listen for changes
         applyFormulasAndWatch();
     }
-});
-
+}
 // ————————————————————————
 // PARSING HELPERS
 // ————————————————————————
@@ -64,11 +88,23 @@ function applyPrefilledCellData() {
 
 // Parse the raw Equations string into array of arrays
 function parseEquationsSetting(equationsStr) {
-    return equationsStr
-        .split(';')                                 // separate equations
-        .map(eq => eq.trim())
-        .filter(Boolean)
-        .map(eq => eq.split(/\s+/).filter(token => token !== '=')) // remove '='
+    const newLocal = equationsStr
+        .split(';') // separate equations
+        .map(eq => eq.trim()).filter(Boolean);
+
+    console.log('Parsing equations:', newLocal);
+    const newLocal_1 = newLocal.map(eq => eq.split(',').map(token => token.trim()).filter(Boolean));
+        //.map(eq => eq.split(',').filter(token => token !== '='));
+
+    console.log('Parsed equations (intermediate):', newLocal_1);
+    return newLocal_1;
+
+    // remove '='
+    console.log('Removing "=" from equations: ', newLocal_1.map(parts => {
+        return parts.slice(0, parts.indexOf('='));
+    }));
+
+    return newLocal_1 
         .map(parts => {
             const equalsIndex = parts.indexOf('=');
             if (equalsIndex === -1) return null;
@@ -148,6 +184,8 @@ function updateAllFormulaCells() {
             const formula = EquationsByY[resultColIdx];
             if (!formula || formula.length === 0) return;
 
+            console.log('Evaluating formula for row:', row.rowIndex, 'formula:', formula);
+
             let result = evaluateFormula(formula, cells);
             if (typeof result === 'number') {
                 result = result.toFixed(2).replace(/\.00$/, '');
@@ -155,8 +193,10 @@ function updateAllFormulaCells() {
                 result = 'Error';
             }
 
+            console.log(`Setting result for column index ${resultColIdx}:`, result);
+
             // resultColIdx is 0-based in data columns → actual DOM index = resultColIdx + 1 (skip row number)
-            const targetCell = cells[resultColIdx + 1];
+            const targetCell = cells[resultColIdx];
             if (targetCell) {
                 targetCell.textContent = result;
                 targetCell.contentEditable = false; // optional: make formula cells read-only
@@ -173,16 +213,20 @@ function evaluateFormula(formulaTokens, cells) {
 
     for (let i = 0; i < formulaTokens.length; i++) {
         const token = formulaTokens[i];
+        console.log('Evaluating token:', token, 'cells:', cells);
 
         if (typeof token === 'number') {
+            console.log('cell:', cells[token].textContent)
             // token is column index
-            const cellValue = parseFloat(cells[token + 1]?.textContent) || 0; // +1 for row number column
+            const cellValue = parseFloat(cells[token]?.textContent) || 0; // +1 for row number column
+            console.log(`Token is column index ${token}, cell value:`, cellValue);
 
             if (operator === '+') value += cellValue;
             if (operator === '-') value -= cellValue;
             if (operator === '*') value *= cellValue;
             if (operator === '/') value /= cellValue;
         } else if (['+', '-', '*', '/'].includes(token)) {
+            console.log('Token is operator:', token);
             operator = token;
         }
     }
