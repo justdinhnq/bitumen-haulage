@@ -2,21 +2,21 @@ let ColumnNames = [];
 let PrefilledCellData = [];
 
 let EquationsAsColumnNames = [];     // Original string format: [["col01", "*", "col02", "-", "col03", "=", "col04"], ...]
-let EquationsByYAsColumnNames = [];  // Grouped by result column: { col04: ["col01", "*", "col02", "-", "col03"], ... }
+let EquationsByYAsColumnNames = {};  // Grouped by result column: { col04: ["col01", "*", "col02", "-", "col03"], ... }
 let EquationsByY = [];               // FINAL: { resultColIndex: [op1, operator, op2, operator, ..., opN] } — using 0-based indices
 
-let ResultColumnIndices = []; // Indices of columns that hold results of equations
+const ResultColumnIndices = new Set(); // Indices of columns that hold results of equations
 
 // Main: Runs when widget is ready
 JFCustomWidget.subscribe('ready', function () {
     Start();
 });
 
-//window.onload = Start;
+window.onload = Start;
 
 function Start() {
     // Setup initial rows and columns
-    SetupRowsAndColumns();
+    //SetupRowsAndColumns();
     
     // Setup column names
     SetupColumnNames();
@@ -25,7 +25,7 @@ function Start() {
     SetupEquations();
     
     // Setup prefilled cell data
-    SetupPrefilledCellData();
+    //SetupPrefilledCellData();
 }
 
 function SetupPrefilledCellData() {
@@ -36,8 +36,8 @@ function SetupPrefilledCellData() {
 }
 
 function SetupColumnNames() {
-    //const colNamesStr = '#, Value A, Value B, Total (A+B)';
-    const colNamesStr = JFCustomWidget.getWidgetSetting('ColumnNames');
+    const colNamesStr = '#, Value A, Value B, Total (A+B)';
+    //const colNamesStr = JFCustomWidget.getWidgetSetting('ColumnNames');
     ColumnNames = parseColumnNames(colNamesStr);
     //console.log('Parsed ColumnNames:', ColumnNames);
     renameAllColumns(ColumnNames);
@@ -56,16 +56,13 @@ function SetupRowsAndColumns() {
 
 function SetupEquations() {
     //col01, *, col02, -, col03, =, col04; col10, -, col01, /, col03, =, col11
-    //const Equations = "Value A, +, Value B, =, Total (A+B)";
-    const Equations = JFCustomWidget.getWidgetSetting('Equations');
+    const Equations = "Value B, +, Value A, =, Total (A+B)";
+    //const Equations = JFCustomWidget.getWidgetSetting('Equations');
     // === NEW: Parse Equations and build EquationsByY ===
     if (Equations.trim()) {
         EquationsAsColumnNames = parseEquationsSetting(Equations);
         EquationsByYAsColumnNames = groupEquationsByResultColumn(EquationsAsColumnNames);
         EquationsByY = convertToIndexBasedEquations(EquationsByYAsColumnNames);
-        //console.log('EquationsAsColumnNames:', EquationsAsColumnNames);
-        //console.log('EquationsByYAsColumnNames:', EquationsByYAsColumnNames);
-        //console.log('EquationsByY (final index-based):', EquationsByY);
         
         // Apply formulas immediately + listen for changes
         applyFormulasAndWatch();
@@ -75,22 +72,13 @@ function SetupEquations() {
 // PARSING HELPERS
 // ————————————————————————
 
-//function parseColumnNames(str) {
-//    if (!str) return [];
-//    return str.split(',').map(s => s.trim()).filter(Boolean);
-//}
-
 // Parse the raw Equations string into array of arrays
 function parseEquationsSetting(equationsStr) {
     const newLocal = equationsStr
         .split(';') // separate equations
         .map(eq => eq.trim()).filter(Boolean);
 
-    //console.log('Parsing equations:', newLocal);
     const newLocal_1 = newLocal.map(eq => eq.split(',').map(token => token.trim()).filter(Boolean));
-        //.map(eq => eq.split(',').filter(token => token !== '='));
-
-    //console.log('Parsed equations (intermediate):', newLocal_1);
     return newLocal_1;
 }
 
@@ -151,10 +139,10 @@ function applyFormulasAndWatch() {
     updateAllFormulaCells();
 
     // Watch all editable cells for changes
-    table.querySelectorAll('tbody td[contenteditable="true"]').forEach(cell => {
-        cell.addEventListener('input', updateAllFormulaCells);
-        cell.addEventListener('paste', () => setTimeout(updateAllFormulaCells, 10));
-    });
+    //table.querySelectorAll('tbody td[contenteditable="true"]').forEach(cell => {
+    //    cell.addEventListener('input', updateAllFormulaCells);
+    //    cell.addEventListener('paste', () => setTimeout(updateAllFormulaCells, 10));
+    //});
 }
 
 function updateAllFormulaCells() {
@@ -165,67 +153,51 @@ function updateAllFormulaCells() {
 
         Object.keys(EquationsByY).forEach(resultColIdx => {
             const formula = EquationsByY[resultColIdx];
-            if (!formula || formula.length === 0) return;
-
-            console.log('Evaluating formula for row:', row.rowIndex, 'formula:', formula);
 
             let result = evaluateFormula(formula, cells);
-            if (typeof result === 'number') {
-                result = result.toFixed(2).replace(/\.00$/, '');
-            } else if (result === Infinity || isNaN(result)) {
-                result = 'Error';
-            }
 
             console.log(`Setting result for column index ${resultColIdx}:`, result);
 
-            // resultColIdx is 0-based in data columns → actual DOM index = resultColIdx + 1 (skip row number)
             const targetCell = cells[resultColIdx];
-            if (targetCell) {
-                targetCell.textContent = result;
-                targetCell.contentEditable = true; 
-                targetCell.style.backgroundColor = '#e8f5e9';
-                targetCell.style.fontWeight = 'bold';
-            }
+            targetCell.textContent = result;
         });
     });
 }
 
 function evaluateFormula(formulaTokens, cells) {
-    //value is float number
     let value = 0;
     let operator = '+';
 
     for (let i = 0; i < formulaTokens.length; i++) {
         const token = formulaTokens[i];
+        let cellValue = 0;
 
         if (typeof token === 'number') {
-            // token is column index
-            const cellValue = parseFloat(cells[token]?.textContent) || 0; // +1 for row number column
-            //console.log(`Token is column index ${token}, cell value:`, cellValue);
-
-            if (operator === '+') value += cellValue;
-            if (operator === '-') value -= cellValue;
-            if (operator === '*') value *= cellValue;
-            if (operator === '/') value /= cellValue;
-        } // if token is in the format of hourly such as 17:30
-        else if (token.includes(':')) {
-            const parts = token.split(':');
-            const hours = parseFloat(parts[0]) || 0;
-            const minutes = parseFloat(parts[1]) || 0;
-            const cellValue = hours + (minutes / 60);
-            console.log(`Token is time "${token}", cell value:`, cellValue);
-            
-            if (operator === '+') value += cellValue;
-            if (operator === '-') value -= cellValue;
-            if (operator === '*') value *= cellValue;
-            if (operator === '/') value /= cellValue;
-        }else if (['+', '-', '*', '/'].includes(token)) {
-            //console.log('Token is operator:', token);
+            cellValue = parseFloat(cells[token + 1]?.textContent) || 0;
+        } 
+        else if (typeof token === 'string' && token.includes(':')) {
+            const [h, m] = token.split(':').map(parseFloat);
+            cellValue = (h || 0) + ((m || 0) / 60);
+        }
+        else if (['+', '-', '*', '/'].includes(token)) {
             operator = token;
+            continue;
+        }
+
+        switch (operator) {
+            case '+': value += cellValue; break;
+            case '-': value -= cellValue; break;
+            case '*': value *= cellValue; break;
+            case '/': 
+                if (cellValue === 0) return 'Error';
+                value /= cellValue;
+                break;
         }
     }
 
-    return value;
+    if (!isFinite(value)) return 'Error';
+
+    return Number(value.toFixed(2)); // ← Perfect: 5 → 5.00, 3.1 → 3.10, clean float
 }
 
 function parsePrefilledCellData(str) {
@@ -293,8 +265,23 @@ function applyPrefilledCellData() {
 /* ---------- EDITABLE CELLS ---------- */
 function makeCellEditable(cell) {
     cell.contentEditable = true;
-    cell.addEventListener('input', updateAllSums);
-    cell.addEventListener('paste', () => setTimeout(updateAllSums, 0));
+
+    let timeoutId = null;  // stores the current timer
+
+    const recalculate = () => {
+        // Clear any existing timer
+        if (timeoutId) clearTimeout(timeoutId);
+
+        // Set a new 3-second timer
+        timeoutId = setTimeout(() => {
+            updateAllSums();        // or updateAllFormulaCells()
+            timeoutId = null;       // reset
+        }, 3000); // 3000 ms = 3 seconds
+    };
+
+    cell.addEventListener('input', recalculate);
+    cell.addEventListener('paste', recalculate);
+    cell.addEventListener('keydown', recalculate); 
 }
 
 /* ---------- ADD ROW ---------- */
@@ -368,7 +355,7 @@ function deleteLastRow() {
 
 /* ---------- INITIALISE ---------- */
 document.querySelectorAll('td[contenteditable="true"]').forEach(makeCellEditable);
-updateAllSums();
+//updateAllSums();
 
 // Fully dynamic data extractor
 function getTableData() {
