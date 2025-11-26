@@ -171,7 +171,7 @@ function updateAllFormulaCells() {
 
             let result = evaluateFormula(formula, cells);
             if (typeof result === 'number') {
-                //result = result.toFixed(2).replace(/\.00$/, '');
+                result = result.toFixed(2).replace(/\.00$/, '');
             } else if (result === Infinity || isNaN(result)) {
                 result = 'Error';
             }
@@ -201,7 +201,7 @@ function evaluateFormula(formulaTokens, cells) {
         if (typeof token === 'number') {
             // token is column index
             const cellValue = parseFloat(cells[token]?.textContent) || 0; // +1 for row number column
-            console.log(`Token is column index ${token}, cell value:`, cellValue);
+            //console.log(`Token is column index ${token}, cell value:`, cellValue);
 
             if (operator === '+') value += cellValue;
             if (operator === '-') value -= cellValue;
@@ -220,7 +220,7 @@ function evaluateFormula(formulaTokens, cells) {
             if (operator === '*') value *= cellValue;
             if (operator === '/') value /= cellValue;
         }else if (['+', '-', '*', '/'].includes(token)) {
-            console.log('Token is operator:', token);
+            //console.log('Token is operator:', token);
             operator = token;
         }
     }
