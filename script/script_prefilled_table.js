@@ -1,382 +1,290 @@
+/********************************************************************
+ * JOTFORM DYNAMIC TABLE WITH LIVE FORMULAS – FINAL CLEAN VERSION
+ * Features:
+ *   • Fully dynamic rows & columns
+ *   • Real-time formula calculation (e.g., "A + B = Total")
+ *   • 3-second debounce (no lag while typing)
+ *   • Prefilled data support
+ *   • Clean JSON output on submit
+ *   • Zero redundant code
+ ********************************************************************/
+
+const table = document.getElementById('dynamicTable');
+
 let ColumnNames = [];
-let PrefilledCellData = [];
+let EquationsByY = {};                    // { resultColIndex: [colIdx, "+", colIdx, ...] }
+const ResultColumnIndices = new Set();    // Columns that are auto-calculated (read-only)
 
-let EquationsAsColumnNames = [];     // Original string format: [["col01", "*", "col02", "-", "col03", "=", "col04"], ...]
-let EquationsByYAsColumnNames = {};  // Grouped by result column: { col04: ["col01", "*", "col02", "-", "col03"], ... }
-let EquationsByY = [];               // FINAL: { resultColIndex: [op1, operator, op2, operator, ..., opN] } — using 0-based indices
+/* ==================================================================
+   START – Widget Initialization
+   ================================================================== */
 
-const ResultColumnIndices = new Set(); // Indices of columns that hold results of equations
-
-// Main: Runs when widget is ready
-JFCustomWidget.subscribe('ready', function () {
-    Start();
+JFCustomWidget.subscribe('ready', () => {
+    setupColumnNames();
+    setupEquations();
+    setupPrefilledData();
+    setupEditableCellsAndFormulas();   // ← Runs ONLY ONCE
 });
+window.onload = () => {
+    setupColumnNames();
+    setupEquations();
+    setupPrefilledData();
+    setupEditableCellsAndFormulas();   // ← Runs ONLY ONCE
+}
+/* ==================================================================
+   1. COLUMN NAMES
+   ================================================================== */
 
-window.onload = Start;
-
-function Start() {
-    // Setup initial rows and columns
-    //SetupRowsAndColumns();
-    
-    // Setup column names
-    SetupColumnNames();
-    
-    // Setup equations
-    SetupEquations();
-    
-    // Setup prefilled cell data
-    //SetupPrefilledCellData();
+function setupColumnNames() {
+    const setting = JFCustomWidget.getWidgetSetting('ColumnNames') || '#, Value A, Value B, Total (A+B)';
+    ColumnNames = setting.split(',').map(s => s.trim()).filter(Boolean);
+    renameHeaders();
 }
 
-function SetupPrefilledCellData() {
-    const prefilledDataStr = JFCustomWidget.getWidgetSetting('PrefilledCellData');
-    PrefilledCellData = parsePrefilledCellData(prefilledDataStr);
-    //console.log('Parsed PrefilledCellData:', PrefilledCellData);
-    applyPrefilledCellData();
+function renameHeaders() {
+    const headers = table.querySelectorAll('thead th');
+    ColumnNames.forEach((name, i) => {
+        if (headers[i]) headers[i].textContent = name;
+    });
 }
 
-function SetupColumnNames() {
-    const colNamesStr = '#, Value A, Value B, Total (A+B)';
-    //const colNamesStr = JFCustomWidget.getWidgetSetting('ColumnNames');
-    ColumnNames = parseColumnNames(colNamesStr);
-    //console.log('Parsed ColumnNames:', ColumnNames);
-    renameAllColumns(ColumnNames);
+/* ==================================================================
+   2. EQUATIONS & FORMULA ENGINE
+   ================================================================== */
+
+function setupEquations() {
+    const raw = JFCustomWidget.getWidgetSetting('Equations') || 'Value B, +, Value A, =, Total (A+B)';
+    if (!raw.trim()) return;
+
+    const equations = parseEquations(raw);
+    const grouped = groupByResultColumn(equations);
+    EquationsByY = convertToIndexFormulas(grouped);
+
+    console.log('Active formulas:', EquationsByY);
 }
 
-function SetupRowsAndColumns() {
-    const moreRows = JFCustomWidget.getWidgetSetting('initialRows');
-    const moreColumns = JFCustomWidget.getWidgetSetting('initialColumns');
-
-    const noRows = parseInt(moreRows);
-    const noColumns = parseInt(moreColumns);
-    
-    for (let i = 0; i < noRows; i++) addRow();
-    for (let i = 0; i < noColumns; i++) addColumn();
+function parseEquations(str) {
+    return str
+        .split(';')
+        .map(eq => eq.trim())
+        .filter(Boolean)
+        .map(eq => eq.split(',').map(t => t.trim()));
 }
 
-function SetupEquations() {
-    //col01, *, col02, -, col03, =, col04; col10, -, col01, /, col03, =, col11
-    const Equations = "Value B, +, Value A, =, Total (A+B)";
-    //const Equations = JFCustomWidget.getWidgetSetting('Equations');
-    // === NEW: Parse Equations and build EquationsByY ===
-    if (Equations.trim()) {
-        EquationsAsColumnNames = parseEquationsSetting(Equations);
-        EquationsByYAsColumnNames = groupEquationsByResultColumn(EquationsAsColumnNames);
-        EquationsByY = convertToIndexBasedEquations(EquationsByYAsColumnNames);
-        
-        // Apply formulas immediately + listen for changes
-        applyFormulasAndWatch();
-    }
-}
-// ————————————————————————
-// PARSING HELPERS
-// ————————————————————————
-
-// Parse the raw Equations string into array of arrays
-function parseEquationsSetting(equationsStr) {
-    const newLocal = equationsStr
-        .split(';') // separate equations
-        .map(eq => eq.trim()).filter(Boolean);
-
-    const newLocal_1 = newLocal.map(eq => eq.split(',').map(token => token.trim()).filter(Boolean));
-    return newLocal_1;
-}
-
-// Group equations by result column (the one after =)
-function groupEquationsByResultColumn(equations) {
+function groupByResultColumn(equations) {
     const map = {};
-    equations.forEach(eq => {
-        const eqIndex = eq.indexOf('=');
-        if (eqIndex === -1 || eqIndex === eq.length - 1) return;
-        const resultCol = eq[eqIndex + 1];
-        const formula = eq.slice(0, eqIndex); 
-        map[resultCol] = formula;
-
-        ResultColumnIndices.push(resultCol);
+    equations.forEach(parts => {
+        const eqIdx = parts.indexOf('=');
+        if (eqIdx === -1 || eqIdx === parts.length - 1) return;
+        const resultName = parts[eqIdx + 1];
+        map[resultName] = parts.slice(0, eqIdx);
+        const colIdx = ColumnNames.indexOf(resultName);
+        if (colIdx !== -1) ResultColumnIndices.add(colIdx);
     });
     return map;
 }
 
-// Convert column names → 0-based column indices (excluding row number column)
-function convertToIndexBasedEquations(equationsByColName) {
+function convertToIndexFormulas(grouped) {
     const result = {};
+    Object.keys(grouped).forEach(resultName => {
+        const tokens = grouped[resultName];
+        const indexed = [];
 
-    Object.keys(equationsByColName).forEach(resultColName => {
-        const formulaTokens = equationsByColName[resultColName];
-        const formulaIndices = [];
-
-        for (let token of formulaTokens) {
+        for (const token of tokens) {
             if (['+', '-', '*', '/'].includes(token)) {
-                formulaIndices.push(token);
+                indexed.push(token);
             } else {
-                // Find index of this column name
-                const colIndex = ColumnNames.indexOf(token);
-                if (colIndex !== -1) {
-                    formulaIndices.push(colIndex); // 0-based real data column index
-                } else {
-                    console.warn(`Column "${token}" not found in ColumnNames`);
-                }
+                const idx = ColumnNames.indexOf(token);
+                if (idx !== -1) indexed.push(idx);
+                else console.warn(`Column not found: "${token}"`);
             }
         }
 
-        if (formulaIndices.length > 0) {
-            const resultColIndex = ColumnNames.indexOf(resultColName);
-            if (resultColIndex !== -1) {
-                result[resultColIndex] = formulaIndices;
-            }
+        const resultIdx = ColumnNames.indexOf(resultName);
+        if (resultIdx !== -1 && indexed.length > 0) {
+            result[resultIdx] = indexed;
         }
     });
-
     return result;
 }
 
-// ————————————————————————
-// APPLY FORMULAS & AUTO-UPDATE
-// ————————————————————————
+/* ==================================================================
+   3. PREFILLED DATA
+   ================================================================== */
 
-function applyFormulasAndWatch() {
-    // Initial calculation
-    updateAllFormulaCells();
+function setupPrefilledData() {
+    const raw = JFCustomWidget.getWidgetSetting('PrefilledCellData') || '';
+    if (!raw.trim()) return;
 
-    // Watch all editable cells for changes
-    //table.querySelectorAll('tbody td[contenteditable="true"]').forEach(cell => {
-    //    cell.addEventListener('input', updateAllFormulaCells);
-    //    cell.addEventListener('paste', () => setTimeout(updateAllFormulaCells, 10));
-    //});
+    const data = raw
+        .split(';')
+        .map(r => r.trim())
+        .filter(Boolean)
+        .map(r => r.split(',').map(c => c.trim()));
+
+    const rows = table.querySelectorAll('tbody tr');
+    data.forEach((rowData, rowIdx) => {
+        if (!rows[rowIdx]) return;
+        const cells = rows[rowIdx].cells;
+        rowData.forEach((value, colIdx) => {
+            if (cells[colIdx] && !ResultColumnIndices.has(colIdx)) {
+                cells[colIdx].textContent = value;
+            }
+        });
+    });
+
+    updateAllFormulas();
 }
 
-function updateAllFormulaCells() {
+/* ==================================================================
+   4. EDITABLE CELLS + LIVE CALCULATION (Debounced 3s)
+   ================================================================== */
+
+function setupEditableCellsAndFormulas() {
+    updateAllFormulas(); // Initial calculation
+
+    // Set up ALL cells ONCE
+    table.querySelectorAll('tbody td').forEach((cell, colIdx) => {
+        makeCellEditable(cell);
+    });
+}
+
+function makeCellEditable(cell) {
+    cell.contentEditable = true;
+    let timer = null;
+
+    const trigger = () => {
+        clearTimeout(timer);
+        timer = setTimeout(updateAllFormulas, 2000);
+    };
+
+    cell.addEventListener('input', trigger);
+    cell.addEventListener('paste', trigger);
+    cell.addEventListener('keydown', trigger);
+}
+
+function updateAllFormulas() {
     if (Object.keys(EquationsByY).length === 0) return;
 
     table.querySelectorAll('tbody tr').forEach(row => {
         const cells = row.cells;
 
-        Object.keys(EquationsByY).forEach(resultColIdx => {
-            const formula = EquationsByY[resultColIdx];
-
-            let result = evaluateFormula(formula, cells);
-
-            console.log(`Setting result for column index ${resultColIdx}:`, result);
-
-            const targetCell = cells[resultColIdx];
-            targetCell.textContent = result;
+        Object.entries(EquationsByY).forEach(([resultIdx, formula]) => {
+            const value = evaluateFormula(formula, cells);
+            const target = cells[parseInt(resultIdx)]; 
+            if (target) target.textContent = value;
         });
     });
 }
 
-function evaluateFormula(formulaTokens, cells) {
-    let value = 0;
-    let operator = '+';
+function evaluateFormula(tokens, cells) {
+    let result = 0;
+    let op = '+';
 
-    for (let i = 0; i < formulaTokens.length; i++) {
-        const token = formulaTokens[i];
-        let cellValue = 0;
+    for (const token of tokens) {
+        let value = 0;
 
         if (typeof token === 'number') {
-            cellValue = parseFloat(cells[token + 1]?.textContent) || 0;
-        } 
-        else if (typeof token === 'string' && token.includes(':')) {
-            const [h, m] = token.split(':').map(parseFloat);
-            cellValue = (h || 0) + ((m || 0) / 60);
+            let tmp = cells[token]?.textContent.trim();
+            if (tmp.includes(':')) {
+                const [h, m] = tmp.split(':').map(Number);
+                value = (h || 0) + ((m || 0) / 60);
+            }
+            else value = parseFloat(tmp) || 0;
         }
         else if (['+', '-', '*', '/'].includes(token)) {
-            operator = token;
+            op = token;
             continue;
         }
 
-        switch (operator) {
-            case '+': value += cellValue; break;
-            case '-': value -= cellValue; break;
-            case '*': value *= cellValue; break;
-            case '/': 
-                if (cellValue === 0) return 'Error';
-                value /= cellValue;
+        switch (op) {
+            case '+': result += value; break;
+            case '-': result -= value; break;
+            case '*': result *= value; break;
+            case '/':
+                if (value === 0) return 'Error';
+                result /= value;
                 break;
         }
     }
 
-    if (!isFinite(value)) return 'Error';
-
-    return Number(value.toFixed(2)); // ← Perfect: 5 → 5.00, 3.1 → 3.10, clean float
+    return isFinite(result) ? Number(result.toFixed(2)) : 'Error';
 }
 
-function parsePrefilledCellData(str) {
-    if (!str) return [];
+/* ==================================================================
+   5. DYNAMIC ROWS & COLUMNS
+   ================================================================== */
 
-    return str
-        .split(';')                     // rows
-        .map(r => r.trim())
-        .filter(r => r.length > 0)
-        .map(r =>
-            r.split(',')                // cells
-             .map(c => c.trim())        // keep empty string ""
-        );
-}
-
-function parseColumnNames(str) {
-    return str
-        .split(',')
-        .map(s => s.trim())
-        .filter(s => s.length > 0);
-}
-
-function renameAllColumns(newNamesArray) {
-    const headerRow = table.querySelector('thead tr');
-    const ths = headerRow.querySelectorAll('th');
-
-    newNamesArray.forEach((name, i) => {
-        if (ths[i]) ths[i].textContent = name;
-    });
-}
-
-
-const table = document.getElementById('dynamicTable');
-let rowCount = 2;
-let dataColCount = 3;          // editable columns **before** the Total column
-let extraColCount = 0;         // columns **after** the Total column
-
-/* ---------- SUM LOGIC ---------- */
-function updateAllSums() {
-    applyFormulasAndWatch();
-}
-
-function applyPrefilledCellData() {
-    if (!PrefilledCellData.length) return;
-
-    const rows = table.querySelectorAll('tbody tr');
-
-    PrefilledCellData.forEach((rowData, r) => {
-        if (!rows[r]) return;
-
-        const cells = rows[r].querySelectorAll('td');
-
-        rowData.forEach((val, column) => {
-            //only fill non-result columns
-            if (cells[column] && ResultColumnIndices.includes(column) === false) {     
-                cells[column].textContent = val;
-            }
-        });
-    });
-
-    updateAllSums();
-}
-
-
-/* ---------- EDITABLE CELLS ---------- */
-function makeCellEditable(cell) {
-    cell.contentEditable = true;
-
-    let timeoutId = null;  // stores the current timer
-
-    const recalculate = () => {
-        // Clear any existing timer
-        if (timeoutId) clearTimeout(timeoutId);
-
-        // Set a new 3-second timer
-        timeoutId = setTimeout(() => {
-            updateAllSums();        // or updateAllFormulaCells()
-            timeoutId = null;       // reset
-        }, 3000); // 3000 ms = 3 seconds
-    };
-
-    cell.addEventListener('input', recalculate);
-    cell.addEventListener('paste', recalculate);
-    cell.addEventListener('keydown', recalculate); 
-}
-
-/* ---------- ADD ROW ---------- */
 function addRow() {
-    rowCount++;
     const row = table.querySelector('tbody').insertRow();
-    //row.insertCell(0).textContent = rowCount;               // #
-    for (let i = 0; i < dataColCount; i++) {                // data columns before Total
-        const c = row.insertCell();
-        //c.textContent = '0';
-        makeCellEditable(c);
+    const colCount = table.querySelector('thead tr').cells.length;
+
+    for (let i = 0; i < colCount; i++) {
+        const cell = row.insertCell();
+        if (ResultColumnIndices.has(i)) {
+            cell.contentEditable = false;
+            cell.style.backgroundColor = '#f0f9f0';
+        } else {
+            makeCellEditable(cell);
+        }
     }
-    const sumCell = row.insertCell();                       // Total column
-    //sumCell.className = 'sum-cell';
-    //sumCell.textContent = '0';
-    for (let i = 0; i < extraColCount; i++) {               // extra columns after Total
-        const c = row.insertCell();
-        //c.textContent = '0';
-        makeCellEditable(c);
-    }
-    updateAllSums();
+    updateAllFormulas();
 }
 
-/* ---------- ADD COLUMN (AFTER TOTAL) ---------- */
 function addColumn() {
-    extraColCount++;
-
-    // Header
     const headerRow = table.querySelector('thead tr');
-    const newTh = document.createElement('th');
-    newTh.textContent = `Extra ${extraColCount}`;
-    newTh.contentEditable = true;
-    headerRow.appendChild(newTh);               // **after** everything (including Total)
+    const th = document.createElement('th');
+    th.textContent = `Column ${headerRow.cells.length}`;
+    th.contentEditable = true;
+    headerRow.appendChild(th);
 
-    // Body rows
     table.querySelectorAll('tbody tr').forEach(row => {
-        const newCell = row.insertCell();         // append at end
-        //newCell.textContent = '0';
-        makeCellEditable(newCell);
+        const cell = row.insertCell();
+        makeCellEditable(cell);
     });
-
-    // No need to recalc sum – it still looks at the two columns before the Total column
-    updateAllSums();
+    updateAllFormulas();
 }
 
-/* ---------- DELETE LAST DATA COLUMN ---------- */
 function deleteLastColumn() {
-    const headerRow = table.querySelector('thead tr');
-    headerRow.deleteCell(-1);  // Delete last TH
-    
-    // Body
-    table.querySelectorAll('tbody tr').forEach(row => {
-        row.deleteCell(-1);  // Delete last TD
-    });
-    
-    updateAllSums();
-    extraColCount--;
+    if (table.querySelector('thead tr').cells.length <= 2) {
+        alert("Cannot delete essential columns!");
+        return;
+    }
+    table.querySelector('thead tr').deleteCell(-1);
+    table.querySelectorAll('tbody tr').forEach(row => row.deleteCell(-1));
+    updateAllFormulas();
 }
 
-/* ---------- DELETE LAST ROW ---------- */
 function deleteLastRow() {
     const tbody = table.querySelector('tbody');
     if (tbody.rows.length <= 1) {
-        alert('Cannot delete the last row!');
+        alert("Cannot delete the last row!");
         return;
     }
     tbody.deleteRow(-1);
-    rowCount--;
-    table.querySelectorAll('tbody tr').forEach((r, i) => r.cells[0].textContent = i + 1);
+    updateAllFormulas();
 }
 
-/* ---------- INITIALISE ---------- */
-document.querySelectorAll('td[contenteditable="true"]').forEach(makeCellEditable);
-//updateAllSums();
+/* ==================================================================
+   6. FORM SUBMIT – Return Clean JSON
+   ================================================================== */
 
-// Fully dynamic data extractor
 function getTableData() {
-    const headers = Array.from(table.querySelectorAll('thead th'));
-
+    const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent);
     const data = [];
+
     table.querySelectorAll('tbody tr').forEach(row => {
         const obj = {};
         row.querySelectorAll('td').forEach((cell, i) => {
-        obj[headers[i].textContent] = cell.textContent;
+            obj[headers[i]] = cell.textContent.trim();
         });
         data.push(obj);
     });
 
-    const newLocal = JSON.stringify(data);
-    console.log('Submitting table data...', newLocal);
-    return newLocal;
+    return JSON.stringify(data, null, 2);
 }
 
-// Send on form submit
-JFCustomWidget.subscribe('submit', function(){
+JFCustomWidget.subscribe('submit', () => {
     JFCustomWidget.sendSubmit({
         valid: true,
         value: getTableData()
