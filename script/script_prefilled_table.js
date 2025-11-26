@@ -267,7 +267,7 @@ function applyPrefilledCellData() {
         const cells = rows[r].querySelectorAll('td');
 
         rowData.forEach((val, column) => {
-            if (cells[column] && resultsColumnIndices.indexOf(column) === -1) {          
+            if (cells[column] && ResultColumnIndices.indexOf(column) === -1) {          
                 cells[column].textContent = val;
             }
         });
