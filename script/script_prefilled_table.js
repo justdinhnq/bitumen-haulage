@@ -31,7 +31,7 @@ function Start() {
 function SetupPrefilledCellData() {
     const prefilledDataStr = JFCustomWidget.getWidgetSetting('PrefilledCellData');
     PrefilledCellData = parsePrefilledCellData(prefilledDataStr);
-    console.log('Parsed PrefilledCellData:', PrefilledCellData);
+    //console.log('Parsed PrefilledCellData:', PrefilledCellData);
     applyPrefilledCellData();
 }
 
@@ -39,7 +39,7 @@ function SetupColumnNames() {
     //const colNamesStr = '#, Value A, Value B, Total (A+B)';
     const colNamesStr = JFCustomWidget.getWidgetSetting('ColumnNames');
     ColumnNames = parseColumnNames(colNamesStr);
-    console.log('Parsed ColumnNames:', ColumnNames);
+    //console.log('Parsed ColumnNames:', ColumnNames);
     renameAllColumns(ColumnNames);
 }
 
@@ -63,9 +63,9 @@ function SetupEquations() {
         EquationsAsColumnNames = parseEquationsSetting(Equations);
         EquationsByYAsColumnNames = groupEquationsByResultColumn(EquationsAsColumnNames);
         EquationsByY = convertToIndexBasedEquations(EquationsByYAsColumnNames);
-        console.log('EquationsAsColumnNames:', EquationsAsColumnNames);
-        console.log('EquationsByYAsColumnNames:', EquationsByYAsColumnNames);
-        console.log('EquationsByY (final index-based):', EquationsByY);
+        //console.log('EquationsAsColumnNames:', EquationsAsColumnNames);
+        //console.log('EquationsByYAsColumnNames:', EquationsByYAsColumnNames);
+        //console.log('EquationsByY (final index-based):', EquationsByY);
         
         // Apply formulas immediately + listen for changes
         applyFormulasAndWatch();
@@ -86,11 +86,11 @@ function parseEquationsSetting(equationsStr) {
         .split(';') // separate equations
         .map(eq => eq.trim()).filter(Boolean);
 
-    console.log('Parsing equations:', newLocal);
+    //console.log('Parsing equations:', newLocal);
     const newLocal_1 = newLocal.map(eq => eq.split(',').map(token => token.trim()).filter(Boolean));
         //.map(eq => eq.split(',').filter(token => token !== '='));
 
-    console.log('Parsed equations (intermediate):', newLocal_1);
+    //console.log('Parsed equations (intermediate):', newLocal_1);
     return newLocal_1;
 }
 
@@ -208,7 +208,7 @@ function evaluateFormula(formulaTokens, cells) {
             if (operator === '*') value *= cellValue;
             if (operator === '/') value /= cellValue;
         } // if token is in the format of hourly such as 17:30
-        else if (typeof token === 'string' && token.includes(':')) {
+        else if (token.includes(':')) {
             const parts = token.split(':');
             const hours = parseFloat(parts[0]) || 0;
             const minutes = parseFloat(parts[1]) || 0;
