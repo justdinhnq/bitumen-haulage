@@ -17,10 +17,10 @@ function Start() {
     SetupColumnNames();
     
     // Setup prefilled cell data
-    //SetupPrefilledCellData();
+    SetupPrefilledCellData();
 
     // Setup initial rows and columns
-    //SetupRowsAndColumns();
+    SetupRowsAndColumns();
 
     // Setup equations
     SetupEquations();
@@ -34,7 +34,8 @@ function SetupPrefilledCellData() {
 }
 
 function SetupColumnNames() {
-    const colNamesStr = '#, Value A, Value B, Total (A+B)';//JFCustomWidget.getWidgetSetting('ColumnNames');
+    //const colNamesStr = '#, Value A, Value B, Total (A+B)';
+    const colNamesStr = JFCustomWidget.getWidgetSetting('ColumnNames');
     ColumnNames = parseColumnNames(colNamesStr);
     console.log('Parsed ColumnNames:', ColumnNames);
     renameAllColumns(ColumnNames);
@@ -271,7 +272,7 @@ let extraColCount = 0;         // columns **after** the Total column
 
 /* ---------- SUM LOGIC ---------- */
 function updateAllSums() {
-    
+    applyFormulasAndWatch();
 }
 
 function applyPrefilledCellData() {
