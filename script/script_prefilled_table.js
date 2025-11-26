@@ -5,6 +5,8 @@ let EquationsAsColumnNames = [];     // Original string format: [["col01", "*", 
 let EquationsByYAsColumnNames = [];  // Grouped by result column: { col04: ["col01", "*", "col02", "-", "col03"], ... }
 let EquationsByY = [];               // FINAL: { resultColIndex: [op1, operator, op2, operator, ..., opN] } — using 0-based indices
 
+let ResultColumnIndices = []; // Indices of columns that hold results of equations
+
 // Main: Runs when widget is ready
 JFCustomWidget.subscribe('ready', function () {
     Start();
@@ -19,11 +21,11 @@ function Start() {
     // Setup column names
     SetupColumnNames();
     
-    // Setup prefilled cell data
-    SetupPrefilledCellData();
-
     // Setup equations
     SetupEquations();
+    
+    // Setup prefilled cell data
+    SetupPrefilledCellData();
 }
 
 function SetupPrefilledCellData() {
@@ -72,20 +74,10 @@ function SetupEquations() {
 // PARSING HELPERS
 // ————————————————————————
 
-function parseColumnNames(str) {
-    if (!str) return [];
-    return str.split(',').map(s => s.trim()).filter(Boolean);
-}
-
-function parsePrefilledCellData(str) {
-    // Format: "row1col1, value; row2col2, another value"
-    // We'll implement later if needed
-    return [];
-}
-
-function applyPrefilledCellData() {
-    // Implement when needed
-}
+//function parseColumnNames(str) {
+//    if (!str) return [];
+//    return str.split(',').map(s => s.trim()).filter(Boolean);
+//}
 
 // Parse the raw Equations string into array of arrays
 function parseEquationsSetting(equationsStr) {
@@ -99,19 +91,6 @@ function parseEquationsSetting(equationsStr) {
 
     console.log('Parsed equations (intermediate):', newLocal_1);
     return newLocal_1;
-
-    // remove '='
-    console.log('Removing "=" from equations: ', newLocal_1.map(parts => {
-        return parts.slice(0, parts.indexOf('='));
-    }));
-
-    return newLocal_1 
-        .map(parts => {
-            const equalsIndex = parts.indexOf('=');
-            if (equalsIndex === -1) return null;
-            return parts.slice(0, equalsIndex).concat('=', parts.slice(equalsIndex + 1));
-        })
-        .filter(Boolean);
 }
 
 // Group equations by result column (the one after =)
@@ -121,8 +100,10 @@ function groupEquationsByResultColumn(equations) {
         const eqIndex = eq.indexOf('=');
         if (eqIndex === -1 || eqIndex === eq.length - 1) return;
         const resultCol = eq[eqIndex + 1];
-        const formula = eq.slice(0, eqIndex); // everything before "="
+        const formula = eq.slice(0, eqIndex); 
         map[resultCol] = formula;
+
+        ResultColumnIndices.push(resultCol);
     });
     return map;
 }
@@ -285,9 +266,9 @@ function applyPrefilledCellData() {
 
         const cells = rows[r].querySelectorAll('td');
 
-        rowData.forEach((val, c) => {
-            if (cells[c]) {          
-                cells[c].textContent = val;
+        rowData.forEach((val, column) => {
+            if (cells[column] && resultsColumnIndices.indexOf(column) === -1) {          
+                cells[column].textContent = val;
             }
         });
     });
