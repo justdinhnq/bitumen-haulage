@@ -197,10 +197,8 @@ function evaluateFormula(formulaTokens, cells) {
 
     for (let i = 0; i < formulaTokens.length; i++) {
         const token = formulaTokens[i];
-        console.log('Evaluating token:', token, 'cells:', cells);
 
         if (typeof token === 'number') {
-            console.log('cell:', cells[token].textContent)
             // token is column index
             const cellValue = parseFloat(cells[token]?.textContent) || 0; // +1 for row number column
             console.log(`Token is column index ${token}, cell value:`, cellValue);
