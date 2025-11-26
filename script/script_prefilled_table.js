@@ -56,7 +56,8 @@ function SetupRowsAndColumns() {
 
 function SetupEquations() {
     //col01, *, col02, -, col03, =, col04; col10, -, col01, /, col03, =, col11
-    const Equations = "Value A, +, Value B, =, Total (A+B)"//JFCustomWidget.getWidgetSetting('Equations');
+    //const Equations = "Value A, +, Value B, =, Total (A+B)";
+    const Equations = JFCustomWidget.getWidgetSetting('Equations');
     // === NEW: Parse Equations and build EquationsByY ===
     if (Equations.trim()) {
         EquationsAsColumnNames = parseEquationsSetting(Equations);
