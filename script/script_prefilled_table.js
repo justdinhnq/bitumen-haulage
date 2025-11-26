@@ -25,12 +25,15 @@ JFCustomWidget.subscribe('ready', () => {
     setupPrefilledData();
     setupEditableCellsAndFormulas();   // ← Runs ONLY ONCE
 });
+
+/* For testing outside JotForm environment
 window.onload = () => {
     setupColumnNames();
     setupEquations();
     setupPrefilledData();
     setupEditableCellsAndFormulas();   // ← Runs ONLY ONCE
 }
+*/
 /* ==================================================================
    1. COLUMN NAMES
    ================================================================== */
