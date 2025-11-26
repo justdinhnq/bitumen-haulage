@@ -23,7 +23,7 @@ JFCustomWidget.subscribe('ready', function () {
     for (let i = 0; i < noColumns; i++) addColumn();
     
     ColumnNames = parseColumnNames(_ColumnNames);
-    log('Parsed ColumnNames:', ColumnNames);
+    console.log('Parsed ColumnNames:', ColumnNames);
     renameAllColumns(ColumnNames);
     
     // Fill prefilled data
