@@ -13,14 +13,14 @@ JFCustomWidget.subscribe('ready', function () {
 //window.onload = Start;
 
 function Start() {
+    // Setup initial rows and columns
+    SetupRowsAndColumns();
+    
     // Setup column names
     SetupColumnNames();
     
     // Setup prefilled cell data
     SetupPrefilledCellData();
-
-    // Setup initial rows and columns
-    SetupRowsAndColumns();
 
     // Setup equations
     SetupEquations();
