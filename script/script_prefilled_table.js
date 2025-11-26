@@ -227,26 +227,7 @@ let extraColCount = 0;         // columns **after** the Total column
 
 /* ---------- SUM LOGIC ---------- */
 function updateAllSums() {
-    if (ColumnsToSum.length === 0) return;
-
-    const headers = Array.from(table.querySelectorAll('thead th'));
-    const sumColIndex = headers.findIndex(h => h.textContent === ColumnToShowSumResult);
-
-    if (sumColIndex === -1) return;
-
-    table.querySelectorAll('tbody tr').forEach(row => {
-        let total = 0;
-
-        ColumnsToSum.forEach(colName => {
-            const colIndex = headers.findIndex(h => h.textContent === colName);
-            if (colIndex !== -1) {
-                const v = parseFloat(row.cells[colIndex].textContent) || 0;
-                total += v;
-            }
-        });
-
-        row.cells[sumColIndex].textContent = total.toFixed(2);
-    });
+    
 }
 
 function applyPrefilledCellData() {
@@ -343,7 +324,7 @@ function deleteLastRow() {
     }
     tbody.deleteRow(-1);
     rowCount--;
-    //table.querySelectorAll('tbody tr').forEach((r, i) => r.cells[0].textContent = i + 1);
+    table.querySelectorAll('tbody tr').forEach((r, i) => r.cells[0].textContent = i + 1);
 }
 
 /* ---------- INITIALISE ---------- */
