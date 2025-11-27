@@ -169,7 +169,7 @@ function setupPrefilledData() {
         .split(';')
         .map(r => r.trim())
         .filter(Boolean)
-        .map(r => r.split(',').map(c => c.trim()));
+        .map(r => r.split('|').map(c => c.trim()));
 
     const rows = table.querySelectorAll('tbody tr');
     data.forEach((rowData, rowIdx) => {
