@@ -40,18 +40,16 @@ window.onload = () => {
    ================================================================== */
 
 function createInitialStructure() {
-    const initialRows = parseInt(JFCustomWidget.getWidgetSetting('initialRows') || '0');
-    const initialCols = parseInt(JFCustomWidget.getWidgetSetting('initialColumns') || '3');
+    const initialRows = parseInt(JFCustomWidget.getWidgetSetting('initialRows'));
+    const initialCols = parseInt(JFCustomWidget.getWidgetSetting('initialColumns'));
 
     // Create rows
-    for (let i = 0; i < Math.max(1, initialRows); i++) {
+    for (let i = 0; i < initialRows; i++) {
         addRowSilently(); // no formula update yet
     }
 
     // Create columns 
-    const currentCols = table.querySelector('thead tr').cells.length;
-    const colsToAdd = Math.max(0, initialCols - currentCols);
-    for (let i = 0; i < colsToAdd; i++) {
+    for (let i = 0; i < initialCols; i++) {
         addColumnSilently();
     }
 
