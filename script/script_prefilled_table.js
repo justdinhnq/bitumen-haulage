@@ -92,8 +92,12 @@ function setupColumnNames() {
 
 function renameHeaders() {
     const headers = table.querySelectorAll('thead th');
-    ColumnNames.forEach((name, i) => {
-        if (headers[i]) headers[i].textContent = name;
+    //ColumnNames.forEach((name, i) => {
+    //    if (headers[i]) headers[i].textContent = name;
+    //});
+
+    headers.forEach((th, i) => {
+        if (ColumnNames[i]) th.textContent = ColumnNames[i];
     });
 }
 
@@ -321,6 +325,7 @@ function deleteLastRow() {
 
 function getTableData() {
     const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent);
+    
     const data = [];
 
     table.querySelectorAll('tbody tr').forEach(row => {
