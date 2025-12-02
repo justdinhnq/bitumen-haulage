@@ -226,6 +226,10 @@ function updateAllFormulas() {
         Object.entries(EquationsByY).forEach(([resultIdx, formula]) => {
             const value = evaluateFormula(formula, cells);
             const target = cells[parseInt(resultIdx)]; 
+
+            if (value === 0)
+                return;
+
             if (target) target.textContent = value;
         });
     });
