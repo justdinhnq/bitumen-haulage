@@ -27,14 +27,14 @@ JFCustomWidget.subscribe('ready', () => {
     setupEditableCellsAndFormulas();   // ← Runs ONLY ONCE
 });
 
-/* For testing outside JotForm environment
+/* For testing outside JotForm environment*/
 window.onload = () => {
     setupColumnNames();
     setupEquations();
     setupPrefilledData();
     setupEditableCellsAndFormulas();   // ← Runs ONLY ONCE
 }
-*/
+
 /* ==================================================================
    1. CREATE INITIAL ROWS & COLUMNS FROM SETTINGS
    ================================================================== */
@@ -85,7 +85,7 @@ function addColumnSilently() {
    ================================================================== */
 
 function setupColumnNames() {
-    const setting = JFCustomWidget.getWidgetSetting('ColumnNames') || '#, Value A, Value B, Total (A+B)';
+    const setting = JFCustomWidget.getWidgetSetting('ColumnNames') || '#, 1, 2, 3';
     ColumnNames = setting.split(',').map(s => s.trim()).filter(Boolean);
     renameHeaders();
 }
@@ -97,6 +97,7 @@ function renameHeaders() {
     //});
 
     headers.forEach((th, i) => {
+        console.log(`Renaming header ${i} to "${ColumnNames[i]}"`);
         if (ColumnNames[i]) th.textContent = ColumnNames[i];
     });
 }
@@ -283,6 +284,8 @@ function addRow() {
         }
     }
     updateAllFormulas();
+
+    //getTableData(); // Update JSON on add
 }
 
 function addColumn() {
@@ -331,12 +334,16 @@ function getTableData() {
     table.querySelectorAll('tbody tr').forEach(row => {
         const obj = {};
         row.querySelectorAll('td').forEach((cell, i) => {
-            obj[headers[i]] = cell.textContent.trim();
+            obj[headers[i] + " "] = cell.textContent.trim();
         });
         data.push(obj);
     });
 
-    return JSON.stringify(data, null, 2);
+    console.log('Final table data object:', data);
+
+    const jsonData =  JSON.stringify(data, null, 2);
+
+    return jsonData;
 }
 
 JFCustomWidget.subscribe('submit', () => {
